@@ -1,0 +1,3 @@
+[submodule "cropsim"]
+	path = cropsim
+	url = git@github.com:ky0on/cropsim.git
