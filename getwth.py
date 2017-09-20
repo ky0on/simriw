@@ -36,16 +36,12 @@ def SVP(temp):
     #	6.112 * exp(17.67*temp/(243.5 + temp))
 
 
-if __name__ == '__main__':
-
-    #argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('csvpath', nargs='?', type=str, default='./daily_weather_28368.nasa.csv')
-    args = parser.parse_args()
+def main(csvpath):
+    ''' main '''
 
     #load original
-    wth = load_config(args.csvpath)
-    w = pd.read_csv(args.csvpath, comment='#', sep=',', na_values=['-'])
+    wth = load_config(csvpath)
+    w = pd.read_csv(csvpath, comment='#', sep=',', na_values=['-'])
     w.rename(columns={'YEAR': 'year', 'DOY': 'doy',
                       'swv_dwn': 'srad',
                       'T2M': 'tavg', 'T2MX': 'tmax', 'T2MN': 'tmin',
@@ -76,3 +72,15 @@ if __name__ == '__main__':
 
     #finalize
     wth['w'] = w
+
+    return wth
+
+
+if __name__ == '__main__':
+
+    #argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('csvpath', nargs='?', type=str, default='./daily_weather_28368.nasa.csv')
+    args = parser.parse_args()
+
+    wth = main(args.csvpath)
