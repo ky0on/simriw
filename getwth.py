@@ -25,7 +25,7 @@ def load_config(csvpath):
             if line[:10] == '#config - ':
                 _config = line.replace('#config - ', '').replace('\n', '')
                 key, value = _config.split(':')
-                config[key] = value
+                config[key] = float(value)
 
     return config
 
