@@ -1,0 +1,483 @@
+# https://matplotlib.org/examples/color/named_colors.html
+
+{
+    "akita-kon2016": {
+        "ekdata_path": "ekdata/rice/akita.csv"
+        "name": "JA秋田ふるさと 近 (2016)"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "gps": "39.23088,140.46855166667"
+        "snid": "M03100000128"
+        "farmer": "Mr. kon"
+        "color": "red"
+        "sowing_date": "2016-04-23"
+        "planting_date": "2016-05-27"
+        "middry_start_date": "2016-07-10"
+        "middry_fin_date": "2016-07-18"
+        "heading_date": "2016-08-06"
+        "flowering_date": ""
+        "drainage_date": "2016-07-03"
+        "harvesting_date": "2016-10-05"
+        "seedling_fert": "育苗専用2号\n40g/箱、4月12日"
+        "soil_fert": "シリカリン\n20kg/反、4月27日"
+        "basal_fert": "まくもん\n25kg/反、4月27日"
+        "additional_fert": "まくもん\n20kg/反、5月26日"
+        "ear_fert": "-"
+        "seed_ster": "-"
+        "bedsoil_chemical": "タチガレエース粉\n6g/箱、4月12日、4月13日"
+        "seedling_box_chemical": "ルーチンアドスピノ箱粒剤\n1.35kg/反、5月23日、5月26日"
+        "herbicide": "ガンガンジャンボ\n1kg/箱、5月29日"
+        "pesticide": "スタークル\n800L/10a、8倍希釈、8月11日、8月24日"
+        "yield": 721.8
+        "planting_density": 18.2
+        "max_branching": 569
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,ta2,soiltempA,watertempA,hd,dew,abshumid"
+        // "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,watertemp,soiltempA,soiltempB,hd,dew,abshumid"
+    }
+    "akita-takahashi2017": {
+        "ekdata_path": "ekdata/rice/akita-takahashi2017.csv"
+        "name": "JA秋田ふるさと 高橋 (2017)"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "farmer": "Mr. Takahashi"
+        "snid": "M03100000128"
+        "color": "yellow"
+        "planting_date": "2017-05-22 15:00:00"   # from diary
+        "middry_start_date": "2017-07-08"        # e-mail
+        "middry_fin_date": "2017-07-22"          # e-mail
+        "panicle_form_date": "2017-07-19"        # e-mail
+        "heading_date": "2017-08-15"             # e-mail
+        # "flowering_date": ""
+        # "drainage_date": ""
+        "harvesting_date": "2017-09-30"          # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": yokote
+    }
+    "akita-chida2017": {
+        "ekdata_path": "ekdata/rice/akita-chida2017.csv"
+        "name": "JA秋田ふるさと 千田(2017)"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "farmer": "Mr. Chida"  # maybe
+        "snid": "M03100000241"
+        "color": "blue"
+        "planting_date": "2017-05-22 15:00:00"    # maybe
+        "middry_start_date": "2017-07-15"        # e-mail
+        "middry_fin_date": "2017-07-22"          # e-mail
+        "panicle_form_date": "2017-07-20"        # e-mail
+        "heading_date": "2017-08-11"             # e-mail
+        # "flowering_date": ""
+        # "drainage_date": ""
+        "harvesting_date": "2017-09-30"          # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": yokote
+    }
+    "kurikko2016": {
+        "ekdata_path": "ekdata/rice/kurikko2016.csv"
+        "name": "JA栗っこ (2016)"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "gps": "38.811523333333,141.02856333333"
+        "snid": "M03100000001"
+        "color": "purple"
+        "sowing_date": "2016-04-02"
+        "planting_date": "2016-05-04 15:00:00"
+        "middry_start_date": "2016-06-18"
+        "middry_fin_date": "2016-07-09"
+        "heading_date": "2016-08-02"
+        "flowering_date": ""
+        "drainage_date": "2016-08-27"
+        "harvesting_date": "2016-09-17"
+        "seedling_fert": "いなほＮ特号培土　　（育苗専用肥料20ｇ/箱）３月２７日"
+        "soil_fert": ""
+        "basal_fert": "ＰＫセーブ一発２５　（２５－１０－１０）　４０ｋｇ／１０ａ　　　　４月１６日"
+        "additional_fert": "－"
+        "ear_fert": "－"
+        "seed_ster": "テクリードＣフロアブル３月１２日２００倍"
+        "bedsoil_chemical": "タチガレエース液剤５００倍液５００ｍｌ／箱　播種同時"
+        "seedling_box_chemical": "ファーストオリゼフェルテラ粒剤　５０ｇ／箱　３月２７日"
+        "herbicide": "メテオフロアブル　　　５００ｍｌ／１０ａ　　５月５日、ガンガン豆つぶ　　　　２５０ｇ／１０ａ　　　５月１５日"
+        "pesticide": "キラップフロアブル　　１６倍０．８㍑　　　　８月３日、ダントツフロアブル　　２４倍０．８㍑　　　　　８月１２日"
+        "yield": 620
+        "planting_density": 16.4
+        "max_branching": 526
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soiltempB,watertempA,watertempB,hd,dew,abshumid"
+        "note": "塩化加里　　　　　　　２０ｋｇ／１０ａ　　　４月１６日　　　　　　放射能対策"
+    }
+    "kurikko2017": {
+        "ekdata_path": "ekdata/rice/kurikko2017.csv"
+        "name": "JA栗っこ (2017)"
+        "variety": "萌えみのり"
+        "gps": "38.811778333333, 141.02830166667"
+        "cultivation_type": "移植"  # maybe
+        "snid": "M03100000001"
+        "color": "tomato"
+        "planting_date": "2017-05-06 15:00:00"    # acutal date, expected time
+        "middry_start_date": "2017-06-24"   # e-mail
+        "middry_fin_date": "2017-07-10"     # e-mail
+        "heading_date": "2017-08-02"        # e-mail
+        "harvesting_date": "2017-09-25"     # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soitempB,watertempA,watertempB,hd,dew,abshumid"
+        "halex_point": kurihara
+    }
+    "sanbu2016": {
+        "name": "JA山武郡市(2016)",
+        "ekdata_path": "ekdata/rice/sanbu2016.csv"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "gps": "35.539458333333,140.39256333333",
+        "snid": "M03100000014"
+        "color": "green"
+        "sowing_date": "2016-04-08"
+        "planting_date": "2016-05-03"
+        "middry_start_date": "-"  # no nakaboshi
+        "middry_fin_date": "-"    # no nakaboshi
+        "heading_date": "2016-07-22"
+        "flowering_date": ""
+        "drainage_date": ""
+        "harvesting_date": "2016-08-29"
+        "seedling_fert": ""
+        "basal_fert": "ネオペーストSR502（15-10-12）、？kg、5月3日"
+        "seed_ster": "タチガレン液剤（殺菌）、カスミン液剤（殺菌）、ダコニール粉剤（殺菌）、フジワン粒剤（殺菌）"
+        "herbicide": "カチボシ１キロ粒剤（除草）"
+        "pesticide": "カスミン液剤（殺菌）、中後期除草剤、カメムシ退治の殺虫剤（キラップ系）"
+        "yield": 687.5
+        "planting_density": 18.9
+        "max_branching": 491.4
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,tb1,tb2,hd,dew,abshumid"
+    }
+    "sanbu2017": {
+        "name": "JA山武郡市(2017)",
+        "ekdata_path": "ekdata/rice/sanbu2017.csv"
+        "variety": "萌えみのり"
+        "cultivation_type": "移植"
+        "snid": "M03100000014"
+        "color": "blue"
+        "planting_date": "2017-05-03"
+        "middry_start_date": "-"  # no nakaboshi
+        "middry_fin_date": "-"    # no nakaboshi
+        "heading_date": "2017-07-20"     # expected
+        "harvesting_date": "2017-08-29"  # expected
+        # "yield": 687.5
+        # "planting_density": 18.9
+        # "max_branching": 491.4
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": sammu
+    }
+    "senju_tubo2016": {
+        "name": "千手-坪山2016"
+        "ekdata_path": "ekdata/rice/senju2016.csv"
+        "variety": "あきだわら"
+        "cultivation_type": "移植"
+        "snid": "M03100000040"
+        "color": "skyblue"
+        "planting_date": "2016-05-11 15:00:00"  # diary
+        "middry_start_date": "2016-06-15"   # diary
+        "middry_fin_date": "2016-07-23"     # diary
+        "heading_date": "2016-08-10"        # diary
+        "harvesting_date": "2016-10-13"     # diary
+        "yield": 741.3    # e-mail
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
+    }
+    "senju_tubo2017": {
+        "name": "千手-坪山2017"
+        "ekdata_path": "ekdata/rice/senju2017.csv"
+        "variety": "あきだわら"
+        "cultivation_type": "移植"
+        "snid": "M03100000040"
+        "color": "blue"
+        "planting_date": "2017-05-12 15:00:00"  # e-mail (different from diary)
+        "middry_start_date": "2017-06-18"     # diary
+        "middry_fin_date": "2017-07-23"     # expected
+        "panicle_form_date": "2017-07-19"   # e-mail
+        "heading_date": "2017-08-13"        # e-mail
+        # "flowering_date": ""
+        "drainage_date": "2017-09-09"       # e-mail
+        "harvesting_date": "2017-10-13"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
+        "halex_point": tokamachi
+    }
+    "senju_taka2016": {
+        "ekdata_path": "ekdata/rice/senju2016.csv"
+        "name": "千手-高原田2016"
+        "variety": "あきだわら"
+        "cultivation_type": "移植"
+        "snid": "M03100000039"
+        "gps": "37.169616666667,138.738305",
+        "color": "darkorange"
+        "sowing_date": "2016-04-18"
+        "planting_date": "2016-05-12 15:00:00"   # e-mail
+        "middry_start_date": "2016-06-15"    # e-mail
+        "middry_fin_date": "2016-07-23"      # diary
+        "heading_date": "2016-08-10"         # e-mail
+        "harvesting_date": "2016-10-13"      # e-mail
+        "seedling_fert": "稚苗苗代配合、35ｇ/箱、4月18日、\nカスミン液剤、50ml/箱、4月18日、ファーストオリゼフェルテラ箱粒剤、50g/箱、4月18日"
+        "basal_fert": "晩生十日町一発、50kg/反、5月12日"
+        "herbicide": "メテオ1キロ粒剤、1kg/反、5月14日、\n月光 1キロ粒剤、　1kg/反、5月24日"
+        "pesticide": "スタークル液剤、　8倍希釈、800ml/10a、8月13日、バリダシンエアー、8倍希釈、800ml/反、8月13日"
+        "yield": 803.19       # e-mail
+        "planting_density": 18.2
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,tb1,tb2,hd,dew,abshumid"
+        "note": "7月14日\t生育調査①\tJA単独（高原田のみ）　　草丈72cm　茎数39本　葉色42.4　（５株の平均）　　幼穂1.2ｍｍ　0.7ｍｍ　2.7ｍｍ\n8月12日\t生育調査②\tJA単独（高原田のみ）　葉色36.3（5株平均）\n9月8日\t生育調査③\tJA単独（高原田のみ）　　穂長21.2cm　穂数27.4個　稈長84cm　葉色27.9　（５株の平均）　紋枯れ確認\n9月26日\t生育調査④\tJA単独（高原田のみ）葉色21.6（５株の平均）"
+    }
+    "senju_taka2017": {
+        "name": "千手-高原田 (2017)"
+        "ekdata_path": "ekdata/rice/senju2017.csv"
+        "variety": "あきだわら"
+        "cultivation_type": "移植"
+        "snid": "M03100000039"
+        "color": "red"
+        "planting_date": "2017-05-10 15:00:00"  # e-mail (different from diary)
+        "middry_start_date": "2017-06-18"     # diary
+        "middry_fin_date": "2017-07-23"     # expected
+        "panicle_form_date": "2017-07-19"   # e-mail
+        "heading_date": "2017-08-11"        # e-mail
+        # "flowering_date": ""
+        "drainage_date": "2017-09-09"       # e-mail
+        "harvesting_date": "2017-10-13"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
+        "halex_point": tokamachi
+    }
+    "_senju_taka_koga2017": {
+        "name": "千手-高原田 こがねもち (2017)"
+        "ekdata_path": "ekdata/rice/senju2017.csv"
+        "variety": "こがねもち"
+        "snid": "M03100000039"
+        "color": "blue"
+        "heading_date": "2017-07-27"        # iMessage from Togami
+        "harvesting_date": "2017-10-13"     # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
+        "halex_point": tokamachi
+    }
+    "_senju_taka_koshi2017": {
+        "name": "千手-高原田 コシヒカリ (2017)"
+        "ekdata_path": "ekdata/rice/senju2017.csv"
+        "variety": "コシヒカリ"
+        "snid": "M03100000039"
+        "color": "green"
+        "heading_date": "2017-08-01"        # iMessage from Togami
+        "harvesting_date": "2017-10-13"     # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
+        "halex_point": tokamachi
+    }
+    "echigo2016": {
+        name: "JA越後中央2016"
+        "variety": "コシヒカリBL"
+        "cultivation_type": "移植"
+        "ekdata_path": "ekdata/rice/echigo2016.csv"
+        "snid": "M03100000045"
+        "gps": "37.670055,138.87909666667",
+        "color": "red"
+        "sowing_date": "2016-04-03"
+        "planting_date": "2016-05-01"
+        "middry_start_date": "2016-06-04"
+        "middry_fin_date": "2016-07-03"
+        "panicle_form_date": "2016-07-04"   # assuming 30 days before from heading
+        "division_reduction_date": "2016-07-20"  # assuming 14 days before from heading
+        "heading_date": "2016-08-03"
+        "flowering_date": "-"
+        "drainage_date": "2016-08-20"
+        "harvesting_date": "2016-09-10"
+        "seedling_fert": ""
+        "soil_fert": ""
+        "basal_fert": "越のかがやき有機一発元肥(12-7-5),5月3日,38kg"
+        "additional_fert": "とれ太郎(0-6-0),6月27日,20kg"
+        "ear_fert": "越のかがやきみのり有機穂肥(12-2-7),7月20日,6kg"
+        "yield": 581
+        "planting_density": "15.1"
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soiltempB,watertempA,watertempB,hd,dew,abshumid"
+    }
+    "echigo-east2017": {
+        name: "JA越後中央2017（東側）"
+        "variety": "コシヒカリBL"
+        "cultivation_type": "移植"
+        "ekdata_path": "ekdata/rice/echigo2017.csv"
+        "snid": "M03100000041"
+        "color": "blue"
+        "planting_date": "2017-05-03 14:00:00"  # diary
+        "branching_date": "2017-05-24 00:00:00" # diary
+        "middry_start_date": "2017-06-07"       # diary (maybe)
+        "middry_fin_date": "2017-07-10"         # expected
+        "panicle_form_date": "2017-07-04"       # assuming 30 days before from heading
+        "division_reduction_date": "2017-07-20" # assuming 14 days before from heading
+        "heading_date": "2017-08-03"            # expected
+        # "flowering_date": ""
+        # "drainage_date": ""
+        # "harvesting_date": ""
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "niigata"
+    }
+    "echigo-west2017": {
+        name: "JA越後中央2017（西側）"
+        "variety": "コシヒカリBL"
+        "cultivation_type": "移植"
+        "ekdata_path": "ekdata/rice/echigo2017.csv"
+        "snid": "M03100000045"
+        "color": "green"
+        "planting_date": "2017-05-03 14:00:00"  # diary
+        "branching_date": "2017-05-24 00:00:00" # diary
+        "middry_start_date": "2017-06-07"       # diary (maybe)
+        "middry_fin_date": "2017-07-10"         # expected
+        "panicle_form_date": "2017-07-04"       # assuming 30 days before from heading
+        "division_reduction_date": "2017-07-20" # assuming 14 days before from heading
+        "heading_date": "2017-08-03"            # expected
+        # "flowering_date": ""
+        # "drainage_date": ""
+        # "harvesting_date": ""
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "niigata"
+    }
+    "yosano-odani2016": {
+        "name": "小谷さん(2016)"
+        "ekdata_path": "ekdata/rice/odani2016.csv"
+        "variety": "コシヒカリ"
+        "cultivation_type": "移植"
+        "snid": "M03100000023"
+        "color": "brown"
+        "sowing_date": "-"
+        "planting_date": "2016-05-08 12:00:00"
+        "middry_start_date": "2016-06-14"
+        "middry_fin_date": "2016-07-08"
+        "heading_date": "2016-07-31"
+        "flowering_date": "-"
+        "drainage_date": "2016-08-28"
+        "harvesting_date": "2016-09-07"
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soilsurface,tb1,tb2,hd,dew,abshumid"
+    }
+    "yosano-odani2017": {
+        "name": "小谷さん(2017)"
+        "ekdata_path": "ekdata/rice/yosano2017.csv"
+        "variety": "コシヒカリ"
+        "cultivation_type": "移植"
+        "snid": "M03100000023"
+        "color": "darksalmon"
+        "planting_date": "2017-05-08 12:00:00"
+        "middry_start_date": "2017-06-16"    # e-mail
+        "middry_fin_date": "2017-07-14"      # iMessage
+        "heading_date": "2017-07-26"         # iMessage
+        "harvesting_date": "2017-09-02"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soilsurface,tb1,tb2,hd,dew,abshumid"
+        "halex_point": yosano
+    }
+    "yosano-miyamoto2017": {
+        "name": "宮本さん(2017)"
+        "ekdata_path": "ekdata/rice/yosano2017.csv"
+        "variety": "コシヒカリ"
+        "cultivation_type": "移植"
+        "snid": "M03100000096"
+        "color": "navy"
+        "planting_date": "2017-05-15 12:00:00"
+        "middry_start_date": "2017-06-19"    # iMessage
+        "middry_fin_date": "2017-07-16"      # iMessage
+        "heading_date": "2017-07-27"         # iMessage
+        "harvesting_date": "2017-09-03"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,soilsurface,tb1,tb2,hd,dew,abshumid"
+        "halex_point": yosano
+    }
+    "satake-no1-2017": {
+        "name": "サタケ様 ほ場No.1 (2017)"
+        "ekdata_path": "ekdata/rice/satake2017.csv"
+        "snid": "M03100000164"
+        "color": "blue"
+        # "planting_date": "2017-05-20 12:00:00"
+        "heading_date": "2017-08-15"         # e-mail
+        "harvesting_date": "2017-10-16"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,ta2,tb1,tb2,hd,dew,abshumid"
+        "halex_point": higashihiroshima
+    }
+    "satake-no2-2017": {
+        "name": "サタケ様 ほ場No.2 (2017)"
+        "ekdata_path": "ekdata/rice/satake2017.csv"
+        "snid": "M03100000164"
+        "color": "red"
+        # "planting_date": "2017-05-20 12:00:00"
+        "heading_date": "2017-08-17"         # e-mail
+        "harvesting_date": "2017-10-16"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,ta2,tb1,tb2,hd,dew,abshumid"
+        "halex_point": higashihiroshima
+    }
+    "satake-no3-2017": {
+        "name": "サタケ様 ほ場No.3 (2017)"
+        "ekdata_path": "ekdata/rice/satake2017.csv"
+        "snid": "M03100000164"
+        "color": "green"
+        # "planting_date": "2017-05-20 12:00:00"
+        "heading_date": "2017-08-18"         # e-mail
+        "harvesting_date": "2017-10-16"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,ta2,tb1,tb2,hd,dew,abshumid"
+        "halex_point": higashihiroshima
+    }
+    "satake-no4-2017": {
+        "name": "サタケ様 ほ場No.4 (2017)"
+        "ekdata_path": "ekdata/rice/satake2017.csv"
+        "snid": "M03100000164"
+        "color": "yellow"
+        # "planting_date": "2017-05-20 12:00:00"
+        "heading_date": "2017-08-18"         # e-mail
+        "harvesting_date": "2017-10-16"      # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,ta1,ta2,tb1,tb2,hd,dew,abshumid"
+        "halex_point": higashihiroshima
+    }
+    "zensho-ikeda17": {
+        "ekdata_path": "ekdata/rice/zensho2017.csv"
+        "name": "ゼンショー 池田様 (2017)"
+        "variety": "コシヒカリ"
+        "cultivation_type": "移植"
+        "snid": "M03100000211"
+        "color": "blue"
+        "planting_date": "2017-05-15"      # diary
+        "middry_start_date": "2017-07-07"  # diary
+        # "middry_fin_date": "2017-07-18"
+        "heading_date": "2017-08-13"       # diary
+        # "flowering_date": ""
+        "harvesting_date": "2017-10-05"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "nishigo"
+    }
+    "zensho-kondo17": {
+        "ekdata_path": "ekdata/rice/zensho2017.csv"
+        "name": "ゼンショー 近藤様 (2017)"
+        "variety": "コシヒカリ"
+        "cultivation_type": "移植"
+        "snid": "M03100000210"
+        "color": "darkblue"
+        "planting_date": "2017-05-15"      # diary
+        "middry_start_date": "2017-07-07"  # diary
+        # "middry_fin_date": "2017-07-18"
+        "heading_date": "2017-08-13"       # diary
+        # "flowering_date": ""
+        "harvesting_date": "2017-10-05"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "nishigo"
+    }
+    "zensho-tsuya17": {
+        "ekdata_path": "ekdata/rice/zensho2017.csv"
+        "name": "つや姫 (2017)"
+        "variety": "つや姫"
+        "snid": "M03100000209"
+        "color": "green"
+        "planting_date": "2017-05-15"      # diary
+        "middry_start_date": "2017-07-07"  # diary
+        # "middry_fin_date": "2017-07-18"
+        "heading_date": "2017-08-22"       # unknown
+        # "flowering_date": ""
+        "harvesting_date": "2017-10-05"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "nishigo"
+    }
+    "zensho-hoshi17": {
+        "ekdata_path": "ekdata/rice/zensho2017.csv"
+        "name": "ほしじるし (2017)"
+        "variety": "ほしじるし"
+        "snid": "M03100000209"
+        "color": "red"
+        "planting_date": "2017-05-15"      # diary
+        "middry_start_date": "2017-07-07"  # diary
+        # "middry_fin_date": "2017-07-18"
+        "heading_date": "2017-08-22"       # diary
+        # "flowering_date": ""
+        "harvesting_date": "2017-10-05"    # expected
+        "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soiltempB,watertempB,hd,dew,abshumid"
+        "halex_point": "nishigo"
+    }
+}
