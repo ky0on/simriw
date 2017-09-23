@@ -108,7 +108,6 @@ if __name__ == '__main__':
     DVI = DVII
     LAI = LAII
     DW = DWI
-    DWGRAIN = 0.0
     DWPAN = 0.0
     STHT = 0
     STLT = 0
