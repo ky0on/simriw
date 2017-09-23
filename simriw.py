@@ -169,17 +169,23 @@ if __name__ == '__main__':
 
         #Culculation of LAI
         if DVI < 0.95:
-            EFFTL = max(AVT[day] - cultivar['TCF'], 0.)
-            GRLAI = LAI * cultivar['A'] * (1.0 - np.exp(-cultivar['KF'] * EFFTL)) * (1.0 - (LAI/cultivar['FAS'])**cultivar['ETA'])
+            #before heading
+            EFFTL = max(AVT[day] - cultivar['TCF'], 0.)  # effective temperature for LAI growth (>=0)
+            GRLAI = LAI * cultivar['A'] * \
+                (1.0 - np.exp(-cultivar['KF'] * EFFTL)) * \
+                (1.0 - (LAI/cultivar['FAS'])**cultivar['ETA'])   # growth rate of LAI
             GRL95 = GRLAI
             DVI95 = DVI
         elif GRLAI > 0.0 or DVI <= 1.0:
+            #no explanation
             GRLAI = GRL95 * (1.0 - (DVI - DVI95)/(1 - DVI95))
             LAIMX = LAI
             DVI1 = DVI
         elif DVI < 1.1:
+            #after heading (empirical function)
             GRLAI = -(LAIMX * (1.0 - cultivar['BETA']) * (DVI - DVI1)/(1.1 - DVI1))*DVR
         else:
+            #after heading (empirical function)
             GRLAI = -LAIMX * (1.0 - cultivar['BETA']) * DVR
         LAI += GRLAI
 

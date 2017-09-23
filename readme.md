@@ -42,17 +42,22 @@
 - `CTR` (unit=C)
     - critical temp. for autumn coolness.
 - `A` (unit=/day)
-    - related to leaf  area growth
+    - related to leaf area growth
+    - maximum relative growth rate of LAI (m^2/m^2)
 - `KF` (no unit)
-    - related to leaf  area growth
+    - related to leaf area growth
+    - empirical constant
 - `ETA` (no unit)
-    - related to leaf  area growth
+    - related to leaf area growth
+    - empirical constant
 - `FAS` (no unit)
-    - related to leaf  area growth
+    - related to leaf area growth
+    - asymptotic value of the leaf area index when temperature is non-limiting (m^2/m^2)
 - `TCF` (unit=C)
-    - related to leaf  area growth
+    - related to leaf area growth
+    - minimum temperature for LAI growth
 - `BETA` (no unit)
-    - related to leaf  area growth
+    - related to leaf area growth
 - `THOT` (unit=C)
     - related to cooling-degree-days for spikelet sterility
 - `STO` (unit=%)
