@@ -5,6 +5,18 @@
     - 0.0 at crop emergence
     - 1.0 at heading
     - 2.0 at maturity
+- `SCAT`
+    - scattering coefficient
+- `RCAN` 
+    - reflectance when the surface is completely covered by the vegetation
+- `RSOL`
+    - reflectance of bare soil
+- `REF`
+    - canopy reflectance
+- `KREF`
+    - maybe empirical constant
+- `ABSRAD`
+    - amount of radiation absorbed by the canopy
 
 ## Cultivar Parameters
 - `GV` (unit=days)
@@ -35,8 +47,10 @@
     - empirical constant
 - `EXTC` (no unit)
     - related to dry matter production
+    - extinction coefficient of the canopy to daily short-wave radiation
 - `COVES` (unit=G/MJ)
     - related to dry matter production
+    - radiation conversion efficiency (maybe)
 - `HIMX` (no unit)
     - maximum harvest index
 - `CTR` (unit=C)

@@ -190,16 +190,24 @@ if __name__ == '__main__':
         LAI += GRLAI
 
         #Culuculation of Crop Dry Weight
+        # SCAT: scattering coefficient
+        # RCAN: reflectance when the surface is completely covered by the vegetation
+        # RSOL: reflectance of bare soil
+        # REF:  canopy reflectance
+        # KREF: maybe empirical constant
+        # ABSRAD: amount of radiation absorbed by the canopy
+        # CONEF, COVCO2: radiation conversion efficiency
         TAU = np.exp(-(1.0 - SCAT) * cultivar['EXTC'] * LAI)
-        REF = RCAN - (RCAN - RSOL) * np.exp(-KREF * LAI)
+        REF = RCAN - (RCAN - RSOL) * np.exp(-KREF * LAI)   # canopy reflectance, KREF=1/2
         ABSOP = 1.0 - REF - (1.0 - RSOL) * TAU
         ABSRAD = RAD[day] * ABSOP
         COVCO2 = cultivar['COVES'] * (1.54 * (args.co2 - 330.0)/(1787.0+(args.co2 - 330.0))+1.0)
         if DVI < 1.0:
             CONEF = COVCO2
         else:
+            #decreases gradually toward zero at maturity
             CONEF = COVCO2 * (1.0+CL)/(1.0+CL * np.exp((DVI - 1.0)/TAUC))
-        DW = DW + CONEF * ABSRAD
+        DW = DW + CONEF * ABSRAD  # daily dry matter production = absorbed radiation * radiation conversion efficiency
 
         #Culuculation of Spikelet Sterility Percentage due to Cool Temerature
         if DVI > 0.75 and DVI < 1.2:
