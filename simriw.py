@@ -153,13 +153,16 @@ if __name__ == '__main__':
 
         #Culculation of Developmental Index DVI
         if DVI < cultivar['DVIA']:
+            #before crop becomes photo sensitive period
             EFT = AVT[day] - cultivar['TH']
             DVR = 1. / (cultivar['GV'] * (1.0 + np.exp(-cultivar['ALF'] * EFT)))
         elif DVI <= 1.0:
+            #before heading (in photo sensitive period)
             EFT = AVT[day] - cultivar['TH']
             EFL = min(DL[day] - cultivar['LC'], 0.)
             DVR = (1.0 - np.exp(cultivar['BDL'] * EFL)) / (cultivar['GV'] * (1.0 + np.exp(-cultivar['ALF'] * EFT)))
         else:
+            #between heading and maturity
             EFT = max(AVT[day] - cultivar['TCR'], 0.)
             DVR = (1.0 - np.exp(-cultivar['KCR'] * EFT)) / cultivar['GR']
         DVI += DVR
