@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""   """
-
 from __future__ import print_function
 import argparse
 import os
@@ -263,3 +261,5 @@ if __name__ == '__main__':
     #plot
     simulated['d'][['DW', 'GY', 'PY']].plot()
     plt.savefig(os.path.join(args.out, 'simulated.pdf'))
+    simulated['d'].to_csv(os.path.join(args.out, 'simulated.csv'))
+    # print(simulated['d'].tail())
