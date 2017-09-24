@@ -74,9 +74,13 @@
     - related to leaf area growth
 - `THOT` (unit=C)
     - related to cooling-degree-days for spikelet sterility
+    - based on 'cooling degree-day’ concept (always 22)
 - `STO` (unit=%)
     - related to cooling-degree-days for spikelet sterility
+    - empirical constant (maybe)
 - `BST` (no unit)
     - related to cooling-degree-days for spikelet sterility
+    - empirical constant (maybe)
 - `PST` (no unit)
     - related to cooling-degree-days for spikelet sterility
+    - empirical constant (maybe)

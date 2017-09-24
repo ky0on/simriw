@@ -210,30 +210,34 @@ if __name__ == '__main__':
         DW = DW + CONEF * ABSRAD  # daily dry matter production = absorbed radiation * radiation conversion efficiency
 
         #Culuculation of Spikelet Sterility Percentage due to Cool Temerature
+        #(the period of highest sensitivity of the rice panicle to cool temperatures)
+        # SSTR: Spikelet Sterility bla bla (maybe)
         if DVI > 0.75 and DVI < 1.2:
-            CDEG = max(cultivar['THOT'] - AVT[day], 0.)
-            CDED += CDEG
-            SSTR = cultivar['STO']+cultivar['BST'] * CDED**cultivar['PST']
-            STLT = min(100.0, SSTR)
-            RIPEP = 1.0 - STLT/100.0
-            ATHLT = cultivar['HIMX'] * RIPEP
+            CDEG = max(cultivar['THOT'] - AVT[day], 0.)  # effective cool temperature
+            CDED += CDEG   # cooling degree-days
+            SSTR = cultivar['STO'] + cultivar['BST'] * CDED**cultivar['PST']   # Eq. 4.14
+            STLT = min(100.0, SSTR)   # must be <=100
+            RIPEP = 1.0 - STLT/100.0  # 0-100 -> 1-0
+            ATHLT = cultivar['HIMX'] * RIPEP   # harvest index considering cool temperature
 
         #Culculation of Spikelet Sterility Percentage due to Heat Stress
         if DVI > 0.96 and DVI < 1.20:
+            #accumulate daily max temperature around anthesis
             HTSUM += TMX[day]
             HTDAY += 1
 
         if DVI >= 1.20 and IFLUG1 == 0:
-            AVTMX = HTSUM / HTDAY
-            STHT = 100.0/(1.0 + np.exp(-0.853 * (AVTMX - 36.6)))
-            ATHHT = (1.0 - STHT/100.0) * cultivar['HIMX']
+            AVTMX = HTSUM / HTDAY   # average daily max temperature around anthesis
+            STHT = 100.0/(1.0 + np.exp(-0.853 * (AVTMX - 36.6)))  # Eq. 4.16 (Relation between average daily maximum temperature during the floweringperiod and spikelet fertility)
+            ATHHT = (1.0 - STHT/100.0) * cultivar['HIMX']   # 0-100 -> 1-0, then harvest index considering high temperature
             IFLUG1 = 1
 
         #Culculation of Grain Yield
-        ATHI = min(ATHLT, ATHHT)
-        STERP = max(STHT, STLT)
-        EFDVI = max(DVI - 1.22, 0.0)
-        HI = ATHI * (1.0 - np.exp(-5.57 * EFDVI))
+        # HI: harvest index
+        ATHI = min(ATHLT, ATHHT)  # choose the largest effect from cool and heat stresses (actual spikelet sterility)
+        STERP = max(STHT, STLT)                    # not used
+        EFDVI = max(DVI - 1.22, 0.0)               # DVI after flowering
+        HI = ATHI * (1.0 - np.exp(-5.57 * EFDVI))  # harvest index
         DWGRAIN = DW * HI
         DWPAN = DWGRAIN/CVBP/CVPP
 
