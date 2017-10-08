@@ -172,6 +172,7 @@
         "ekdata_path": "ekdata/rice/senju2016.csv"
         "variety": "あきだわら"
         "cultivation_type": "移植"
+        "gps": "37.17074,138.73437333333"
         "snid": "M03100000040"
         "color": "skyblue"
         "planting_date": "2016-05-11 15:00:00"  # diary
