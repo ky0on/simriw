@@ -30,26 +30,28 @@ if __name__ == '__main__':
     parser.add_argument('path', nargs='?', type=str, default='./history.hjson')
     args = parser.parse_args()
 
-    #init
-    history = {}
-
     #extract
     with open(args.path, 'r') as f:
         history_all = hjson.load(f)
+
+    #save
     for key in history_all.keys():
+
+        #filter
         if has_key(['planting_date', 'harvesting_date', 'yield', 'gps'], history_all[key]):
             # print(key)
-            history[key] = {}
-            history[key]['planting_date'] = history_all[key]['planting_date'][:10]
-            history[key]['harvesting_date'] = history_all[key]['harvesting_date'][:10]
-            history[key]['yield'] = history_all[key]['yield']
-            history[key]['lat'] = float(history_all[key]['gps'].split(',')[0])
-            history[key]['lon'] = float(history_all[key]['gps'].split(',')[1])
+            history = {}
+            history['planting_date'] = history_all[key]['planting_date'][:10]
+            history['harvesting_date'] = history_all[key]['harvesting_date'][:10]
+            history['yield'] = history_all[key]['yield']
+            history['lat'] = float(history_all[key]['gps'].split(',')[0])
+            history['lon'] = float(history_all[key]['gps'].split(',')[1])
+        else:
+            continue
 
-    #get mesh
-    for key in history.keys():
-        timedomain = [history[key]['planting_date'], history[key]['harvesting_date']]
-        lalodomain = [history[key]['lat'], history[key]['lat'], history[key]['lon'], history[key]['lon']]
+        #get mesh
+        timedomain = [history['planting_date'], history['harvesting_date']]
+        lalodomain = [history['lat'], history['lat'], history['lon'], history['lon']]
         meshes = []
         for element in ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP'):
             Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
@@ -67,12 +69,12 @@ if __name__ == '__main__':
             'GSR': 'swv_dwn',
             'APCP': 'RAIN',
             'RH': 'RH2M'}, inplace=True)
-        history[key]['mesh'] = mesh.to_json()
+        history['mesh'] = mesh.to_json()
 
         #save
-        csv = '#config - lat:{}\n'.format(history[key]['lat'])
-        csv += '#config - lon:{}\n'.format(history[key]['lon'])
-        mesh = pd.read_json(history[key]['mesh'])
+        csv = '#config - lat:{}\n'.format(history['lat'])
+        csv += '#config - lon:{}\n'.format(history['lon'])
+        mesh = pd.read_json(history['mesh'])
         mesh.index.name = 'DATE'
         csv += re.sub(' +', ',', mesh.reset_index().to_string(index=False))
         outcsv = os.path.join('dataset', key + '.csv')
