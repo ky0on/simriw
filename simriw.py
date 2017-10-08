@@ -33,12 +33,14 @@ def daylength(lat, doy):
     #     doy <- doyFromDate(doy)
     # }
 
+    _doy = doy.copy()
+
     if lat > 90 or lat < -90:
         lat = np.nan
 
-    doy.loc[doy == 366] = 365  # is this ok? uruudoshi?
-    if np.any(doy < 1) or np.any(doy > 365):
-        raise Exception('doy must be between 1 and 365')
+    _doy.loc[_doy > 365] = 365  # is this ok? uruudoshi?
+    if np.any(_doy < 1) or np.any(_doy > 365):
+        raise Exception('_doy must be between 1 and 365')
 
     P = np.arcsin(0.39795 * np.cos(0.2163108 + 2 * np.arctan(0.9671396 * np.tan(0.0086 * (doy - 186)))))
     a = (np.sin(0.8333 * np.pi/180) + np.sin(lat * np.pi/180) * np.sin(P))/(np.cos(lat * np.pi/180) * np.cos(P))
@@ -282,4 +284,4 @@ if __name__ == '__main__':
     simulated['d'][['DW', 'GY', 'PY']].plot()
     plt.savefig(os.path.join(args.out, 'simulated.pdf'))
     simulated['d'].to_csv(os.path.join(args.out, 'simulated.csv'))
-    # print(simulated['d'].tail())
+    print('\nsimulated["d"].tail():\n', simulated['d'].tail())
