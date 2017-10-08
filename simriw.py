@@ -276,7 +276,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--cultivar', '-c', default='Nipponbare', type=str)
-    parser.add_argument('--weather', '-w', default='./daily_weather_28368.nasa.csv', type=str)
+    parser.add_argument('--weather', '-w', default='./dataset/daily_weather_28368.nasa.csv', type=str)
     parser.add_argument('--startday', '-s', default='2000-05-15', type=str)
     parser.add_argument('--co2', default=350, type=int)
     parser.add_argument('--transplant', action='store_true')

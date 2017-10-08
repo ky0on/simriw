@@ -83,7 +83,7 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('csvpath', nargs='?', type=str, default='./daily_weather_28368.nasa.csv')
+    parser.add_argument('csvpath', nargs='?', type=str, default='./dataset/daily_weather_28368.nasa.csv')
     args = parser.parse_args()
 
     wth = main(args.csvpath)
