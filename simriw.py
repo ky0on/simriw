@@ -16,7 +16,7 @@ __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '20 Sep 2017'
 
 
-def load_cultivar_params(cultivar):
+def load_cultivar_params(cultivar_params_file, cultivar):
     ''' Load cultivar parameters '''
 
     with open(cultivar_params_file, 'r') as f:
@@ -50,24 +50,11 @@ def daylength(lat, doy):
     return DL
 
 
-if __name__ == '__main__':
-
-    #argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--cultivar', '-c', default='Nipponbare', type=str)
-    parser.add_argument('--weather', '-w', default='./daily_weather_28368.nasa.csv', type=str)
-    parser.add_argument('--startday', '-s', default='2000-05-15', type=str)
-    parser.add_argument('--co2', default=350, type=int)
-    parser.add_argument('--transplant', action='store_true')
-    parser.add_argument('--out', default='output', type=str)
-    args = parser.parse_args()
-
-    #init
-    cultivar_params_file = './cultivars.hjson'
-    plt.style.use('ggplot')
+def main(cultivar_params_file):
+    ''' '''
 
     #load cultivar parameters
-    cultivar = load_cultivar_params(args.cultivar)
+    cultivar = load_cultivar_params(cultivar_params_file, args.cultivar)
 
     #load weather data
     wth = getwth.main(args.weather)
@@ -279,6 +266,25 @@ if __name__ == '__main__':
     simulated['PANDW'] = PANDW
     simulated['DWT'] = DWT
     simulated['d'] = pd.DataFrame(res).T   # [1:simday, ]
+
+    return simulated
+
+
+if __name__ == '__main__':
+
+    #argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--cultivar', '-c', default='Nipponbare', type=str)
+    parser.add_argument('--weather', '-w', default='./daily_weather_28368.nasa.csv', type=str)
+    parser.add_argument('--startday', '-s', default='2000-05-15', type=str)
+    parser.add_argument('--co2', default=350, type=int)
+    parser.add_argument('--transplant', action='store_true')
+    parser.add_argument('--out', default='output', type=str)
+    args = parser.parse_args()
+
+    #init
+    plt.style.use('ggplot')
+    simulated = main(cultivar_params_file='cultivars.hjson')
 
     #plot
     simulated['d'][['DW', 'GY', 'PY']].plot()
