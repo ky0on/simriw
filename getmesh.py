@@ -7,9 +7,6 @@ from __future__ import print_function
 import hjson
 import argparse
 import pandas as pd
-# import os
-# import numpy as np
-# import matplotlib.pyplot as plt
 
 import AMD_Tools3 as AMD
 
@@ -59,7 +56,17 @@ if __name__ == '__main__':
             mesh = pd.DataFrame({'date': tim, element: Msh})
             mesh.set_index('date', inplace=True)
             meshes.append(mesh)
-        history[key]['mesh'] = pd.concat(meshes, axis=1).to_json()
+        mesh = pd.concat(meshes, axis=1)
+        mesh['DOY'] = mesh.index.dayofyear
+        mesh['YEAR'] = mesh.index.year
+        mesh.rename(columns={
+            'TMP_mea': 'T2M',
+            'TMP_max': 'T2MX',
+            'TMP_min': 'T2MN',
+            'GSR': 'swv_dwn',
+            'APCP': 'RAIN',
+            'RH': 'RH2M'}, inplace=True)
+        history[key]['mesh'] = mesh.to_json()
 
     #save
     with open('history_with_yield.hjson', 'w') as f:
