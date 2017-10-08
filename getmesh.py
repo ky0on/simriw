@@ -74,6 +74,9 @@ if __name__ == '__main__':
         #save
         csv = '#config - lat:{}\n'.format(history['lat'])
         csv += '#config - lon:{}\n'.format(history['lon'])
+        csv += '#config - planting_date:{}\n'.format(history['planting_date'])
+        csv += '#config - harvesting_date:{}\n'.format(history['harvesting_date'])
+        csv += '#config - yield:{}\n'.format(history['yield'])
         mesh = pd.read_json(history['mesh'])
         mesh.index.name = 'DATE'
         csv += re.sub(' +', ',', mesh.reset_index().to_string(index=False))
