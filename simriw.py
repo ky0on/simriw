@@ -50,14 +50,14 @@ def daylength(lat, doy):
     return DL
 
 
-def main(cultivar_params_file):
+def main(cultivar, weather, transplant, startday, co2, cultivar_params_file='cultivars.hjson'):
     ''' '''
 
     #load cultivar parameters
-    cultivar = load_cultivar_params(cultivar_params_file, args.cultivar)
+    cultivar = load_cultivar_params(cultivar_params_file, cultivar)
 
     #load weather data
-    wth = getwth.main(args.weather)
+    wth = getwth.main(weather)
 
     #Constants and parameters which may not be cutivar specific
     #Constants related to optcal properties of canopy
@@ -73,7 +73,7 @@ def main(cultivar_params_file):
     CVPP = 0.9
 
     #Initial conditions for simulation
-    if args.transplant:
+    if transplant:
         DVII = 0.15  # transplant
         LAII = 0.05
         DWI = 15
@@ -105,7 +105,7 @@ def main(cultivar_params_file):
     AVT = wth['w'].tavg
     RAD = wth['w'].srad
     TMX = wth['w'].tmax
-    startday = pd.to_datetime(args.startday)
+    startday = pd.to_datetime(startday)
     endday = startday + pd.to_timedelta('200 days')
     days = pd.date_range(startday, endday)
     DL = daylength(wth['lat'], wth['w'].doy)
@@ -190,7 +190,7 @@ def main(cultivar_params_file):
         REF = RCAN - (RCAN - RSOL) * np.exp(-KREF * LAI)   # canopy reflectance, KREF=1/2
         ABSOP = 1.0 - REF - (1.0 - RSOL) * TAU
         ABSRAD = RAD[day] * ABSOP
-        COVCO2 = cultivar['COVES'] * (1.54 * (args.co2 - 330.0)/(1787.0+(args.co2 - 330.0))+1.0)
+        COVCO2 = cultivar['COVES'] * (1.54 * (co2 - 330.0)/(1787.0+(co2 - 330.0))+1.0)
         if DVI < 1.0:
             CONEF = COVCO2
         else:
@@ -284,7 +284,9 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    simulated = main(cultivar_params_file='cultivars.hjson')
+    simulated = main(args.cultivar, args.weather, args.transplant,
+                     args.startday, args.co2,
+                     cultivar_params_file='cultivars.hjson')
 
     #plot
     simulated['d'][['DW', 'GY', 'PY']].plot()
