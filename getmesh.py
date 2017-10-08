@@ -4,6 +4,8 @@
 """   """
 
 from __future__ import print_function
+import re
+import os
 import hjson
 import argparse
 import pandas as pd
@@ -29,7 +31,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #init
-    # plt.style.use('ggplot')
     history = {}
 
     #extract
@@ -68,6 +69,12 @@ if __name__ == '__main__':
             'RH': 'RH2M'}, inplace=True)
         history[key]['mesh'] = mesh.to_json()
 
-    #save
-    with open('history_with_yield.hjson', 'w') as f:
-        hjson.dump(history, f)
+        #save
+        csv = '#config - lat:{}\n'.format(history[key]['lat'])
+        csv += '#config - lon:{}\n'.format(history[key]['lon'])
+        mesh = pd.read_json(history[key]['mesh'])
+        mesh.index.name = 'DATE'
+        csv += re.sub(' +', ',', mesh.reset_index().to_string(index=False))
+        outcsv = os.path.join('dataset', key + '.csv')
+        with open(outcsv, 'w') as f:
+            f.write(csv)
