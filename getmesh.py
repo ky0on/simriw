@@ -50,14 +50,16 @@ if __name__ == '__main__':
 
     #get mesh
     for key in history.keys():
-        element = 'TMP_mea'
         timedomain = [history[key]['planting_date'], history[key]['harvesting_date']]
         lalodomain = [history[key]['lat'], history[key]['lat'], history[key]['lon'], history[key]['lon']]
-        Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
-        Msh = Msh[:, 0, 0]     # dimension (from 3 to 1)
-        mesh = pd.DataFrame({'date': tim, 'airtemp': Msh})
-        mesh.set_index('date', inplace=True)
-        history[key]['mesh'] = mesh.to_json()
+        meshes = []
+        for element in ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP'):
+            Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
+            Msh = Msh[:, 0, 0]     # dimension (from 3 to 1)
+            mesh = pd.DataFrame({'date': tim, element: Msh})
+            mesh.set_index('date', inplace=True)
+            meshes.append(mesh)
+        history[key]['mesh'] = pd.concat(meshes, axis=1).to_json()
 
     #save
     with open('history_with_yield.hjson', 'w') as f:
