@@ -44,6 +44,9 @@ if __name__ == '__main__':
     parser.add_argument('--out', '-o', default='output', type=str)
     args = parser.parse_args()
 
+    #init
+    plt.style.use('ggplot')
+
     #main
     for csvpath in glob.glob(os.path.join(args.path, '*.csv')):
 
