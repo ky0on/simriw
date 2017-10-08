@@ -124,7 +124,7 @@ def main(cultivar, weather, transplant, startday, co2, cultivar_params_file='cul
     while growing:
         day += 1
         simday += 1
-        if day >= wth['w'].shape[0]:
+        if day >= wth['w'].shape[0] - 1:
             warnings.warn('reached end of weather records')
             growing = False
 
