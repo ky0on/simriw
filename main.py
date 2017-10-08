@@ -8,7 +8,7 @@ import os
 import glob
 import argparse
 import simriw
-# import pandas as pd
+import pandas as pd
 import matplotlib.pyplot as plt
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
@@ -46,12 +46,14 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
+    result = {}
 
     #main
     for csvpath in glob.glob(os.path.join(args.path, '*.csv')):
 
         #load params
-        print(csvpath)
+        print('\n#', csvpath)
+        name = os.path.basename(csvpath).replace('.csv', '')
         config = load_config(csvpath)
 
         #run simulation
@@ -60,6 +62,19 @@ if __name__ == '__main__':
 
         #fin
         simulated['d'][['DW', 'GY', 'PY']].plot()
-        plt.savefig(os.path.join(args.out, 'simulated_{}.pdf').format(os.path.basename(csvpath)))
-        simulated['d'].to_csv(os.path.join(args.out, 'simulated_{}.csv').format(os.path.basename(csvpath)))
+        plt.savefig(os.path.join(args.out, 'simulated_{}.pdf').format(name))
+        simulated['d'].to_csv(os.path.join(args.out, 'simulated_{}.csv').format(name))
         # print('\nsimulated["d"].tail():\n', simulated['d'].tail())
+
+        #comparison
+        print(config['harvesting_date'], str(simulated['d'].date.iloc[-1]))
+        print(config['yield'], str(simulated['d'].GY.iloc[-1]))
+        result[name] = {
+            'yield': config['yield'],
+            'GY': simulated['d'].GY.iloc[-1],
+        }
+
+    #fin
+    result = pd.DataFrame(result).T
+    result.plot.scatter(x='yield', y='GY')
+    plt.savefig(os.path.join(args.out, 'yield_vs_GY.pdf'))
