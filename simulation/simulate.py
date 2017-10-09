@@ -63,8 +63,9 @@ if __name__ == '__main__':
             #fin
             # simulated['d'].to_csv(os.path.join(outdir, 'sim_{}_{}.csv').format(key, year))
 
-    #result to dataframe
+    #convert result to dataframe
     simulated_all = pd.concat(simulated_all)
+    simulated_all.to_csv(os.path.join(outdir, 'sim.csv'), index=False)
 
     #plot GY in subplots
     for loc in simulated_all['loc'].unique():
@@ -81,4 +82,4 @@ if __name__ == '__main__':
             ax.set_title(str(year))
         ax.legend()
         plt.tight_layout()
-        plt.savefig(os.path.join(outdir, loc + '.png'))
+        plt.savefig(os.path.join(outdir, 'sim_' + loc + '.png'))
