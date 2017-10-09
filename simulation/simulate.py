@@ -80,6 +80,6 @@ if __name__ == '__main__':
         for i, (year, ax) in enumerate(targets):
             grouped.get_group(year).GY.plot(ax=ax)
             ax.set_title(str(year))
-        ax.legend()
+            ax.set_ylim(0, 800)
         plt.tight_layout()
         plt.savefig(os.path.join(outdir, 'sim_' + loc + '.png'))
