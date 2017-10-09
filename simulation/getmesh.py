@@ -66,7 +66,7 @@ if __name__ == '__main__':
             'RH': 'RH2M'}, inplace=True)
 
         #save
-        outcsv = os.path.join('dataset', key + '.csv')
+        outcsv = dataset[key]['csv']
         with open(outcsv, 'w') as f:
             f.write('#config - lat:{}\n'.format(dataset[key]['lat']))
             f.write('#config - lon:{}\n'.format(dataset[key]['lon']))
