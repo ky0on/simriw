@@ -44,6 +44,7 @@ if __name__ == '__main__':
             history['planting_date'] = history_all[key]['planting_date'][:10]
             history['harvesting_date'] = history_all[key]['harvesting_date'][:10]
             history['yield'] = history_all[key]['yield']
+            history['density'] = history_all[key]['density']
             history['lat'] = float(history_all[key]['gps'].split(',')[0])
             history['lon'] = float(history_all[key]['gps'].split(',')[1])
         else:
