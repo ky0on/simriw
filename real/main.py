@@ -5,11 +5,16 @@
 
 from __future__ import print_function
 import os
+import sys
 import glob
 import argparse
-import simriw
 import pandas as pd
 import matplotlib.pyplot as plt
+
+sys.path.append((os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    os.pardir)))
+import simriw
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '08 Oct 2017'
@@ -58,7 +63,9 @@ if __name__ == '__main__':
 
         #run simulation
         simulated = simriw.main(
-            'Nipponbare', csvpath, True, config['planting_date'], 350)
+            'Nipponbare', csvpath, True, config['planting_date'], 350,
+            '../cultivars.hjson'
+        )
 
         #fin
         simulated['d'][['DW', 'GY', 'PY']].plot()
