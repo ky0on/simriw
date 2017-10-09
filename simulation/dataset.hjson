@@ -1,0 +1,30 @@
+{
+  akita:
+  {
+    planting: 2016-05-27
+    harvesting: 2016-10-05
+    lat: 39.23088
+    lon: 140.46855166667
+  }
+  miyagi:
+  {
+    planting: 2016-05-04
+    harvesting: 2016-09-17
+    lat: 38.811523333333
+    lon: 141.02856333333
+  }
+  chiba:
+  {
+    planting: 2016-05-03
+    harvesting: 2016-08-29
+    lat: 35.539458333333
+    lon: 140.39256333333
+  }
+  niigata:
+  {
+    planting: 2016-05-01
+    harvesting: 2016-09-10
+    lat: 37.670055
+    lon: 138.87909666667
+  }
+}
