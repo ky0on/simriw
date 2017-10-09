@@ -7,9 +7,8 @@ from __future__ import print_function
 import argparse
 import os
 import sys
-import glob
 import hjson
-# import numpy as np
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -31,6 +30,7 @@ if __name__ == '__main__':
     #init
     plt.style.use('ggplot')
     outdir = 'output'
+    simulated_all = []
 
     #load dataset settings
     with open('dataset.hjson', 'r') as f:
@@ -50,16 +50,35 @@ if __name__ == '__main__':
 
             #init
             start_date = str(year) + '-' + dataset[key]['planting']
-            print(start_date)
 
             #run simulation
             simulated = simriw.main(
                 'Nipponbare', dataset[key]['csv'], True, start_date, 350,
                 '../cultivars.hjson'
             )
+            simulated['d']['year'] = year
+            simulated['d']['loc'] = key
+            simulated_all.append(simulated['d'])
 
             #fin
-            # simulated['d'][['DW', 'GY', 'PY']].plot()
-            # plt.savefig(os.path.join(outdir, 'sim_{}_{}.pdf').format(key, year))
-            # simulated['d'].to_csv(os.path.join(outdir, 'sim_{}.csv').format(key))
-            # print('\nsimulated["d"].tail():\n', simulated['d'].tail())
+            # simulated['d'].to_csv(os.path.join(outdir, 'sim_{}_{}.csv').format(key, year))
+
+    #result to dataframe
+    simulated_all = pd.concat(simulated_all)
+
+    #plot GY in subplots
+    for loc in simulated_all['loc'].unique():
+        df = simulated_all.loc[simulated_all['loc'] == loc, :]
+        df.set_index('date', inplace=True)
+        grouped = df.groupby('year')
+        fig, axs = plt.subplots(figsize=(30, 20),
+                                nrows=int(np.ceil(grouped.ngroups / 4)),
+                                ncols=4)
+
+        targets = zip(grouped.groups.keys(), axs.flatten())
+        for i, (year, ax) in enumerate(targets):
+            grouped.get_group(year).GY.plot(ax=ax)
+            ax.set_title(str(year))
+        ax.legend()
+        plt.tight_layout()
+        plt.savefig(os.path.join(outdir, loc + '.png'))
