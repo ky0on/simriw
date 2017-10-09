@@ -79,9 +79,10 @@ if __name__ == '__main__':
         result[name] = {
             'yield': config['yield'],
             'GY': simulated['d'].GY.iloc[-1],
+            'density': config['density'],
         }
 
     #fin
     result = pd.DataFrame(result).T
-    result.plot.scatter(x='yield', y='GY')
+    result.plot.scatter(x='yield', y='GY', c='density')
     plt.savefig(os.path.join(args.out, 'yield_vs_GY.pdf'))

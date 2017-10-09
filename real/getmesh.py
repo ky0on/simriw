@@ -38,7 +38,7 @@ if __name__ == '__main__':
     for key in history_all.keys():
 
         #filter
-        if has_key(['planting_date', 'harvesting_date', 'yield', 'gps'], history_all[key]):
+        if has_key(['planting_date', 'harvesting_date', 'yield', 'gps', 'planting_density'], history_all[key]):
             # print(key)
             history = {}
             history['planting_date'] = history_all[key]['planting_date'][:10]
@@ -78,6 +78,7 @@ if __name__ == '__main__':
         csv += '#config - planting_date:{}\n'.format(history['planting_date'])
         csv += '#config - harvesting_date:{}\n'.format(history['harvesting_date'])
         csv += '#config - yield:{}\n'.format(history['yield'])
+        csv += '#config - density:{}\n'.format(history['density'])
         mesh = pd.read_json(history['mesh'])
         mesh.index.name = 'DATE'
         csv += re.sub(' +', ',', mesh.reset_index().to_string(index=False))

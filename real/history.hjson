@@ -181,6 +181,7 @@
         "heading_date": "2016-08-10"        # diary
         "harvesting_date": "2016-10-13"     # diary
         "yield": 741.3    # e-mail
+        "planting_density": 18.2  # maybe
         "columns": "nodeid,datetime,airtemp,humid,vwc,ec,rad,ppm,soiltempA,watertempA,soitempB,watertempB,hd,dew,abshumid"
     }
     "senju_tubo2017": {
