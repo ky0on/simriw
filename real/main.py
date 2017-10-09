@@ -84,5 +84,10 @@ if __name__ == '__main__':
 
     #fin
     result = pd.DataFrame(result).T
-    result.plot.scatter(x='yield', y='GY', c='density')
+    ax = result.plot.scatter(x='yield', y='GY', c='density')
+    ax.set_xlim(500, 820)
+    ax.set_ylim(500, 820)
+    ax.plot(ax.get_xlim(), ax.get_ylim(), 'k--')
+    ax.set_xlabel('observed yield')
+    ax.set_ylabel('simulated yield')
     plt.savefig(os.path.join(args.out, 'yield_vs_GY.pdf'))
