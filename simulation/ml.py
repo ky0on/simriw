@@ -55,3 +55,13 @@ if __name__ == '__main__':
     result = pd.DataFrame({'predicted': p, 'observed': ys})
     result.plot.scatter(x='observed', y='predicted')
     plt.savefig('output/result.pdf')
+
+    #plot tree
+    import pydotplus
+    from sklearn.externals.six import StringIO
+    dot_data = StringIO()
+    tree.export_graphviz(clf, out_file=dot_data,
+                         feature_names=x_names,
+                         filled=True, rounded=True)
+    graph = pydotplus.graph_from_dot_data(dot_data.getvalue())
+    graph.write_pdf('output/tree.pdf')
