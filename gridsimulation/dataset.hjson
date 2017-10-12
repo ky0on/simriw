@@ -1,0 +1,472 @@
+{
+  hokkaido:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 41.51722222222222
+    lon0: 139.79916666666668
+    lat1: 45.55722222222222
+    lon1: 148.89305555555555
+    csv: dataset/hokkaido.csv
+  }
+  aomori:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 40.534166666666664
+    lon0: 141.01277777777779
+    lat1: 41.556111111111115
+    lon1: 141.68333333333334
+    csv: dataset/aomori.csv
+  }
+  iwate:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 39.39111111111111
+    lon0: 141.2313888888889
+    lat1: 40.45055555555555
+    lon1: 142.0725
+    csv: dataset/iwate.csv
+  }
+  miyagi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 37.9825
+    lon0: 140.7927777777778
+    lat1: 39.00277777777778
+    lon1: 141.67527777777778
+    csv: dataset/miyagi.csv
+  }
+  akita:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 39.99444444444445
+    lon0: 140.56222222222223
+    lat1: 40.51111111111111
+    lon1: 140.99527777777777
+    csv: dataset/akita.csv
+  }
+  yamagata:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 39.185833333333335
+    lon0: 140.12583333333333
+    lat1: 39.20861111111111
+    lon1: 140.64666666666668
+    csv: dataset/yamagata.csv
+  }
+  fukushima:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 37.23777777777778
+    lon0: 140.465
+    lat1: 37.97666666666667
+    lon1: 141.04361111111112
+    csv: dataset/fukushima.csv
+  }
+  ibaraki:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.19777777777778
+    lon0: 140.8375
+    lat1: 36.945277777777775
+    lon1: 140.85166666666666
+    csv: dataset/ibaraki.csv
+  }
+  tochigi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.657222222222224
+    lon0: 139.68777777777777
+    lat1: 37.155
+    lon1: 140.2925
+    csv: dataset/tochigi.csv
+  }
+  gunma:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.48972222222222
+    lon0: 138.71277777777777
+    lat1: 37.05861111111111
+    lon1: 139.66972222222222
+    csv: dataset/gunma.csv
+  }
+  saitama:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.97138888888889
+    lon0: 139.54722222222222
+    lat1: 36.28333333333333
+    lon1: 139.90027777777777
+    csv: dataset/saitama.csv
+  }
+  chiba:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.31194444444444
+    lon0: 139.88694444444445
+    lat1: 36.10388888888889
+    lon1: 140.8725
+    csv: dataset/chiba.csv
+  }
+  tokyo:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 20.42527777777778
+    lon0: 136.06972222222223
+    lat1: 35.89833333333333
+    lon1: 153.98638888888888
+    csv: dataset/tokyo.csv
+  }
+  kanagawa:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.40472222222222
+    lon0: 139.6288888888889
+    lat1: 35.672777777777775
+    lon1: 139.79611111111112
+    csv: dataset/kanagawa.csv
+  }
+  yamanashi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.714444444444446
+    lon0: 138.4911111111111
+    lat1: 35.971666666666664
+    lon1: 139.13444444444445
+    csv: dataset/yamanashi.csv
+  }
+  nagano:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.81194444444444
+    lon0: 137.57861111111112
+    lat1: 37.030277777777776
+    lon1: 138.73944444444444
+    csv: dataset/nagano.csv
+  }
+  niigata:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.98027777777778
+    lon0: 138.70527777777778
+    lat1: 38.553333333333335
+    lon1: 139.9
+    csv: dataset/niigata.csv
+  }
+  toyama:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.423611111111114
+    lon0: 136.9752777777778
+    lat1: 36.98027777777778
+    lon1: 137.76333333333332
+    csv: dataset/toyama.csv
+  }
+  ishikawa:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 36.29694444444444
+    lon0: 136.67388888888888
+    lat1: 37.85527777777778
+    lon1: 137.36527777777778
+    csv: dataset/ishikawa.csv
+  }
+  fukui:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.52583333333333
+    lon0: 135.70083333333332
+    lat1: 36.29666666666667
+    lon1: 136.8322222222222
+    csv: dataset/fukui.csv
+  }
+  gifu:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.653055555555554
+    lon0: 136.66944444444445
+    lat1: 36.465
+    lon1: 137.65305555555557
+    csv: dataset/gifu.csv
+  }
+  shizuoka:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.75
+    lon0: 138.94333333333333
+    lat1: 35.645833333333336
+    lon1: 139.17666666666668
+    csv: dataset/shizuoka.csv
+  }
+  aichi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.14194444444445
+    lon0: 137.0363888888889
+    lat1: 35.425
+    lon1: 137.83805555555554
+    csv: dataset/aichi.csv
+  }
+  mie:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.85916666666667
+    lon0: 135.97472222222223
+    lat1: 35.257777777777775
+    lon1: 136.9875
+    csv: dataset/mie.csv
+  }
+  shiga:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.34527777777778
+    lon0: 136.02694444444444
+    lat1: 35.70361111111111
+    lon1: 136.45527777777778
+    csv: dataset/shiga.csv
+  }
+  kyoto:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.58861111111111
+    lon0: 135.85111111111112
+    lat1: 35.77916666666667
+    lon1: 136.05555555555554
+    csv: dataset/kyoto.csv
+  }
+  osaka:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.31444444444445
+    lon0: 135.11138888888888
+    lat1: 35.05138888888889
+    lon1: 135.74666666666667
+    csv: dataset/osaka.csv
+  }
+  hyogo:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.85194444444444
+    lon0: 134.8163888888889
+    lat1: 35.67472222222222
+    lon1: 135.4686111111111
+    csv: dataset/hyogo.csv
+  }
+  nara:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.075833333333335
+    lon0: 135.87222222222223
+    lat1: 34.78138888888889
+    lon1: 136.23
+    csv: dataset/nara.csv
+  }
+  wakayama:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.27972222222222
+    lon0: 135.7625
+    lat1: 34.38444444444445
+    lon1: 136.01333333333332
+    csv: dataset/wakayama.csv
+  }
+  tottori:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.070277777777775
+    lon0: 133.26916666666668
+    lat1: 35.614444444444445
+    lon1: 134.51527777777778
+    csv: dataset/tottori.csv
+  }
+  shimane:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.50416666666667
+    lon0: 131.8202777777778
+    lat1: 37.244166666666665
+    lon1: 133.38694444444445
+    csv: dataset/shimane.csv
+  }
+  okayama:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 35.05305555555555
+    lon0: 133.5336111111111
+    lat1: 35.352777777777774
+    lon1: 134.41305555555556
+    csv: dataset/okayama.csv
+  }
+  hiroshima:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.50138888888889
+    lon0: 132.48527777777778
+    lat1: 35.105555555555554
+    lon1: 133.47083333333333
+    csv: dataset/hiroshima.csv
+  }
+  yamaguchi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.11222222222222
+    lon0: 132.13361111111112
+    lat1: 34.798611111111114
+    lon1: 132.49194444444444
+    csv: dataset/yamaguchi.csv
+  }
+  tokushima:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.88166666666667
+    lon0: 134.32
+    lat1: 34.25194444444445
+    lon1: 134.82166666666666
+    csv: dataset/tokushima.csv
+  }
+  kagawa:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.10777777777778
+    lon0: 133.68805555555556
+    lat1: 34.56472222222222
+    lon1: 134.4475
+    csv: dataset/kagawa.csv
+  }
+  ehime:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.34444444444444
+    lon0: 132.45305555555555
+    lat1: 34.30166666666667
+    lon1: 133.69305555555556
+    csv: dataset/ehime.csv
+  }
+  kochi:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.79972222222222
+    lon0: 132.54305555555555
+    lat1: 33.88333333333333
+    lon1: 134.3138888888889
+    csv: dataset/kochi.csv
+  }
+  fukuoka:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.68972222222222
+    lon0: 130.39666666666668
+    lat1: 34.25
+    lon1: 131.19027777777777
+    csv: dataset/fukuoka.csv
+  }
+  saga:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.57555555555555
+    lon0: 130.21805555555557
+    lat1: 33.619166666666665
+    lon1: 130.5425
+    csv: dataset/saga.csv
+  }
+  nagasaki:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.24388888888889
+    lon0: 128.35
+    lat1: 34.7275
+    lon1: 130.38694444444445
+    csv: dataset/nagasaki.csv
+  }
+  kumamoto:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.17527777777778
+    lon0: 130.82055555555556
+    lat1: 33.195277777777775
+    lon1: 131.32944444444445
+    csv: dataset/kumamoto.csv
+  }
+  oita:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 33.25111111111111
+    lon0: 131.92583333333334
+    lat1: 33.74055555555555
+    lon1: 132.1772222222222
+    csv: dataset/oita.csv
+  }
+  miyazaki:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.05833333333333
+    lon0: 131.33583333333334
+    lat1: 32.83888888888889
+    lon1: 131.88583333333332
+    csv: dataset/miyazaki.csv
+  }
+  kagoshima:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 27.0475
+    lon0: 128.44361111111112
+    lat1: 32.31055555555555
+    lon1: 131.20555555555555
+    csv: dataset/kagoshima.csv
+  }
+  okinawa:
+  {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 24.449444444444445
+    lon0: 123.78833333333333
+    lat1: 27.885555555555555
+    lon1: 131.3322222222222
+    csv: dataset/okinawa.csv
+  }
+}
