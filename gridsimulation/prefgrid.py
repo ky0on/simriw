@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+import os
 import re
 import hjson
 import requests
+import subprocess
 import pandas as pd
 from html.parser import HTMLParser
 
@@ -52,18 +54,30 @@ if __name__ == '__main__':
     #explore prefectures
     for pref, url in parser.hrefs.items():
         print(pref)
-        table = pd.read_html(url)[0]
-        nw = [to_dd(table.iloc[2, 5]), to_dd(table.iloc[1, 4])]
-        se = [to_dd(table.iloc[2, 3]), to_dd(table.iloc[1, 2])]
+        table = pd.read_html(url, header=0, index_col=0, attrs={'border': 2})[0]
+        table.columns = ['cho', 'east', 'west', 'south', 'north']
+        table.index = ['lon', 'lat']
+        table = table.applymap(to_dd)
+        nw = {'lat': table.loc['lat', 'north'], 'lon': table.loc['lon', 'west']}
+        se = {'lat': table.loc['lat', 'south'], 'lon': table.loc['lon', 'east']}
         dataset[pref] = {
             'planting': '05-01',
             'harvesting': '10-05',
-            'lat0': min(nw[0], se[0]),
-            'lon0': min(nw[1], se[1]),
-            'lat1': max(nw[0], se[0]),
-            'lon1': max(nw[1], se[1]),
+            'lat0': min(nw['lat'], se['lat']),
+            'lon0': min(nw['lon'], se['lon']),
+            'lat1': max(nw['lat'], se['lat']),
+            'lon1': max(nw['lon'], se['lon']),
             'csv': 'dataset/{}.csv'.format(pref),
         }
+
+        #save map
+        yahoo_id = os.environ['YAHOO_API']
+        mapurl = \
+            f'https://map.yahooapis.jp/map/V1/static?appid={yahoo_id}' +\
+            '&pin1={},{}'.format(dataset[pref]['lat0'], dataset[pref]['lon0']) +\
+            '&pin2={},{}'.format(dataset[pref]['lat1'], dataset[pref]['lon1'])
+        cmd = f'wget "{mapurl}" -O output/{pref}.png'
+        subprocess.call(cmd, shell=True)
 
     #save
     with open('dataset.hjson', 'w') as fp:
