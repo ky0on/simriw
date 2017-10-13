@@ -31,4 +31,28 @@
     lon: 138.87909666667
     csv: 'dataset/niigata.csv'
   }
+  kyoto:
+  {
+    planting: 05-08
+    harvesting: 09-07
+    lat: 35.499473333333
+    lon: 135.10140666667
+    csv: 'dataset/kyoto.csv'
+  }
+  hiroshima:
+  {
+    planting: 05-18  # maybe
+    harvesting: 09-27
+    lat: 34.59301683
+    lon: 132.8103033
+    csv: 'dataset/hiroshima.csv'
+  }
+  fukushima:
+  {
+    planting: 05-15
+    harvesting: 10-05
+    lat: 37.17058811
+    lon: 140.1684573
+    csv: 'dataset/fukushima.csv'
+  }
 }
