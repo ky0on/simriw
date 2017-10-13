@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
             #run simulation
             simulated = simriw.main(
-                'Nipponbare', dataset[key]['csv'], True, start_date, 350,
+                'Koshihikari', dataset[key]['csv'], True, start_date, 350,
                 '../cultivars.hjson'
             )
             simulated['d']['year'] = year

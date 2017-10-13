@@ -41,7 +41,7 @@
   }
   hiroshima:
   {
-    planting: 05-18  # maybe
+    planting: '05-18'  # maybe
     harvesting: 09-27
     lat: 34.59301683
     lon: 132.8103033
