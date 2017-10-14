@@ -50,7 +50,7 @@ def daylength(lat, doy):
     return DL
 
 
-def main(cultivar, weather, transplant, startday, co2, cultivar_params_file='cultivars.hjson'):
+def main(cultivar, weather, transplant, startday, co2, cultivar_params_file='cultivars.hjson', silent=False):
     ''' '''
 
     #load cultivar parameters
@@ -234,7 +234,8 @@ def main(cultivar, weather, transplant, startday, co2, cultivar_params_file='cul
         if DVI > 1.0 and AVT[day] < cultivar['CTR']:
             TCHECK += 1
         if DVI > 2.0:
-            print('DVI reached to 2.')
+            if not silent:
+                print('DVI reached to 2.')
             growing = False
 
     #finalize
