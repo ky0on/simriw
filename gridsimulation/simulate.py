@@ -9,7 +9,7 @@ import os
 import sys
 import glob
 import hjson
-# import numpy as np
+import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -51,9 +51,14 @@ if __name__ == '__main__':
 
         for csvpath in tqdm(csvpaths):
 
+            #check weather data
+            csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
+            if np.any(pd.isnull(csv.T2M)):
+                print(f'np.nan in T2M. Skipped {csvpath}')
+                continue
+
             #plot raw data
             if args.plotraw:
-                csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
                 csv.plot(subplots=True)
                 plt.savefig(os.path.join(outdir, 'raw_{}.jpg'.format(pref)))
 
