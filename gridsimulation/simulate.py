@@ -53,6 +53,7 @@ if __name__ == '__main__':
 
             #check weather data
             csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
+            name = csvpath.split('.')[0]
             if np.any(pd.isnull(csv.T2M)):
                 print(f'np.nan in T2M. Skipped {csvpath}')
                 continue
@@ -75,7 +76,7 @@ if __name__ == '__main__':
                     '../cultivars.hjson', silent=True
                 )
                 simulated['d']['year'] = year
-                simulated['d']['loc'] = pref
+                simulated['d']['name'] = name
                 simulated_all.append(simulated['d'])
 
                 #fin
