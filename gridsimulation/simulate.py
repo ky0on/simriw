@@ -89,7 +89,7 @@ if __name__ == '__main__':
         csvpaths = glob.glob(os.path.join('dataset', '{}*.csv'.format(pref)))
         csvpaths.sort()
 
-        r = joblib.Parallel(n_jobs=4, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths[2300:2400])
+        r = joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
         result.append(pd.concat([pd.concat(_r) for _r in r if _r is not None]))
 
     #convert result to dataframe
