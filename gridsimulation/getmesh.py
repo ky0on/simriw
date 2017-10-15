@@ -4,12 +4,15 @@
 """   """
 
 from __future__ import print_function
+import os
 import hjson
 import joblib
 import argparse
 import numpy as np
 import pandas as pd
 from collections import defaultdict
+
+from common import mkdir
 
 import AMD_Tools3 as AMD
 
@@ -39,7 +42,7 @@ def fetch(element, timedomain, lalodomain):
     return dic
 
 
-def to_csv(name, dic):
+def to_csv(dic):
         #rename columns
         mesh = dic['mesh']
         mesh['DOY'] = mesh.index.dayofyear
@@ -53,12 +56,14 @@ def to_csv(name, dic):
             'RH': 'RH2M'}, inplace=True)
 
         #save
-        outcsv = 'dataset/{}.csv'.format(name)
+        outdir = os.path.join('dataset', dic['pref'], str(dic['year']))
+        outcsv = os.path.join(outdir, f'{dic["lat"]:.3f}x{dic["lon"]:.3f}.csv')
+        mkdir(outdir)
         with open(outcsv, 'w') as f:
             f.write('#config - lat:{}\n'.format(dic['lat']))
             f.write('#config - lon:{}\n'.format(dic['lon']))
             mesh.to_csv(f, float_format='%.3f')
-        print('saved as', outcsv)
+        # print('saved as', outcsv)
 
 
 if __name__ == '__main__':
@@ -81,13 +86,12 @@ if __name__ == '__main__':
         #init
         lalodomain = [dataset[pref]['lat0'], dataset[pref]['lat1'],
                       dataset[pref]['lon0'], dataset[pref]['lon1']]
-        meshes = {}   # key=name
+        elements = ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP')
 
         #explore year
         for year in range(1980, 2017):
 
             #access to server
-            elements = ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP')
             timedomain = [f'{year}-05-01', f'{year}-12-31']
             df = joblib.Parallel(n_jobs=6, verbose=1)(joblib.delayed(fetch)(element, timedomain, lalodomain) for element in elements)
 
@@ -101,13 +105,13 @@ if __name__ == '__main__':
                     mesh['DATE'] = tim
                     mesh = pd.DataFrame(mesh)
                     mesh.set_index('DATE', inplace=True)
-                    name = f'{pref}_{year}_{y:0>3}_{x:0>3}'
-                    meshes[name] = {
+                    dic = {
                         'lat': lat[y],
                         'lon': lon[x],
                         'mesh': mesh,
                         'year': year,
+                        'pref': pref,
                     }
 
-        #save as csv
-        joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(to_csv)(name, dic) for name, dic in meshes.items())
+                    #save as csv
+                    to_csv(dic)
