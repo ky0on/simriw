@@ -42,6 +42,24 @@ def fetch(element, timedomain, lalodomain):
     return dic
 
 
+def split_by_meshcode(lat, lon, y, x, df):
+    ''' '''
+    mesh = {d['element']: d['mesh'][:, y, x] for d in df}
+    mesh['DATE'] = tim
+    mesh = pd.DataFrame(mesh)
+    mesh.set_index('DATE', inplace=True)
+    dic = {
+        'lat': lat[y],
+        'lon': lon[x],
+        'mesh': mesh,
+        'year': year,
+        'pref': pref,
+    }
+
+    #save as csv
+    to_csv(dic)
+
+
 def to_csv(dic):
         #rename columns
         mesh = dic['mesh']
@@ -99,19 +117,6 @@ if __name__ == '__main__':
             lat = df[0]['lat']
             lon = df[0]['lon']
             tim = df[0]['tim']
-            for y in range(len(lat)):
-                for x in range(len(lon)):
-                    mesh = {d['element']: d['mesh'][:, y, x] for d in df}
-                    mesh['DATE'] = tim
-                    mesh = pd.DataFrame(mesh)
-                    mesh.set_index('DATE', inplace=True)
-                    dic = {
-                        'lat': lat[y],
-                        'lon': lon[x],
-                        'mesh': mesh,
-                        'year': year,
-                        'pref': pref,
-                    }
-
-                    #save as csv
-                    to_csv(dic)
+            joblib.Parallel(n_jobs=-1, verbose=1)(
+                joblib.delayed(split_by_meshcode)(
+                    lat, lon, y, x, df) for y in range(len(lat)) for x in range(len(lon)))
