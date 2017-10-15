@@ -23,7 +23,7 @@ def fetch(element, timedomain, lalodomain):
     except OSError:
         print('Warning: {} in {} is not available. Filled with nan'.format(element, year))
         ndays = AMD.timrange(*timedomain)
-        Msh = np.empty([len(ndays), 100, 100])   # should be fixed...
+        Msh = np.empty([len(ndays), 100, 100])   # approximate sizes of lat and lon
         Msh[:, :] = None
         lat = None
         lon = None
@@ -37,6 +37,28 @@ def fetch(element, timedomain, lalodomain):
         'element': element,
     }
     return dic
+
+
+def to_csv(name, dic):
+        #rename columns
+        mesh = dic['mesh']
+        mesh['DOY'] = mesh.index.dayofyear
+        mesh['YEAR'] = mesh.index.year
+        mesh.rename(columns={
+            'TMP_mea': 'T2M',
+            'TMP_max': 'T2MX',
+            'TMP_min': 'T2MN',
+            'GSR': 'swv_dwn',
+            'APCP': 'RAIN',
+            'RH': 'RH2M'}, inplace=True)
+
+        #save
+        outcsv = 'dataset/{}.csv'.format(name)
+        with open(outcsv, 'w') as f:
+            f.write('#config - lat:{}\n'.format(dic['lat']))
+            f.write('#config - lon:{}\n'.format(dic['lon']))
+            mesh.to_csv(f, float_format='%.3f')
+        print('saved as', outcsv)
 
 
 if __name__ == '__main__':
@@ -62,8 +84,7 @@ if __name__ == '__main__':
         meshes = {}   # key=name
 
         #explore year
-        # for year in range(1980, 2017):
-        for year in range(1980, 1982):
+        for year in range(1980, 2017):
 
             #access to server
             elements = ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP')
@@ -89,24 +110,4 @@ if __name__ == '__main__':
                     }
 
         #save as csv
-        for name, dic in meshes.items():
-
-            #rename columns
-            mesh = dic['mesh']
-            mesh['DOY'] = mesh.index.dayofyear
-            mesh['YEAR'] = mesh.index.year
-            mesh.rename(columns={
-                'TMP_mea': 'T2M',
-                'TMP_max': 'T2MX',
-                'TMP_min': 'T2MN',
-                'GSR': 'swv_dwn',
-                'APCP': 'RAIN',
-                'RH': 'RH2M'}, inplace=True)
-
-            #save
-            outcsv = 'dataset/{}.csv'.format(name)
-            with open(outcsv, 'w') as f:
-                f.write('#config - lat:{}\n'.format(dic['lat']))
-                f.write('#config - lon:{}\n'.format(dic['lon']))
-                mesh.to_csv(f, float_format='%.3f')
-            print('saved as', outcsv)
+        joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(to_csv)(name, dic) for name, dic in meshes.items())
