@@ -42,7 +42,7 @@ def fetch(element, timedomain, lalodomain):
     return dic
 
 
-def split_by_meshcode(lat, lon, y, x, df):
+def split_by_meshcode(lat, lon, tim, y, x, year, pref, df):
     ''' '''
     mesh = {d['element']: d['mesh'][:, y, x] for d in df}
     mesh['DATE'] = tim
@@ -56,32 +56,27 @@ def split_by_meshcode(lat, lon, y, x, df):
         'pref': pref,
     }
 
-    #save as csv
-    to_csv(dic)
+    #rename columns
+    mesh = dic['mesh']
+    mesh['DOY'] = mesh.index.dayofyear
+    mesh['YEAR'] = mesh.index.year
+    mesh.rename(columns={
+        'TMP_mea': 'T2M',
+        'TMP_max': 'T2MX',
+        'TMP_min': 'T2MN',
+        'GSR': 'swv_dwn',
+        'APCP': 'RAIN',
+        'RH': 'RH2M'}, inplace=True)
 
-
-def to_csv(dic):
-        #rename columns
-        mesh = dic['mesh']
-        mesh['DOY'] = mesh.index.dayofyear
-        mesh['YEAR'] = mesh.index.year
-        mesh.rename(columns={
-            'TMP_mea': 'T2M',
-            'TMP_max': 'T2MX',
-            'TMP_min': 'T2MN',
-            'GSR': 'swv_dwn',
-            'APCP': 'RAIN',
-            'RH': 'RH2M'}, inplace=True)
-
-        #save
-        outdir = os.path.join('dataset', dic['pref'], str(dic['year']))
-        outcsv = os.path.join(outdir, f'{dic["lat"]:.3f}x{dic["lon"]:.3f}.csv')
-        mkdir(outdir)
-        with open(outcsv, 'w') as f:
-            f.write('#config - lat:{}\n'.format(dic['lat']))
-            f.write('#config - lon:{}\n'.format(dic['lon']))
-            mesh.to_csv(f, float_format='%.3f')
-        # print('saved as', outcsv)
+    #save
+    outdir = os.path.join('dataset', dic['pref'], str(dic['year']))
+    outcsv = os.path.join(outdir, f'{dic["lat"]:.3f}x{dic["lon"]:.3f}.csv')
+    mkdir(outdir)
+    with open(outcsv, 'w') as f:
+        f.write('#config - lat:{}\n'.format(dic['lat']))
+        f.write('#config - lon:{}\n'.format(dic['lon']))
+        mesh.to_csv(f, float_format='%.3f')
+    # print('saved as', outcsv)
 
 
 if __name__ == '__main__':
@@ -117,6 +112,6 @@ if __name__ == '__main__':
             lat = df[0]['lat']
             lon = df[0]['lon']
             tim = df[0]['tim']
-            joblib.Parallel(n_jobs=-1, verbose=1)(
+            joblib.Parallel(n_jobs=-1, verbose=10)(
                 joblib.delayed(split_by_meshcode)(
-                    lat, lon, y, x, df) for y in range(len(lat)) for x in range(len(lon)))
+                    lat, lon, tim, y, x, year, pref, df) for y in range(len(lat)) for x in range(len(lon)))
