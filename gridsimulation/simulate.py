@@ -26,7 +26,7 @@ __date__ = '09 Oct 2017'
 def simulate(csvpath):
 
     #check weather data
-    print(f'Loading {csvpath}')
+    # print(f'Loading {csvpath}')
     csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
     name = csvpath.split('.')[0]
     if np.any(pd.isnull(csv.T2M)):
@@ -66,8 +66,7 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    outdir = 'output'
-    result = []
+    outdir = 'simulated'
 
     #load dataset settings
     with open('dataset.hjson', 'r') as f:
@@ -76,20 +75,24 @@ if __name__ == '__main__':
     #explore datasets
     for pref in dataset.keys():
 
-        #filter by prefecture
-        if pref != 'yamanashi':
-            continue
+        #explore year (to reduce memory consumption)
+        for year in range(1980, 2017):
 
-        #init
-        csvpaths = glob.glob(os.path.join('dataset', '{}*.csv'.format(pref)))
-        csvpaths.sort()
+            #init
+            csvpaths = glob.glob(os.path.join('dataset', pref, str(year), '*.csv'))
+            csvpaths.sort()
+            if len(csvpaths) == 0:
+                continue
 
-        r = joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
-        result += r
+            result = joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
 
-    #convert result to dataframe
-    result = pd.concat(result)
-    result.to_csv(os.path.join(outdir, 'sim.csv'), index=False)
+            #convert result to dataframe
+            result = pd.concat(result)
+
+            #save
+            outcsv = os.path.join(outdir, f'{pref}_{year}.csv')
+            result.to_csv(outcsv, index=False)
+            print(f'saved as {outcsv}')
 
     #plot GY in subplots
     # for loc in simulated_all['loc'].unique():
