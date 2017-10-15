@@ -12,7 +12,6 @@ import hjson
 import joblib
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 sys.path.append((os.path.join(
@@ -26,9 +25,8 @@ __date__ = '09 Oct 2017'
 
 def simulate(csvpath):
 
-    simulated_all = []
-
     #check weather data
+    print(f'Loading {csvpath}')
     csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
     name = csvpath.split('.')[0]
     if np.any(pd.isnull(csv.T2M)):
@@ -40,26 +38,23 @@ def simulate(csvpath):
         csv.plot(subplots=True)
         plt.savefig(os.path.join(outdir, 'raw_{}.jpg'.format(pref)))
 
-    #explore year
-    # for year in range(1980, 2017):
-    for year in range(1980, 1982):
+    #assert
+    years = np.unique(csv.index.year)
+    assert(len(years) == 1)   # asuming cultivation finishes in a year
+    year = years[0]
 
-        #init
-        start_date = str(year) + '-' + dataset[pref]['planting']
+    #init
+    start_date = str(year) + '-' + dataset[pref]['planting']
 
-        #run simulation
-        simulated = simriw.main(
-            'Koshihikari', csvpath, True, start_date, 350,
-            '../cultivars.hjson', silent=True
-        )
-        simulated['d']['year'] = year
-        simulated['d']['name'] = name
-        simulated_all.append(simulated['d'])
+    #run simulation
+    simulated = simriw.main(
+        'Koshihikari', csvpath, True, start_date, 350,
+        '../cultivars.hjson', silent=True
+    )
+    simulated['d']['year'] = year
+    simulated['d']['name'] = name
 
-        #fin
-        # simulated['d'].to_csv(os.path.join(outdir, 'sim_{}_{}.csv').format(pref, year))
-
-    return simulated_all
+    return simulated['d']
 
 
 if __name__ == '__main__':
@@ -90,7 +85,7 @@ if __name__ == '__main__':
         csvpaths.sort()
 
         r = joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
-        result.append(pd.concat([pd.concat(_r) for _r in r if _r is not None]))
+        result += r
 
     #convert result to dataframe
     result = pd.concat(result)
