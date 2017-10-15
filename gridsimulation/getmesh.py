@@ -5,6 +5,7 @@
 
 from __future__ import print_function
 import hjson
+import joblib
 import argparse
 import numpy as np
 import pandas as pd
@@ -14,6 +15,28 @@ import AMD_Tools3 as AMD
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '08 Oct 2017'
+
+
+def fetch(element, timedomain, lalodomain):
+    try:
+        Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
+    except OSError:
+        print('Warning: {} in {} is not available. Filled with nan'.format(element, year))
+        ndays = AMD.timrange(*timedomain)
+        Msh = np.empty([len(ndays), 100, 100])   # should be fixed...
+        Msh[:, :] = None
+        lat = None
+        lon = None
+        tim = None
+
+    dic = {
+        'lat': lat,
+        'lon': lon,
+        'tim': tim,
+        'mesh': Msh,
+        'element': element,
+    }
+    return dic
 
 
 if __name__ == '__main__':
@@ -39,42 +62,37 @@ if __name__ == '__main__':
         meshes = {}   # key=name
 
         #explore year
-        for year in range(1980, 2017):
+        # for year in range(1980, 2017):
+        for year in range(1980, 1982):
 
             #access to server
             elements = ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP')
-            timedomain = ['{}-01-01'.format(year), '{}-12-31'.format(year)]
-            for element in elements:
-                try:
-                    Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
+            timedomain = [f'{year}-05-01', f'{year}-12-31']
+            df = joblib.Parallel(n_jobs=6, verbose=1)(joblib.delayed(fetch)(element, timedomain, lalodomain) for element in elements)
 
-                except OSError:
-                    print('Warning: {} in {} is not available. Filled with nan'.format(element, year))
-                    Msh = np.empty([len(tim), len(lat), len(lon)])   # assuming other element in the same year has been downloaded just before
-                    Msh[:, :] = np.nan
-
-                #split by meshcode
-                for y in range(len(lat)):
-                    for x in range(len(lon)):
-                        mesh = pd.DataFrame({'DATE': tim, element: Msh[:, y, x]})
-                        mesh.set_index('DATE', inplace=True)
-                        name = '{0}_{1:0>3}_{2:0>3}'.format(pref, y, x)
-                        if name not in meshes.keys():
-                            meshes[name] = {
-                                'lat': lat[y],
-                                'lon': lon[x],
-                                'mesh': defaultdict(lambda: []),
-                            }
-                        meshes[name]['mesh'][element].append(mesh)
+            #split by meshcode
+            lat = df[0]['lat']
+            lon = df[0]['lon']
+            tim = df[0]['tim']
+            for y in range(len(lat)):
+                for x in range(len(lon)):
+                    mesh = {d['element']: d['mesh'][:, y, x] for d in df}
+                    mesh['DATE'] = tim
+                    mesh = pd.DataFrame(mesh)
+                    mesh.set_index('DATE', inplace=True)
+                    name = f'{pref}_{year}_{y:0>3}_{x:0>3}'
+                    meshes[name] = {
+                        'lat': lat[y],
+                        'lon': lon[x],
+                        'mesh': mesh,
+                        'year': year,
+                    }
 
         #save as csv
         for name, dic in meshes.items():
 
-            #concat
-            _mesh = [pd.concat(dic['mesh'][element]) for element in elements]
-            mesh = pd.concat(_mesh, axis=1)
-
             #rename columns
+            mesh = dic['mesh']
             mesh['DOY'] = mesh.index.dayofyear
             mesh['YEAR'] = mesh.index.year
             mesh.rename(columns={
@@ -90,5 +108,5 @@ if __name__ == '__main__':
             with open(outcsv, 'w') as f:
                 f.write('#config - lat:{}\n'.format(dic['lat']))
                 f.write('#config - lon:{}\n'.format(dic['lon']))
-                mesh.to_csv(f)
+                mesh.to_csv(f, float_format='%.3f')
             print('saved as', outcsv)
