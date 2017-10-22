@@ -28,9 +28,9 @@ def simulate(csvpath):
     #check weather data
     # print(f'Loading {csvpath}')
     csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
-    name = os.path.splitext(csvpath)[0]
+    name = os.path.splitext(os.path.basename(csvpath))[0]
     if np.any(pd.isnull(csv.T2M)):
-        print(f'np.nan in T2M. Skipped {csvpath}')
+        print(f'np.nan in T2M. Skipped {csvpath}.')
         return None
 
     #plot raw data
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    outdir = 'simulated'
+    outdir = 'simdata'
 
     #load dataset settings
     with open('dataset.hjson', 'r') as f:
@@ -84,7 +84,8 @@ if __name__ == '__main__':
             if len(csvpaths) == 0:
                 continue
 
-            result = joblib.Parallel(n_jobs=-1, verbose=1)(joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
+            result = joblib.Parallel(n_jobs=-1, verbose=1)(
+                joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
 
             #convert result to dataframe
             result = pd.concat(result)
