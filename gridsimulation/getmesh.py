@@ -42,22 +42,14 @@ def fetch(element, timedomain, lalodomain):
     return dic
 
 
-def split_by_meshcode(lat, lon, tim, y, x, year, pref, df):
+def split_by_meshcode(lat, lon, tims, y, x, year, pref, df):
     ''' '''
     mesh = {d['element']: d['mesh'][:, y, x] for d in df}
-    mesh['DATE'] = tim
+    mesh['DATE'] = tims
     mesh = pd.DataFrame(mesh)
     mesh.set_index('DATE', inplace=True)
-    dic = {
-        'lat': lat[y],
-        'lon': lon[x],
-        'mesh': mesh,
-        'year': year,
-        'pref': pref,
-    }
 
     #rename columns
-    mesh = dic['mesh']
     mesh['DOY'] = mesh.index.dayofyear
     mesh['YEAR'] = mesh.index.year
     mesh.rename(columns={
@@ -69,12 +61,13 @@ def split_by_meshcode(lat, lon, tim, y, x, year, pref, df):
         'RH': 'RH2M'}, inplace=True)
 
     #save
-    outdir = os.path.join('meshdata', dic['pref'], str(dic['year']))
-    outcsv = os.path.join(outdir, f'{dic["lat"]:.3f}x{dic["lon"]:.3f}.csv')
+    meshcode = AMD.lalo2mesh(lat, lon)
+    outdir = os.path.join('meshdata', pref, str(year))
+    outcsv = os.path.join(outdir, f'{meshcode}.csv')
     mkdir(outdir)
     with open(outcsv, 'w') as f:
-        f.write('#config - lat:{}\n'.format(dic['lat']))
-        f.write('#config - lon:{}\n'.format(dic['lon']))
+        f.write('#config - lat:{}\n'.format(lat))
+        f.write('#config - lon:{}\n'.format(lon))
         mesh.to_csv(f, float_format='%.3f')
     # print('saved as', outcsv)
 
@@ -83,6 +76,7 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument('--interval', '-i', default=1, help='interval of latitude and longitude')
     args = parser.parse_args()
 
     #load dataset settings
@@ -106,12 +100,14 @@ if __name__ == '__main__':
 
             #access to server
             timedomain = [f'{year}-05-01', f'{year}-12-31']
-            df = joblib.Parallel(n_jobs=6, verbose=1)(joblib.delayed(fetch)(element, timedomain, lalodomain) for element in elements)
+            df = joblib.Parallel(n_jobs=6, verbose=1)(
+                joblib.delayed(fetch)(element, timedomain, lalodomain) for element in elements)
 
             #split by meshcode
-            lat = df[0]['lat']
-            lon = df[0]['lon']
-            tim = df[0]['tim']
+            lats = df[0]['lat']
+            lons = df[0]['lon']
+            tims = df[0]['tim']
             joblib.Parallel(n_jobs=-1, verbose=10)(
                 joblib.delayed(split_by_meshcode)(
-                    lat, lon, tim, y, x, year, pref, df) for y in range(len(lat)) for x in range(len(lon)))
+                    lats[y], lons[x], tims, y, x, year, pref, df)
+                for y in range(0, len(lats), args.interval) for x in range(0, len(lons), args.interval))
