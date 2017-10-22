@@ -28,7 +28,7 @@ def simulate(csvpath):
     #check weather data
     # print(f'Loading {csvpath}')
     csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
-    name = csvpath.split('.')[0]
+    name = os.path.splitext(csvpath)[0]
     if np.any(pd.isnull(csv.T2M)):
         print(f'np.nan in T2M. Skipped {csvpath}')
         return None
