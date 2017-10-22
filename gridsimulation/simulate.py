@@ -28,7 +28,7 @@ def simulate(csvpath):
     #check weather data
     # print(f'Loading {csvpath}')
     csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
-    name = os.path.splitext(os.path.basename(csvpath))[0]
+    meshcode = os.path.splitext(os.path.basename(csvpath))[0]
     if np.any(pd.isnull(csv.T2M)):
         print(f'np.nan in T2M. Skipped {csvpath}.')
         return None
@@ -52,7 +52,7 @@ def simulate(csvpath):
         '../cultivars.hjson', silent=True
     )
     simulated['d']['year'] = year
-    simulated['d']['name'] = name
+    simulated['d']['meshcode'] = meshcode
 
     return simulated['d']
 
