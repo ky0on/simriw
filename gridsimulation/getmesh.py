@@ -69,7 +69,7 @@ def split_by_meshcode(lat, lon, tim, y, x, year, pref, df):
         'RH': 'RH2M'}, inplace=True)
 
     #save
-    outdir = os.path.join('dataset', dic['pref'], str(dic['year']))
+    outdir = os.path.join('meshdata', dic['pref'], str(dic['year']))
     outcsv = os.path.join(outdir, f'{dic["lat"]:.3f}x{dic["lon"]:.3f}.csv')
     mkdir(outdir)
     with open(outcsv, 'w') as f:

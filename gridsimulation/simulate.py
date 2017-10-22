@@ -79,7 +79,7 @@ if __name__ == '__main__':
         for year in range(1980, 2017):
 
             #init
-            csvpaths = glob.glob(os.path.join('dataset', pref, str(year), '*.csv'))
+            csvpaths = glob.glob(os.path.join('meshdata', pref, str(year), '*.csv'))
             csvpaths.sort()
             if len(csvpaths) == 0:
                 continue
