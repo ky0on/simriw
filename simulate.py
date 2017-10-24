@@ -49,7 +49,7 @@ def simulate(csvpath):
     #run simulation
     simulated = simriw.main(
         'Koshihikari', csvpath, True, start_date, 350,
-        '../cultivars.hjson', silent=True
+        './cultivars.hjson', silent=True
     )
     simulated['d']['year'] = year
     simulated['d']['meshcode'] = meshcode
