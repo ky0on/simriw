@@ -28,12 +28,15 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
+    parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
 
     #init
     plt.style.use('ggplot')
     slack = Slacker(os.environ['SLACK_API_KYONAWS'])
     csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
+    if args.debug:
+        csvpaths = csvpaths[:2]
     dfs = joblib.Parallel(n_jobs=-1, verbose=1)(
         joblib.delayed(load_dataset)(csvpath) for csvpath in csvpaths)
     df = pd.concat(dfs)
@@ -65,9 +68,11 @@ if __name__ == '__main__':
     ys = np.array(ys)
     print('xs.shape:', xs.shape)
     print('ys.shape:', ys.shape)
+    print('In training...')
     clf = tree.DecisionTreeRegressor()
     clf = clf.fit(xs, ys)
     p = clf.predict(xs)
+    print('done!')
     result = pd.DataFrame({'predicted': p, 'observed': ys})
     result.plot.scatter(x='observed', y='predicted')
     plt.savefig('output/simresult.pdf')
