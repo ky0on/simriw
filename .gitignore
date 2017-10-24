@@ -1,4 +1,6 @@
 /output/*
+/meshdata/*
+/simdata/*
 !.gitkeep
 
 /__pycache__
