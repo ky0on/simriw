@@ -14,10 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-sys.path.append((os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    os.pardir)))
-import simriw
+from pysimriw import simriw
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '09 Oct 2017'
