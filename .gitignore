@@ -3,4 +3,6 @@
 /simdata/*
 !.gitkeep
 
+/.ipynb_checkpoints
+
 /__pycache__
