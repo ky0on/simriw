@@ -19,7 +19,7 @@ __date__ = '15 Oct 2017'
 
 
 def load_dataset(csvpath):
-    # print('Loading', csvpath)
+    print('Loading', csvpath)
     df = pd.read_csv(csvpath)
     return df
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     slack = Slacker(os.environ['SLACK_API_KYONAWS'])
 
     #load simdata
-    csvpaths = glob.glob(os.path.join('simdata', '*.csv'))[:3]
+    csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
     if args.debug:
         csvpaths = csvpaths[:2]
     simdata_all = joblib.Parallel(n_jobs=-1, verbose=1)(
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     #run machine learning
     from sklearn.model_selection import ShuffleSplit
-    ss = ShuffleSplit(n_splits=5, test_size=0.30, random_state=308)
+    ss = ShuffleSplit(n_splits=3, test_size=0.30, random_state=308)
     for fold, (train, test) in enumerate(ss.split(simdata)):
 
         #init
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         yd = ['DVR']
 
         #train
-        clf = tree.DecisionTreeRegressor(max_depth=10)
+        clf = tree.DecisionTreeRegressor(max_depth=5)
         clf = clf.fit(simdata.iloc[train][xd],
                       simdata.iloc[train][yd])
 
