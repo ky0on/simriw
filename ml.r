@@ -17,7 +17,7 @@ sdf <- sample_n(df, 500000)
 x <- sdf[, c('DL', 'TMP', 'RAD', 'DVI'), with=F]
 y <- sdf[['DVR']]
 model <- cubist(x, y)
-summary(model)
+sink('output/summary.txt'); print(summary(model)); sink()
 
 #parameter tuning with caret
 # library(doParallel)
