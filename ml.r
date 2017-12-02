@@ -1,4 +1,6 @@
+#init
 set.seed(308)
+out <- './output/'
 
 #load
 library(data.table)
@@ -19,7 +21,8 @@ y <- sdf[['DVR']]
 library(Cubist)
 cat('training...\n')
 model <- cubist(x, y)
-sink('output/cubist.txt'); print(summary(model)); sink()
+sink(paste0(out, 'cubist.txt')); print(summary(model)); sink()
+saveRDS(model, paste0(out, 'cubist.obj'))
 
 #train (mob)
 library(party)
@@ -29,8 +32,14 @@ ctrl <- party::mob_control(
                            minsplit=500,
                            objfun=deviance,
                            verbose=FALSE)
-model <- party::mob(DVR ~ DL+TMP|DVI, data=sdf, control=ctrl, model=linearModel)
-plot(model)
+model <- party::mob(DVR ~ DL+TMP|DVI,
+                    data=sdf,
+                    control=ctrl,
+                    model=linearModel)
+#todo: try non-linear
+sink(paste0(out, 'mob.txt')); print(model, summary(model)); sink()
+pdf(paste0(out, 'mob.pdf')); plot(model); dev.off()
+saveRDS(model, paste0(out, 'mob.obj'))
 
 #train (M5P)
 #  - M5P controls: WOW(M5P)
@@ -39,8 +48,8 @@ library(partykit)
 model <- M5P(DVR~TMP+DL+DVI,
              data=sdf,
              control=Weka_control(N=F, M=200))
-print(model)
-summary(model)
-plot(as.party.Weka_tree(model))
+sink(paste0(out, 'm5p.txt')); print(model, summary(model)); sink()
+pdf(paste0(out, 'm5p.pdf')); plot(as.party.Weka_tree(model)); dev.off()
+saveRDS(model, paste0(out, 'm5p.obj'))
 
 #todo: plot prediction
