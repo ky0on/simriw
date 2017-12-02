@@ -8,31 +8,39 @@ files <- list.files(path=dir, pattern='*.csv')
 temp <- lapply(paste0(dir, '/', files), fread, sep=',')
 df <- rbindlist(temp)
 
-#train
-library(Cubist)
-library(mlbench)
+#dataset
 library(dplyr)
-cat('training...\n')
-sdf <- sample_n(df, 500000)
+# sdf <- sample_n(df, 500000)
+sdf <- sample_n(df, 5000)
 x <- sdf[, c('DL', 'TMP', 'RAD', 'DVI'), with=F]
 y <- sdf[['DVR']]
+
+#train (cubist)
+library(Cubist)
+cat('training...\n')
 model <- cubist(x, y)
-sink('output/summary.txt'); print(summary(model)); sink()
+sink('output/cubist.txt'); print(summary(model)); sink()
 
-#parameter tuning with caret
-# library(doParallel)
-# require(caret)
-# cl <- makeCluster(8); registerDoParallel(cl)
-# df <- sample_n(df, 100)
-# x <- df[, c('DL', 'TMP', 'RAD', 'DVI'), with=F]
-# y <- df[['DVR']]
-# fit <- train(x, y, 'cubist', committees=1)
-# fit
-# fit$times$everything
-# stopCluster(cl); registerDoSEQ()
+#train (mob)
+library(party)
+ctrl <- party::mob_control(
+                           alpha=0.05,
+                           bonferroni=TRUE,
+                           minsplit=500,
+                           objfun=deviance,
+                           verbose=FALSE)
+model <- party::mob(DVR ~ DL+TMP|DVI, data=sdf, control=ctrl, model=linearModel)
+plot(model)
 
-#plot
-# library(gridExtra)
-# p1 <- dotplot(model, what='splits', main='Conditions')
-# p2 <- dotplot(model, what='coefs', main='Coefs')
-# grid.arrange(p1,p2)
+#train (M5P)
+#  - M5P controls: WOW(M5P)
+library(RWeka)
+library(partykit)
+model <- M5P(DVR~TMP+DL+DVI,
+             data=sdf,
+             control=Weka_control(N=F, M=200))
+print(model)
+summary(model)
+plot(as.party.Weka_tree(model))
+
+#todo: plot prediction
