@@ -36,7 +36,7 @@ model <- party::mob(DVR ~ DL+TMP|DVI,
                     model=linearModel)
 #todo: try non-linear
 sink(paste0(out, 'mob.txt')); print(model, summary(model)); sink()
-pdf(paste0(out, 'mob.pdf')); plot(model); dev.off()
+pdf(paste0(out, 'mob.pdf'), width=12); plot(model); dev.off()
 saveRDS(model, paste0(out, 'mob.obj'))
 
 #train (M5P)
