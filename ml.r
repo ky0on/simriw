@@ -4,7 +4,6 @@ out <- './output/'
 
 #load
 library(data.table)
-cat('loading...\n')
 dir <- 'simdata'
 files <- list.files(path=dir, pattern='*.csv')
 temp <- lapply(paste0(dir, '/', files), fread, sep=',')
@@ -18,11 +17,10 @@ x <- sdf[, c('DL', 'TMP', 'RAD', 'DVI'), with=F]
 y <- sdf[['DVR']]
 
 #train (cubist)
-library(Cubist)
-cat('training...\n')
-model <- cubist(x, y)
-sink(paste0(out, 'cubist.txt')); print(summary(model)); sink()
-saveRDS(model, paste0(out, 'cubist.obj'))
+# library(Cubist)
+# model <- cubist(x, y)
+# sink(paste0(out, 'cubist.txt')); print(summary(model)); sink()
+# saveRDS(model, paste0(out, 'cubist.obj'))
 
 #train (mob)
 library(party)
@@ -43,13 +41,13 @@ saveRDS(model, paste0(out, 'mob.obj'))
 
 #train (M5P)
 #  - M5P controls: WOW(M5P)
-library(RWeka)
-library(partykit)
-model <- M5P(DVR~TMP+DL+DVI,
-             data=sdf,
-             control=Weka_control(N=F, M=200))
-sink(paste0(out, 'm5p.txt')); print(model, summary(model)); sink()
-pdf(paste0(out, 'm5p.pdf')); plot(as.party.Weka_tree(model)); dev.off()
-saveRDS(model, paste0(out, 'm5p.obj'))
+# library(RWeka)
+# library(partykit)
+# model <- M5P(DVR~TMP+DL+DVI,
+#              data=sdf,
+#              control=Weka_control(N=F, M=200))
+# sink(paste0(out, 'm5p.txt')); print(model, summary(model)); sink()
+# pdf(paste0(out, 'm5p.pdf')); plot(as.party.Weka_tree(model)); dev.off()
+# saveRDS(model, paste0(out, 'm5p.obj'))
 
 #todo: plot prediction
