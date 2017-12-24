@@ -81,6 +81,7 @@ if __name__ == '__main__':
             if len(csvpaths) == 0:
                 continue
 
+            print(f'{pref} ({year})')
             result = joblib.Parallel(n_jobs=-1, verbose=1)(
                 joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
 
