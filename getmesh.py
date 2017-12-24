@@ -44,7 +44,7 @@ def fetch(element, timedomain, lalodomain):
 
 def split_by_meshcode(lat, lon, tims, y, x, year, pref, df):
     ''' '''
-    mesh = {d['element']: d['mesh'][:, y, x] for d in df}
+    mesh = {d['element']: d['mesh'][:, y, x] for d in df if not np.all(d['lat'] is None)}
     mesh['DATE'] = tims
     mesh = pd.DataFrame(mesh)
     mesh.set_index('DATE', inplace=True)
