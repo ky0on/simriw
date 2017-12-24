@@ -121,12 +121,24 @@ if __name__ == '__main__':
                   optimizer=keras.optimizers.RMSprop(),
                   metrics=['accuracy'])
 
+    #learn
     model.fit(x_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
               verbose=1,
               # validation_data=(x_test, y_test),
               )
+
+    #score
     score = model.evaluate(x_train, y_train, verbose=0)
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
+
+    #plot prediction
+    pred = model.predict(x_train)
+    result = pd.DataFrame({
+        'actual': y_train.flatten(),
+        'predict': pred.flatten(),
+    })
+    result.plot.scatter(x='actual', y='predict')
+    plt.savefig('output/predict.pdf')
