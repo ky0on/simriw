@@ -83,7 +83,7 @@ if __name__ == '__main__':
     plt.cla()
     plt.hist(ys)
     plt.xlabel('GY')
-    plt.savefig('output/hist_y.pdf')
+    plt.savefig('output/hist_y.png')
 
     #cnn
     import keras
@@ -158,4 +158,4 @@ if __name__ == '__main__':
         'predict': pred.flatten(),
     })
     result.plot.scatter(x='actual', y='predict')
-    plt.savefig('output/predict.pdf')
+    plt.savefig('output/predict.png')
