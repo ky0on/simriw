@@ -60,23 +60,35 @@ if __name__ == '__main__':
         table = table.applymap(to_dd)
         nw = {'lat': table.loc['lat', 'north'], 'lon': table.loc['lon', 'west']}
         se = {'lat': table.loc['lat', 'south'], 'lon': table.loc['lon', 'east']}
+        lat0 = min(nw['lat'], se['lat'])
+        lon0 = min(nw['lon'], se['lon'])
+        lat1 = max(nw['lat'], se['lat'])
+        lon1 = max(nw['lon'], se['lon'])
         dataset[pref] = {
             'planting': '05-01',
             'harvesting': '10-05',
-            'lat0': min(nw['lat'], se['lat']),
-            'lon0': min(nw['lon'], se['lon']),
-            'lat1': max(nw['lat'], se['lat']),
-            'lon1': max(nw['lon'], se['lon']),
+            'lat0': lat0,
+            'lon0': lon0,
+            'lat1': lat1,
+            'lon1': lon1,
             'csv': 'dataset/{}.csv'.format(pref),
         }
 
         #save map
-        yahoo_id = os.environ['YAHOO_API']
+        apikey = os.environ['GOOGLE_MAP_API']
         mapurl = \
-            f'https://map.yahooapis.jp/map/V1/static?appid={yahoo_id}' +\
-            '&pin1={},{}'.format(dataset[pref]['lat0'], dataset[pref]['lon0']) +\
-            '&pin2={},{}'.format(dataset[pref]['lat1'], dataset[pref]['lon1'])
-        cmd = f'wget "{mapurl}" -O output/{pref}.png'
+            'https://maps.googleapis.com/maps/api/staticmap?' +\
+            f'markers={lat0},{lon0}' +\
+            f'&markers={lat0},{lon1}' +\
+            f'&markers={lat1},{lon0}' +\
+            f'&markers={lat1},{lon1}' +\
+            f'&path={lat0},{lon0}|{lat0},{lon1}' +\
+            f'&path={lat0},{lon0}|{lat1},{lon0}' +\
+            f'&path={lat1},{lon0}|{lat1},{lon1}' +\
+            f'&path={lat0},{lon1}|{lat1},{lon1}' +\
+            f'&size=600x600' +\
+            f'&key={apikey}'
+        cmd = f'wget "{mapurl}" -O output/map/{pref}.png'
         subprocess.call(cmd, shell=True)
 
     #save
