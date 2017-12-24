@@ -76,7 +76,8 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--interval', '-i', default=1, type=int, help='interval of latitude and longitude')
+    parser.add_argument('--interval', '-i', default=5, type=int,
+                        help='interval of latitude and longitude')
     args = parser.parse_args()
 
     #load dataset settings
