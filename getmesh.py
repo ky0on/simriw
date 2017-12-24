@@ -26,7 +26,7 @@ def fetch(element, timedomain, lalodomain):
     except OSError:
         print('Warning: {} in {} is not available. Filled with nan'.format(element, year))
         ndays = AMD.timrange(*timedomain)
-        Msh = np.empty([len(ndays), 100, 100])   # approximate sizes of lat and lon
+        Msh = np.empty([len(ndays), 1000, 1000])   # approximate sizes of lat and lon
         Msh[:, :] = None
         lat = None
         lon = None
@@ -44,7 +44,7 @@ def fetch(element, timedomain, lalodomain):
 
 def split_by_meshcode(lat, lon, tims, y, x, year, pref, df):
     ''' '''
-    mesh = {d['element']: d['mesh'][:, y, x] for d in df if not np.all(d['lat'] is None)}
+    mesh = {d['element']: d['mesh'][:, y, x] for d in df}
     mesh['DATE'] = tims
     mesh = pd.DataFrame(mesh)
     mesh.set_index('DATE', inplace=True)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--interval', '-i', default=5, type=int,
+    parser.add_argument('--interval', '-i', default=10, type=int,
                         help='interval of latitude and longitude')
     args = parser.parse_args()
 
