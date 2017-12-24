@@ -24,10 +24,10 @@ if __name__ == '__main__':
         lon1 = v['lon1']
         mapurl = \
             'https://maps.googleapis.com/maps/api/staticmap?' +\
-            f'markers={lat0},{lon0}' +\
+            f'markers=label:A|{lat0},{lon0}' +\
             f'&markers={lat0},{lon1}' +\
             f'&markers={lat1},{lon0}' +\
-            f'&markers={lat1},{lon1}' +\
+            f'&markers=label:Z|{lat1},{lon1}' +\
             f'&path={lat0},{lon0}|{lat0},{lon1}' +\
             f'&path={lat0},{lon0}|{lat1},{lon0}' +\
             f'&path={lat1},{lon0}|{lat1},{lon1}' +\
