@@ -43,6 +43,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
+    parser.add_argument('--std', action='store_true')
     args = parser.parse_args()
     # args.debug = True
 
@@ -90,6 +91,7 @@ if __name__ == '__main__':
     from keras.layers import Dense, Dropout, Flatten
     from keras.layers import Conv2D
     # from keras.layers import Conv2D, MaxPooling2D
+    from sklearn.preprocessing import MinMaxScaler
 
     batch_size = 32
     epochs = 100
@@ -97,11 +99,19 @@ if __name__ == '__main__':
     #NaN -> 0
     xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
 
-    # x_train = x_train.astype('float32')
-    # x_test = x_test.astype('float32')
-    # x_train /= 255
-    # x_test /= 255
-
+    #normalization
+    x_scaler = MinMaxScaler()
+    y_scaler = MinMaxScaler()
+    xs_scaled = x_scaler.fit_transform(xs.reshape(-1, xs.shape[2]))
+    ys_scaled = y_scaler.fit_transform(ys.reshape(-1, 1))
+    xs_scaled = xs_scaled.reshape(xs.shape)
+    ys_scaled = ys_scaled.reshape(ys.shape)
+    if args.std:
+        x_train = xs_scaled.reshape(xs_scaled.shape[0], xs_scaled.shape[1], xs_scaled.shape[2], 1)
+        y_train = ys_scaled.reshape(ys.shape[0], 1)
+    else:
+        x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
+        y_train = ys.reshape(ys.shape[0], 1)
     print('x_train shape:', x_train.shape)
     print(x_train.shape[0], 'train samples')
     # print(x_test.shape[0], 'test samples')
