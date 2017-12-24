@@ -87,7 +87,12 @@ if __name__ == '__main__':
     for pref in dataset.keys():
 
         #filter by prefecture
-        if pref != 'yamanashi':
+        if pref not in ('yamanashi', 'akita'):
+            continue
+
+        #skip if data exists
+        if os.path.exists(os.path.join('meshdata', pref)):
+            print('skipped', pref)
             continue
 
         #init
