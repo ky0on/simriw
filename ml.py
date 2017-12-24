@@ -92,11 +92,10 @@ if __name__ == '__main__':
     # from keras.layers import Conv2D, MaxPooling2D
 
     batch_size = 32
-    epochs = 12
+    epochs = 100
 
-    x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
-    y_train = ys.reshape(ys.shape[0], 1)
-    #TODO(kyon):normalization
+    #NaN -> 0
+    xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
 
     # x_train = x_train.astype('float32')
     # x_test = x_test.astype('float32')
