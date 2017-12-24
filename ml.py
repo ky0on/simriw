@@ -79,6 +79,7 @@ if __name__ == '__main__':
     print('ys.shape:', ys.shape)
 
     #histogram of x and y
+    plt.cla()
     plt.hist(ys)
     plt.xlabel('GY')
     plt.savefig('output/hist_y.pdf')
@@ -119,15 +120,22 @@ if __name__ == '__main__':
 
     model.compile(loss=keras.losses.mean_squared_error,
                   optimizer=keras.optimizers.RMSprop(),
-                  metrics=['accuracy'])
+                  metrics=[keras.metrics.mae])
 
     #learn
-    model.fit(x_train, y_train,
-              batch_size=batch_size,
-              epochs=epochs,
-              verbose=1,
-              # validation_data=(x_test, y_test),
-              )
+    history = model.fit(x_train, y_train,
+                        batch_size=batch_size,
+                        epochs=epochs,
+                        verbose=1,
+                        # validation_data=(x_test, y_test),
+                        )
+
+    #history
+    for t in ('loss', 'mean_absolute_error'):
+        plt.cla()
+        plt.plot(history.history[t], label=f'train ({t})')
+        plt.legend()
+        plt.savefig(f'output/history_{t}.png')
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
