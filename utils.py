@@ -10,7 +10,7 @@ __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '26 Dec 2017'
 
 
-def slack_image(imgpath, msg='', channel='#general', post=True):
+def slack_file(filepath, msg='', channel='#general', post=True):
     ''' Post image to slack '''
 
     #not post
@@ -20,9 +20,9 @@ def slack_image(imgpath, msg='', channel='#general', post=True):
     slack = Slacker(os.environ['SLACK_API_KYONAWS'])
 
     try:
-        slack.files.upload(imgpath,
+        slack.files.upload(filepath,
                            initial_comment=msg,
                            channels=channel,
-                           filename=imgpath.replace('/', '-'))
+                           filename=filepath.replace('/', '-'))
     except:
         warnings.warn('slack failed.')

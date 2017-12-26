@@ -13,6 +13,8 @@ import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
 
+# from utils import slack_file
+
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
 
@@ -46,6 +48,7 @@ if __name__ == '__main__':
     parser.add_argument('--std', action='store_true')
     parser.add_argument('--epochs', '-e', type=int, default=100, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
+    parser.add_argument('--noslack', action='store_false')
     args = parser.parse_args()
     # args.debug = True
 
