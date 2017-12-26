@@ -14,13 +14,14 @@ from slacker import Slacker
 import matplotlib.pyplot as plt
 
 # from utils import slack_file
+from utils import log
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
 
 
 def load_dataset(csvpath):
-    print('Loading', csvpath)
+    log('Loading', csvpath)
     df = pd.read_csv(csvpath)
     return df
 
@@ -71,7 +72,7 @@ if __name__ == '__main__':
     xs, ys = [], []
     for meshcode in simdata['meshcode'].unique():
         for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
-            # print(year, meshcode)
+            # log(year, meshcode)
             a_simdata = simdata.loc[(simdata['meshcode'] == meshcode) & (simdata['year'] == year), :]
             x = a_simdata[x_types]
             x = fill_na_rows(x, target_nrows=longest)
@@ -81,8 +82,8 @@ if __name__ == '__main__':
             #TODO: eliminate lower GY?
     xs = np.array(xs).astype(np.float32)
     ys = np.array(ys).astype(np.float32)
-    print('xs.shape:', xs.shape)
-    print('ys.shape:', ys.shape)
+    log('xs.shape:', xs.shape)
+    log('ys.shape:', ys.shape)
 
     #histogram of x and y
     plt.cla()
@@ -114,9 +115,9 @@ if __name__ == '__main__':
     else:
         x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
         y_train = ys.reshape(ys.shape[0], 1)
-    print('x_train shape:', x_train.shape)
-    print(x_train.shape[0], 'train samples')
-    # print(x_test.shape[0], 'test samples')
+    log('x_train shape:', x_train.shape)
+    log(x_train.shape[0], 'train samples')
+    # log(x_test.shape[0], 'test samples')
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
@@ -150,8 +151,8 @@ if __name__ == '__main__':
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
+    log('Test loss:', score[0])
+    log('Test accuracy:', score[1])
 
     #plot prediction
     pred = model.predict(x_train)
