@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""   """
+""" GY prediction using CNN  """
 
 from __future__ import print_function
 import argparse
@@ -44,6 +44,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('--std', action='store_true')
+    parser.add_argument('--epochs', '-e', type=int, default=100, help='the number of epochs')
+    parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     args = parser.parse_args()
     # args.debug = True
 
@@ -93,9 +95,6 @@ if __name__ == '__main__':
     # from keras.layers import Conv2D, MaxPooling2D
     from sklearn.preprocessing import MinMaxScaler
 
-    batch_size = 32
-    epochs = 100
-
     #NaN -> 0
     xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
 
@@ -133,8 +132,8 @@ if __name__ == '__main__':
 
     #learn
     history = model.fit(x_train, y_train,
-                        batch_size=batch_size,
-                        epochs=epochs,
+                        batch_size=args.batchsize,
+                        epochs=args.epochs,
                         verbose=1,
                         # validation_data=(x_test, y_test),
                         )
