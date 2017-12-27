@@ -52,6 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--noslack', action='store_false')
     args = parser.parse_args()
     # args.debug = True
+    log(str(args))
 
     #init
     plt.style.use('ggplot')
