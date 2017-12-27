@@ -13,8 +13,7 @@ import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
 
-# from utils import slack_file
-from utils import log
+from utils import slack_file, log
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
@@ -163,3 +162,5 @@ if __name__ == '__main__':
     })
     result.plot.scatter(x='actual', y='predict')
     plt.savefig('output/predict.png')
+
+    slack_file('output/log.txt')
