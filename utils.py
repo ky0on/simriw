@@ -35,13 +35,6 @@ def slack_file(filepath, msg='', channel='#general', post=True):
         warnings.warn('slack failed.')
 
 
-def log(*args):
-    msg = ' '.join(map(str, [datetime.datetime.now(), '>'] + list(args)))
-    print(msg)
-    with open('output/log.txt', 'a') as fd:
-        fd.write(msg + '\n')
-
-
 def xyline(ax):
     lims = [
         np.min([ax.get_xlim(), ax.get_ylim()]),  # min of both axes
@@ -49,3 +42,15 @@ def xyline(ax):
     ]
 
     ax.plot(lims, lims, 'k-', alpha=.5)
+
+
+class Logger:
+
+    def __init__(self, fpath):
+        self.fpath = fpath
+
+    def __call__(self, *args):
+        msg = ' '.join(map(str, [datetime.datetime.now(), '>'] + list(args)))
+        print(msg)
+        with open(self.fpath, 'a') as fd:
+            fd.write(msg + '\n')

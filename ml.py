@@ -13,7 +13,8 @@ import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
 
-from utils import save_and_slack_file, slack_file, log, xyline
+from utils import save_and_slack_file, slack_file, xyline
+from utils import Logger
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
@@ -52,6 +53,12 @@ if __name__ == '__main__':
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
     args = parser.parse_args()
     # args.debug = True
+
+    #logger
+    logpath = os.path.join(
+        'output',
+        pd.Timestamp.now().strftime('%y%m%d%H%M') + '.log')
+    log = Logger(logpath)
     log(str(args))
 
     #init
@@ -173,4 +180,4 @@ if __name__ == '__main__':
     save_and_slack_file(fig, 'output/predict.png', post=args.noslack)
 
     #post log
-    slack_file('output/log.txt', post=args.noslack)
+    slack_file(logpath, post=args.noslack)
