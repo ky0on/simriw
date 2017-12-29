@@ -13,7 +13,7 @@ import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
 
-from utils import slack_file, log
+from utils import save_and_slack_file, slack_file, log
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     # simdata.dropna(how='any', inplace=True)   # drop nan records
 
     #extract dataset
-    x_types = ['DL', 'TMP', 'RAD']
+    x_types = ['DL', 'TMP', 'RAD']   # TODO: Tmax, co2
     xs, ys = [], []
     for meshcode in simdata['meshcode'].unique():
         for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
@@ -86,10 +86,10 @@ if __name__ == '__main__':
     log('ys.shape:', ys.shape)
 
     #histogram of x and y
-    plt.cla()
-    plt.hist(ys)
-    plt.xlabel('GY')
-    plt.savefig('output/hist_y.png')
+    fig, ax = plt.subplots(1, 1)
+    ax.hist(ys)
+    ax.set_xlabel('GY')
+    save_and_slack_file(fig, 'output/hist_y.png', post=args.noslack)
 
     #cnn
     import keras
@@ -143,11 +143,11 @@ if __name__ == '__main__':
                         )
 
     #history
-    for t in ('loss', 'mean_absolute_error'):
-        plt.cla()
-        plt.plot(history.history[t], label=f'train ({t})')
-        plt.legend()
-        plt.savefig(f'output/history_{t}.png')
+    fig, axes = plt.subplots(1, 2)
+    for i, t in enumerate(('loss', 'mean_absolute_error')):
+        axes[i].plot(history.history[t], label=f'train ({t})')
+        axes[i].legend(loc='upper right')
+    save_and_slack_file(fig, 'output/history.png', post=args.noslack)
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
@@ -160,7 +160,9 @@ if __name__ == '__main__':
         'actual': y_train.flatten(),
         'predict': pred.flatten(),
     })
-    result.plot.scatter(x='actual', y='predict')
-    plt.savefig('output/predict.png')
+    fig, ax = plt.subplots(1, 1)
+    result.plot.scatter(x='actual', y='predict', ax=ax)
+    save_and_slack_file(fig, 'output/predict.png', post=args.noslack)
 
-    slack_file('output/log.txt')
+    #post log
+    slack_file('output/log.txt', post=args.noslack)

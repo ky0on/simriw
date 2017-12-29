@@ -11,6 +11,11 @@ __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '26 Dec 2017'
 
 
+def save_and_slack_file(fig, filepath, post=True):
+    fig.savefig(filepath)
+    slack_file(filepath, post=post)
+
+
 def slack_file(filepath, msg='', channel='#general', post=True):
     ''' Post image to slack '''
 
