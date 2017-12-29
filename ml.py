@@ -49,6 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', '-e', type=int, default=100, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
+    parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
     args = parser.parse_args()
     # args.debug = True
     log(str(args))
@@ -89,7 +90,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots(1, 1)
     ax.hist(ys)
     ax.set_xlabel('GY')
-    save_and_slack_file(fig, 'output/hist_y.png', post=args.noslack)
+    save_and_slack_file(fig, 'output/hist_y_before.png', post=args.noslack)
 
     #cnn
     import keras
@@ -101,6 +102,10 @@ if __name__ == '__main__':
 
     #NaN -> 0
     xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
+
+    #remove smaller GY
+    xs = xs[ys > args.threshold]
+    ys = ys[ys > args.threshold]
 
     #normalization
     x_scaler = MinMaxScaler()
