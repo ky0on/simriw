@@ -69,7 +69,10 @@ if __name__ == '__main__':
     # simdata.dropna(how='any', inplace=True)   # drop nan records
 
     #extract dataset
-    x_types = ['DL', 'TMP', 'RAD']   # TODO: Tmax, co2
+    # x_types = ['DL', 'TAV', 'RAD']
+    # x_types = ['DL', 'TAV', 'TMX', 'RAD']
+    x_types = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
+    log('x_types:', x_types)
     xs, ys = [], []
     for meshcode in simdata['meshcode'].unique():
         for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
