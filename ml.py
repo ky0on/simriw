@@ -80,7 +80,6 @@ if __name__ == '__main__':
             y = a_simdata.GY.iloc[-1]
             xs.append(np.array(x))
             ys.append(y)
-            #TODO: eliminate lower GY?
     xs = np.array(xs).astype(np.float32)
     ys = np.array(ys).astype(np.float32)
     log('xs.shape:', xs.shape)
