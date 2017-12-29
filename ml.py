@@ -13,7 +13,7 @@ import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
 
-from utils import save_and_slack_file, slack_file, log
+from utils import save_and_slack_file, slack_file, log, xyline
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
@@ -162,6 +162,7 @@ if __name__ == '__main__':
     })
     fig, ax = plt.subplots(1, 1)
     result.plot.scatter(x='actual', y='predict', ax=ax)
+    xyline(ax)
     save_and_slack_file(fig, 'output/predict.png', post=args.noslack)
 
     #post log

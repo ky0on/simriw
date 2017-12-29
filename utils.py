@@ -5,6 +5,7 @@ from __future__ import print_function
 import os
 import warnings
 import datetime
+import numpy as np
 from slacker import Slacker
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
@@ -39,3 +40,12 @@ def log(*args):
     print(msg)
     with open('output/log.txt', 'a') as fd:
         fd.write(msg + '\n')
+
+
+def xyline(ax):
+    lims = [
+        np.min([ax.get_xlim(), ax.get_ylim()]),  # min of both axes
+        np.max([ax.get_xlim(), ax.get_ylim()]),  # max of both axes
+    ]
+
+    ax.plot(lims, lims, 'k-', alpha=.5)
