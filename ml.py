@@ -54,16 +54,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
     # args.debug = True
 
-    #logger
-    logpath = os.path.join(
-        'output',
-        pd.Timestamp.now().strftime('%y%m%d%H%M') + '.log')
-    log = Logger(logpath)
-    log(str(args))
-
     #init
     plt.style.use('ggplot')
     slack = Slacker(os.environ['SLACK_API_KYONAWS'])
+    outdir = os.path.join('output',
+                          pd.Timestamp.now().strftime('%y%m%d%H%M%S'))
+    os.mkdir(outdir)
+
+    #logger
+    logpath = os.path.join(outdir, 'log')
+    log = Logger(logpath)
+    log(str(args))
 
     #load simdata
     csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
@@ -99,7 +100,7 @@ if __name__ == '__main__':
     fig, ax = plt.subplots(1, 1)
     ax.hist(ys)
     ax.set_xlabel('GY')
-    save_and_slack_file(fig, 'output/hist_y_before.png', post=args.noslack)
+    save_and_slack_file(fig, f'{outdir}/hist_y_before.png', post=args.noslack)
 
     #cnn
     import keras
@@ -161,7 +162,7 @@ if __name__ == '__main__':
     for i, t in enumerate(('loss', 'mean_absolute_error')):
         axes[i].plot(history.history[t], label=f'train ({t})')
         axes[i].legend(loc='upper right')
-    save_and_slack_file(fig, 'output/history.png', post=args.noslack)
+    save_and_slack_file(fig, f'{outdir}/history.png', post=args.noslack)
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
@@ -177,10 +178,10 @@ if __name__ == '__main__':
     fig, ax = plt.subplots(1, 1)
     result.plot.scatter(x='actual', y='predict', ax=ax)
     xyline(ax)
-    save_and_slack_file(fig, 'output/predict.png', post=args.noslack)
+    save_and_slack_file(fig, f'{outdir}/predict.png', post=args.noslack)
 
     #post log
     slack_file(logpath, post=args.noslack)
 
     #save model
-    model.save('output/model.h5')
+    model.save(f'{outdir}/model.h5')
