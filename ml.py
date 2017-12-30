@@ -181,3 +181,6 @@ if __name__ == '__main__':
 
     #post log
     slack_file(logpath, post=args.noslack)
+
+    #save model
+    model.save('output/model.h5')
