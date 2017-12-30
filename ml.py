@@ -144,6 +144,7 @@ if __name__ == '__main__':
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(1))
+    model.summary(print_fn=log)
 
     model.compile(loss=keras.losses.mean_squared_error,
                   optimizer=keras.optimizers.RMSprop(),
