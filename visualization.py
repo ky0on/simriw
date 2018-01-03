@@ -3,11 +3,11 @@
 
 from __future__ import print_function
 import argparse
-# import os
+import os
 # import glob
 # import numpy as np
 # import pandas as pd
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '31 Dec 2017'
@@ -16,105 +16,44 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', nargs='?', type=str, default='./output/171230224113/model.h5',
+    parser.add_argument('path', nargs='?', type=str, default='./output/171231162244/model.h5',
                         help='Path to keras model')
     args = parser.parse_args()
 
     #init
     # plt.style.use('ggplot')
+    outdir = os.path.dirname(args.path)
 
-    # # Activation Maximization on VGGNet
+    #
+    # Dense Layer Visualizations
+    #
 
-    # ## Dense Layer Visualizations
-
-    # To visualize activation over final dense layer outputs, we need to switch the
-    # `softmax` activation out for `linear` since gradient of output node will
-    # depend on all the other node activations. Doing this in keras is tricky, so
-    # we provide `utils.apply_modifications` to modify network parameters and
-    # rebuild the graph.
-
-    # If this swapping is not done, the results might be suboptimal. We will start
-    # by swapping out 'softmax' for 'linear' and compare what happens if we dont do
-    # this at the end.
-
-    # from keras.applications import VGG16
     from vis.utils import utils
     from keras import activations
     from keras.models import load_model
 
-    # model = VGG16(weights='imagenet', include_top=True)
     model = load_model(args.path)
-    layer_idx = utils.find_layer_idx(model, 'dense_8')   # last layer
+    layer_idx = utils.find_layer_idx(model, 'dense_2')   # last layer
 
     #Swap softmax with linear
     # model.layers[layer_idx].activation = activations.linear
     # model = utils.apply_modifications(model)
 
-    # # ### Visualizing a specific output category
-    #
-    # # Lets try visualizing a specific output category. We will pick `ouzel` which corresponds to imagenet category `20`
-
+    #Visualizing a specific output category
     from vis.visualization import visualize_activation
+    from vis.input_modifiers import Jitter
+    img1 = visualize_activation(model, layer_idx, filter_indices=0)
+    img2 = visualize_activation(model, layer_idx, filter_indices=0, max_iter=500, verbose=True)
+    img3 = visualize_activation(model, layer_idx, filter_indices=0, max_iter=500, input_modifiers=[Jitter(16)])
+    stitched = utils.stitch_images([img1, img2, img3], cols=3)
+    plt.imshow(stitched[:, :, 0])
+    plt.colorbar()
+    plt.savefig(os.path.join(outdir, 'dense_layer_vis.pdf'))
 
-    # # 20 is the imagenet category for 'ouzel'
-    img = visualize_activation(model, layer_idx, filter_indices=0)
-    plt.imshow(img[:, :, 0])
-    plt.savefig('/tmp/vis.png')
+    #
+    # Visualizing Conv filters
+    #
 
-    # # Hmm, that sort of looks like a bird. Lets see if we can get better results with more iterations. This time, lets see the verbose output during the optimization process.
-    #
-    # # In[3]:
-    #
-    #
-    # # 20 is the imagenet category for 'ouzel'
-    # img = visualize_activation(model, layer_idx, filter_indices=20, max_iter=500, verbose=True)
-    # plt.imshow(img)
-    #
-    #
-    # # We can see that the loss appears to be converging. So more iterations definitely seem to give better output. One way to get crisper results is to use `Jitter` input_modifier. As the name suggests, `Jitter` moves pixels around in the image. Lets try this out.
-    #
-    # # In[11]:
-    #
-    #
-    # from vis.input_modifiers import Jitter
-    #
-    # # 20 is the imagenet category for 'ouzel'
-    # # Jitter 16 pixels along all dimensions to during the optimization process.
-    # img = visualize_activation(model, layer_idx, filter_indices=20, max_iter=500, input_modifiers=[Jitter(16)])
-    # plt.imshow(img)
-    #
-    #
-    # # Look at that! Not only has the conv net captured what it means to be an ouzel, but it also seems to encode for different orientations and scales, a further proof of rotational and scale invariance.
-    #
-    # # Lets try this for a bunch of other random categories. This will take a while. Go grab a nice cup of coffee and prepare to be amused :)
-    #
-    # # In[12]:
-    #
-    #
-    # import numpy as np
-    # categories = np.random.permutation(1000)[:15]
-    #
-    # vis_images = []
-    # image_modifiers = [Jitter(16)]
-    # for idx in categories:
-    #     img = visualize_activation(model, layer_idx, filter_indices=idx, max_iter=500, input_modifiers=image_modifiers)
-    #
-    #     # Reverse lookup index to imagenet label and overlay it on the image.
-    #     img = utils.draw_text(img, utils.get_imagenet_label(idx))
-    #     vis_images.append(img)
-    #
-    # # Generate stitched images with 5 cols (so it will have 3 rows).
-    # plt.rcParams['figure.figsize'] = (50, 50)
-    # stitched = utils.stitch_images(vis_images, cols=5)
-    # plt.axis('off')
-    # plt.imshow(stitched)
-    # plt.show()
-    #
-    #
-    # # Some of them make sense if you stare at ot for a while. There are ways of improving this. We will cover some ideas for this in the next section. You can come back here and try those out as an exercise.
-    #
-    # # ## Visualizing Conv filters
-    #
     # # In a CNN, each Conv layer has several learned *template matching* filters that maximize their output when a similar
     # # template pattern is found in the input image. First Conv layer is easy to interpret; simply visualize the weights as an image. To see what the Conv layer is doing, a simple option is to apply the filter over raw input pixels.
     # # Subsequent Conv filters operate over the outputs of previous Conv filters (which indicate the presence or absence
