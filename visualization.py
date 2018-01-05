@@ -54,6 +54,7 @@ if __name__ == '__main__':
 
     #
     # Visualizing Conv filters
+    # TODO: Try Jitter (already tried but could not understand the result...)
     #
 
     from vis.visualization import get_num_filters
@@ -80,38 +81,3 @@ if __name__ == '__main__':
     cax = ax.imshow(stitched[:, :, 0])
     fig.colorbar(cax)
     fig.savefig(os.path.join(outdir, 'conv_layer_vis.pdf'))
-
-    #generate input image for each filter.
-    vis_images = []
-    for idx in filters:
-        #jitter 5% relative to the image size.
-        img = visualize_activation(model, layer_idx, filter_indices=idx,
-                                   tv_weight=0.,
-                                   input_modifiers=[Jitter(0.05)])
-        vis_images.append(img)
-
-    #plot
-    stitched = utils.stitch_images(vis_images, cols=32)
-    fig, ax = plt.subplots(1, 1)
-    ax.axis('off')
-    cax = ax.imshow(stitched[:, :, 0])
-    fig.colorbar(cax)
-    fig.savefig(os.path.join(outdir, 'conv_layer_vis_Jitter.pdf'))
-
-    #Generate input image for each filter.
-    new_vis_images = []
-    for i, idx in enumerate(filters):
-        #We will seed with optimized image this time.
-        img = visualize_activation(model, layer_idx, filter_indices=idx,
-                                   seed_input=vis_images[i],
-                                   input_modifiers=[Jitter(0.05)])
-
-        new_vis_images.append(img)
-
-    #plot
-    stitched = utils.stitch_images(vis_images, cols=32)
-    fig, ax = plt.subplots(1, 1)
-    ax.axis('off')
-    cax = ax.imshow(stitched[:, :, 0])
-    fig.colorbar(cax)
-    fig.savefig(os.path.join(outdir, 'conv_layer_vis_Jitter_seedinput.pdf'))
