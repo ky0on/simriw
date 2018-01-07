@@ -184,5 +184,7 @@ if __name__ == '__main__':
     #post log
     slack_file(logpath, post=args.noslack)
 
-    #save model
+    #save
+    np.save(f'{outdir}/x_train.npy', x_train)
+    np.save(f'{outdir}/y_train.npy', y_train)
     model.save(f'{outdir}/model.h5')
