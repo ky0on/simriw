@@ -45,18 +45,24 @@ model = load_model(args.path)
 # Denase Layer Visualization
 #
 
-#Visualizing a specific output category
-layer_idx = utils.find_layer_idx(model, 'dense_2')   # last layer
-img1 = visualize_activation(model, layer_idx, filter_indices=0)
-img2 = visualize_activation(model, layer_idx, filter_indices=0, max_iter=500, verbose=False)
-img3 = visualize_activation(model, layer_idx, filter_indices=0, max_iter=500, input_modifiers=[Jitter(16)])
+result = {}
 
+layer_idx = utils.find_layer_idx(model, 'dense_2')   # last layer
+result['normal'] = visualize_activation(model, layer_idx, filter_indices=0)
+result['iter_50'] = visualize_activation(model, layer_idx, filter_indices=0, max_iter=50, verbose=False)
+result['iter_500'] = visualize_activation(model, layer_idx, filter_indices=0, max_iter=500, verbose=False)
+# result['iter_1000'] = visualize_activation(model, layer_idx, filter_indices=0, max_iter=1000, verbose=False)
+result['Jitter'] = visualize_activation(model, layer_idx, filter_indices=0, max_iter=50, input_modifiers=[Jitter(16)])
 #TODO(kyon): plot history
-stitched = utils.stitch_images([img1, img2, img3], cols=3)
-fig, ax = plt.subplots(1, 1)
-ax.axis('off')
-cax = ax.imshow(stitched[:, :, 0])
+
+fig, axes = plt.subplots(1, len(result.keys()))
+for i, (title, img) in enumerate(result.items()):
+    ax = axes[i]
+    # ax.axis('off')
+    ax.set_title(title)
+    cax = ax.imshow(img[..., 0], interpolation='nearest', aspect='auto')
 fig.colorbar(cax)
+fig.tight_layout()
 fig.savefig(os.path.join(outdir, 'dense_layer_vis.pdf'))
 
 
