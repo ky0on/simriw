@@ -83,17 +83,18 @@ filters = np.arange(get_num_filters(model.layers[layer_idx]))
 
 #generate input image for each filter
 vis_images = []
-for idx in tqdm(filters):
+for idx in tqdm(filters[:5]):
     img = visualize_activation(model, layer_idx, filter_indices=idx)
     # img = utils.draw_text(img[:, :, 0], f'Filter {idx}', font='ipaexg', color=0)
     # img = np.expand_dims(img, axis=2)
     vis_images.append(img)
 
 #plot
-stitched = utils.stitch_images(vis_images, cols=32)
-fig, ax = plt.subplots(1, 1)
-ax.axis('off')
-cax = ax.imshow(stitched[:, :, 0])
+fig, axes = plt.subplots(3, 12)
+for i, (img, ax) in enumerate(zip(vis_images, axes.flatten())):
+    ax.axis('off')
+    ax.set_title(f'l{i}')
+    cax = ax.imshow(img[..., 0], interpolation='nearest', aspect='auto')
 fig.colorbar(cax)
 fig.savefig(os.path.join(outdir, 'conv_layer_vis.pdf'))
 
