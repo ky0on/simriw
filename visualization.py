@@ -60,7 +60,8 @@ for i, (title, img) in enumerate(result.items()):
     ax = axes[i]
     # ax.axis('off')
     ax.set_title(title)
-    cax = ax.imshow(img[..., 0], interpolation='nearest', aspect='auto')
+    cax = ax.imshow(img[..., 0], interpolation='nearest', aspect='auto',
+                   clim=(np.array(list(result.values())).min(), np.array(list(result.values())).max()))
 fig.colorbar(cax)
 fig.tight_layout()
 fig.savefig(os.path.join(outdir, 'dense_layer_vis.pdf'))
@@ -83,10 +84,8 @@ filters = np.arange(get_num_filters(model.layers[layer_idx]))
 
 #generate input image for each filter
 vis_images = []
-for idx in tqdm(filters[:5]):
+for idx in tqdm(filters):
     img = visualize_activation(model, layer_idx, filter_indices=idx)
-    # img = utils.draw_text(img[:, :, 0], f'Filter {idx}', font='ipaexg', color=0)
-    # img = np.expand_dims(img, axis=2)
     vis_images.append(img)
 
 #plot
@@ -94,8 +93,10 @@ fig, axes = plt.subplots(3, 12)
 for i, (img, ax) in enumerate(zip(vis_images, axes.flatten())):
     ax.axis('off')
     ax.set_title(f'l{i}')
-    cax = ax.imshow(img[..., 0], interpolation='nearest', aspect='auto')
+    cax = ax.imshow(img[..., 0], interpolation='nearest',
+                    aspect='auto', clim=(np.array(vis_images).min(), np.array(vis_images).max()))
 fig.colorbar(cax)
+# fig.tight_layout()
 fig.savefig(os.path.join(outdir, 'conv_layer_vis.pdf'))
 
 
@@ -111,25 +112,35 @@ from vis.visualization import visualize_saliency
 
 x_train = np.load(os.path.join(basedir, 'x_train.npy'))
 y_train = np.load(os.path.join(basedir, 'y_train.npy'))
-fig, axes = plt.subplots(10, 4, figsize=(6.4*2, 4.8*2))
+fig, axes = plt.subplots(10, 4, figsize=(10, 20))
 cnt = 0
 
 for y in tqdm(np.arange(0, 1, .1)):
 
-    img = x_train[(y_train.flatten() >= y-.1) & (y_train.flatten() < y+.1)][0]
-    axes[cnt, 0].imshow(img[..., 0], cmap='jet')
+    x = x_train[(y_train.flatten() >= y-.03) & (y_train.flatten() < y+.03)][0]
+    y = y_train[(y_train.flatten() >= y-.03) & (y_train.flatten() < y+.03)][0][0]
+    ax = axes[cnt, 0]
+    cax = ax.imshow(x[..., 0], cmap='jet', clim=(0, 1), interpolation='nearest', aspect='auto')
+    ax.axis('off')
+    ax.set_title(f'input (y={y:.2f})')
+    fig.colorbar(cax, orientation='horizontal', ax=ax)
 
     for j, modifier in enumerate([None, 'guided', 'relu']):
 
         layer_idx = utils.find_layer_idx(model, 'dense_2')
         grads = visualize_saliency(model, layer_idx, filter_indices=0,
-                                   seed_input=img, backprop_modifier=modifier)
+                                   seed_input=x, backprop_modifier=modifier)
+        #TODO: grads is 3-channels image.
         ax = axes[cnt, j+1]
         ax.axis('off')
-        ax.imshow(grads, cmap='jet')
-        # ax.set_title('vanilla' if modifier is None else modifier)
+        cax = ax.imshow(grads, cmap='jet', clim=(0, 255), interpolation='nearest', aspect='auto')
+        fig.colorbar(cax, orientation='horizontal', ax=ax)
+        
+        if cnt == 0:
+            ax.set_title('vanilla' if modifier is None else modifier)
     
     cnt += 1
 
-fig.savefig(os.path.join(outdir, 'cam.pdf'))
+fig.tight_layout()
+fig.savefig(os.path.join(outdir, 'saliency_vis.pdf'))
 
