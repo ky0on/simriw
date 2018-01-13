@@ -26,8 +26,6 @@ basedir = os.path.dirname(args.path)
 outdir = os.path.dirname(args.path)
 
 
-# # Denase Layer Visualization
-
 # In[ ]:
 
 
@@ -38,6 +36,14 @@ from vis.visualization import visualize_activation
 from vis.input_modifiers import Jitter
 
 model = load_model(args.path)
+
+
+# In[ ]:
+
+
+#
+# Denase Layer Visualization
+#
 
 #Visualizing a specific output category
 layer_idx = utils.find_layer_idx(model, 'dense_2')   # last layer
@@ -54,10 +60,12 @@ fig.colorbar(cax)
 fig.savefig(os.path.join(outdir, 'dense_layer_vis.pdf'))
 
 
-# # Conv filter visualization
-
 # In[ ]:
 
+
+#
+# Conv filter visualization
+#
 
 # TODO: Try Jitter (already tried but could not understand the result...)
 
@@ -84,10 +92,12 @@ fig.colorbar(cax)
 fig.savefig(os.path.join(outdir, 'conv_layer_vis.pdf'))
 
 
-# # Attension map
-
 # In[ ]:
 
+
+#
+# Attension Map
+#
 
 import matplotlib.cm as cm
 from vis.visualization import visualize_saliency
