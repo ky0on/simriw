@@ -108,10 +108,18 @@ fig.savefig(os.path.join(outdir, 'conv_layer_vis.pdf'))
 #
 
 import matplotlib.cm as cm
-from vis.visualization import visualize_saliency
 
 x_train = np.load(os.path.join(basedir, 'x_train.npy'))
 y_train = np.load(os.path.join(basedir, 'y_train.npy'))
+
+
+# In[ ]:
+
+
+#saliency
+
+from vis.visualization import visualize_saliency
+
 fig, axes = plt.subplots(10, 4, figsize=(10, 20))
 cnt = 0
 
@@ -124,12 +132,14 @@ for y in tqdm(np.arange(0, 1, .1)):
     ax.axis('off')
     ax.set_title(f'input (y={y:.2f})')
     fig.colorbar(cax, orientation='horizontal', ax=ax)
+    
+    modifiers = [None, 'negate', 'small_values']
 
-    for j, modifier in enumerate([None, 'guided', 'relu']):
+    for j, modifier in enumerate(modifiers):
 
         layer_idx = utils.find_layer_idx(model, 'dense_2')
         grads = visualize_saliency(model, layer_idx, filter_indices=0,
-                                   seed_input=x, backprop_modifier=modifier)
+                                   seed_input=x, grad_modifier=modifier)
         #TODO: grads is 3-channels image.
         ax = axes[cnt, j+1]
         ax.axis('off')
@@ -137,10 +147,52 @@ for y in tqdm(np.arange(0, 1, .1)):
         fig.colorbar(cax, orientation='horizontal', ax=ax)
         
         if cnt == 0:
-            ax.set_title('vanilla' if modifier is None else modifier)
+            ax.set_title('positive' if modifier is None else modifier)
     
     cnt += 1
 
 fig.tight_layout()
 fig.savefig(os.path.join(outdir, 'saliency_vis.pdf'))
+
+
+# In[ ]:
+
+
+#cam
+
+from vis.visualization import visualize_cam
+
+fig, axes = plt.subplots(10, 4, figsize=(10, 20))
+cnt = 0
+
+for y in tqdm(np.arange(0, 1, .1)):
+
+    x = x_train[(y_train.flatten() >= y-.03) & (y_train.flatten() < y+.03)][0]
+    y = y_train[(y_train.flatten() >= y-.03) & (y_train.flatten() < y+.03)][0][0]
+    ax = axes[cnt, 0]
+    cax = ax.imshow(x[..., 0], cmap='jet', clim=(0, 1), interpolation='nearest', aspect='auto')
+    ax.axis('off')
+    ax.set_title(f'input (y={y:.2f})')
+    fig.colorbar(cax, orientation='horizontal', ax=ax)
+    
+    modifiers = [None, 'negate', 'small_values']
+
+    for j, modifier in enumerate(modifiers):
+
+        layer_idx = utils.find_layer_idx(model, 'dense_2')
+        grads = visualize_cam(model, layer_idx, filter_indices=0,
+                              seed_input=x, grad_modifier=modifier)
+        #TODO: grads is 3-channels image.
+        ax = axes[cnt, j+1]
+        ax.axis('off')
+        cax = ax.imshow(grads, cmap='jet', clim=(0, 255), interpolation='nearest', aspect='auto')
+        fig.colorbar(cax, orientation='horizontal', ax=ax)
+        
+        if cnt == 0:
+            ax.set_title('positive' if modifier is None else modifier)
+    
+    cnt += 1
+
+fig.tight_layout()
+fig.savefig(os.path.join(outdir, 'cam_vis.pdf'))
 
