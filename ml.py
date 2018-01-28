@@ -47,7 +47,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('--std', action='store_true')
-    parser.add_argument('--epochs', '-e', type=int, default=100, help='the number of epochs')
+    parser.add_argument('--epochs', '-e', type=int, default=10, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
@@ -60,6 +60,7 @@ if __name__ == '__main__':
     outdir = os.path.join('output',
                           pd.Timestamp.now().strftime('%y%m%d%H%M%S'))
     os.mkdir(outdir)
+    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
 
     #logger
     logpath = os.path.join(outdir, 'log')
@@ -97,10 +98,9 @@ if __name__ == '__main__':
     log('ys.shape:', ys.shape)
 
     #histogram of x and y
-    fig, ax = plt.subplots(1, 1)
+    ax = axes[0, 0]
     ax.hist(ys)
     ax.set_xlabel('GY')
-    save_and_slack_file(fig, f'{outdir}/hist_y_before.png', post=args.noslack)
 
     #cnn
     import keras
@@ -159,11 +159,9 @@ if __name__ == '__main__':
                         )
 
     #history
-    fig, axes = plt.subplots(1, 2)
     for i, t in enumerate(('loss', 'mean_absolute_error')):
-        axes[i].plot(history.history[t], label=f'train ({t})')
-        axes[i].legend(loc='upper right')
-    save_and_slack_file(fig, f'{outdir}/history.png', post=args.noslack)
+        axes[1, i].plot(history.history[t], label=f'train ({t})')
+        axes[1, i].legend(loc='upper right')
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
@@ -176,12 +174,12 @@ if __name__ == '__main__':
         'actual': y_train.flatten(),
         'predict': pred.flatten(),
     })
-    fig, ax = plt.subplots(1, 1)
+    ax = axes[0, 1]
     result.plot.scatter(x='actual', y='predict', ax=ax)
     xyline(ax)
-    save_and_slack_file(fig, f'{outdir}/predict.png', post=args.noslack)
 
-    #post log
+    #slack
+    save_and_slack_file(fig, f'{outdir}/ml.png', post=args.noslack)
     slack_file(logpath, post=args.noslack)
 
     #save
