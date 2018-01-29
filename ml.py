@@ -56,7 +56,6 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    slack = Slacker(os.environ['SLACK_API_KYONAWS'])
     outdir = os.path.join('output',
                           pd.Timestamp.now().strftime('%y%m%d%H%M%S'))
     os.mkdir(outdir)

@@ -17,14 +17,14 @@ def save_and_slack_file(fig, filepath, post=True):
     slack_file(filepath, post=post)
 
 
-def slack_file(filepath, msg='', channel='#general', post=True):
+def slack_file(filepath, msg='', channel='#debug', post=True):
     ''' Post image to slack '''
 
     #not post
     if not post:
         return
 
-    slack = Slacker(os.environ['SLACK_API_KYONAWS'])
+    slack = Slacker(os.environ['SLACK_API_EK'])
 
     try:
         slack.files.upload(filepath,
