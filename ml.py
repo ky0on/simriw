@@ -147,6 +147,9 @@ if __name__ == '__main__':
 
     model.compile(loss=keras.losses.mean_squared_error,
                   optimizer=keras.optimizers.RMSprop(),
+                  # optimizer=keras.optimizers.SGD(),
+                  # optimizer=keras.optimizers.Adam(),
+                  # optimizer=keras.optimizers.Adagrad(),
                   metrics=[keras.metrics.mae])
 
     #learn
