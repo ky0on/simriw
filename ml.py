@@ -59,7 +59,7 @@ if __name__ == '__main__':
     outdir = os.path.join('output',
                           pd.Timestamp.now().strftime('%y%m%d%H%M%S'))
     os.mkdir(outdir)
-    fig, axes = plt.subplots(2, 2, figsize=(10, 10))
+    fig, axes = plt.subplots(3, 3, figsize=(10, 10))
 
     #logger
     logpath = os.path.join(outdir, 'log')
@@ -100,6 +100,7 @@ if __name__ == '__main__':
     ax = axes[0, 0]
     ax.hist(ys)
     ax.set_xlabel('GY')
+    ax.set_title('Before thresholding')
 
     #cnn
     import keras
@@ -115,6 +116,10 @@ if __name__ == '__main__':
     #remove smaller GY
     xs = xs[ys > args.threshold]
     ys = ys[ys > args.threshold]
+    ax = axes[0, 1]
+    ax.hist(ys)
+    ax.set_xlabel('GY')
+    ax.set_title('After thresholding')
 
     #normalization
     x_scaler = MinMaxScaler()
@@ -176,11 +181,12 @@ if __name__ == '__main__':
         'actual': y_train.flatten(),
         'predict': pred.flatten(),
     })
-    ax = axes[0, 1]
+    ax = axes[2, 0]
     result.plot.scatter(x='actual', y='predict', ax=ax)
     xyline(ax)
 
     #slack
+    fig.tight_layout()
     save_and_slack_file(fig, f'{outdir}/ml.png', post=args.noslack)
     slack_file(logpath, post=args.noslack)
 
