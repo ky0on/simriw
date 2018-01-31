@@ -88,7 +88,7 @@ if __name__ == '__main__':
     for pref in dataset.keys():
 
         #filter by prefecture
-        if pref not in ('yamanashi', 'akita'):
+        if pref not in ('yamanashi', 'akita', 'niigata'):
             continue
 
         #skip if data exists
