@@ -68,6 +68,7 @@ if __name__ == '__main__':
 
     #load simdata
     csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
+    csvpaths.sort()
     if args.debug:
         csvpaths = csvpaths[:2]
     simdata_all = joblib.Parallel(n_jobs=-1, verbose=1)(
