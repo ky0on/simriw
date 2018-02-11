@@ -56,8 +56,11 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    outdir = os.path.join('output',
-                          pd.Timestamp.now().strftime('%y%m%d%H%M%S'))
+    outdir = os.path.join(
+        'output',
+        pd.Timestamp.now().strftime('%m-%d-%H-%M-%S'))
+    if args.debug:
+        outdir = os.path.join('/tmp', outdir)
     os.mkdir(outdir)
     fig, axes = plt.subplots(3, 3, figsize=(10, 10))
 
