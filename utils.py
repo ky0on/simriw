@@ -24,7 +24,7 @@ def slack_file(filepath, msg='', channel='#debug', post=True):
     if not post:
         return
 
-    slack = Slacker(os.environ['SLACK_API_EK'])
+    slack = Slacker(os.environ['SLACK_API_EK_BOT'])
 
     try:
         slack.files.upload(filepath,
