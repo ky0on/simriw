@@ -181,12 +181,14 @@ if __name__ == '__main__':
                         batch_size=args.batchsize,
                         epochs=args.epochs,
                         verbose=1,
-                        # validation_data=(x_test, y_test),
+                        validation_data=(x_valid, y_valid),
                         )
 
     #history
     for i, t in enumerate(('loss', 'mean_absolute_error')):
-        axes[1, i].plot(history.history[t], label=f'train ({t})')
+        axes[1, i].set_title(t)
+        axes[1, i].plot(history.history[t], label=f'train')
+        axes[1, i].plot(history.history[f'val_{t}'], label=f'valid')
         axes[1, i].legend(loc='upper right')
 
     #score
@@ -195,14 +197,16 @@ if __name__ == '__main__':
     log('Test accuracy:', score[1])
 
     #plot prediction
-    pred = model.predict(x_train)
-    result = pd.DataFrame({
-        'actual': y_train.flatten(),
-        'predict': pred.flatten(),
-    })
-    ax = axes[2, 0]
-    result.plot.scatter(x='actual', y='predict', ax=ax)
-    xyline(ax)
+    for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
+        pred = model.predict(x)
+        result = pd.DataFrame({
+            'actual': y.flatten(),
+            'predict': pred.flatten(),
+        })
+        ax = axes[2, 0+i]
+        result.plot.scatter(x='actual', y='predict', ax=ax)
+        ax.set_title(title)
+        xyline(ax)
 
     #slack
     fig.tight_layout()
