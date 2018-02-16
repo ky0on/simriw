@@ -13,6 +13,7 @@ import random as rn
 import pandas as pd
 from slacker import Slacker
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 #seed https://keras.io/getting-started/faq/
 import os
@@ -58,7 +59,6 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
-    parser.add_argument('--std', action='store_true')
     parser.add_argument('--epochs', '-e', type=int, default=10, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
@@ -144,15 +144,18 @@ if __name__ == '__main__':
     ys_scaled = y_scaler.fit_transform(ys.reshape(-1, 1))
     xs_scaled = xs_scaled.reshape(xs.shape)
     ys_scaled = ys_scaled.reshape(ys.shape)
-    if args.std:
-        x_train = xs_scaled.reshape(xs_scaled.shape[0], xs_scaled.shape[1], xs_scaled.shape[2], 1)
-        y_train = ys_scaled.reshape(ys.shape[0], 1)
-    else:
-        x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
-        y_train = ys.reshape(ys.shape[0], 1)
+
+    #split train/valid
+    # x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
+    # y_train = ys.reshape(ys.shape[0], 1)
+    x_train = xs_scaled.reshape(xs_scaled.shape[0], xs_scaled.shape[1], xs_scaled.shape[2], 1)
+    y_train = ys_scaled.reshape(ys.shape[0], 1)
+    x_train, x_valid = train_test_split(x_train, test_size=.25, random_state=0)
+    y_train, y_valid = train_test_split(y_train, test_size=.25, random_state=0)
     log('x_train shape:', x_train.shape)
+    log('y_train shape:', y_train.shape)
     log(x_train.shape[0], 'train samples')
-    # log(x_test.shape[0], 'test samples')
+    log(x_valid.shape[0], 'valid samples')
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
