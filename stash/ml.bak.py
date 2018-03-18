@@ -94,8 +94,8 @@ if __name__ == '__main__':
 
     #extract dataset
     # x_types = ['DL', 'TAV', 'RAD']
-    # x_types = ['DL', 'TAV', 'TMX', 'RAD']
-    x_types = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
+    x_types = ['DL', 'TAV', 'TMX', 'RAD']
+    # x_types = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
     log('x_types:', x_types)
     xs, ys = [], []
     for meshcode in simdata['meshcode'].unique():
@@ -157,31 +157,17 @@ if __name__ == '__main__':
     log(x_train.shape[0], 'train samples')
     log(x_valid.shape[0], 'valid samples')
 
-    #model - use 3x3 conv2d
     model = Sequential()
-    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
+    model.add(Conv2D(32, kernel_size=(1, 1), activation='relu',
                      input_shape=x_train.shape[1:], name='conv2d_1'))
-    model.add(Conv2D(64, (3, 3), activation='relu', name='conv2d_2'))
+    model.add(Conv2D(32, (1, 4), activation='relu', name='conv2d_2'))
     # model.add(MaxPooling2D(pool_size=(2, 2)))
     # model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(128, activation='relu', name='dense_1'))
+    # model.add(Dense(128, activation='relu', name='dense_1'))
     # model.add(Dropout(0.5))
-    model.add(Dense(1, name='dense_2'))
+    model.add(Dense(1, name='dense_1'))
     model.summary(print_fn=log)
-
-    #model - use 1x1 conv2d
-    # model = Sequential()
-    # model.add(Conv2D(32, kernel_size=(1, 1), activation='relu',
-    #                  input_shape=x_train.shape[1:], name='conv2d_1'))
-    # model.add(Conv2D(32, (1, 4), activation='relu', name='conv2d_2'))
-    # # model.add(MaxPooling2D(pool_size=(2, 2)))
-    # # model.add(Dropout(0.25))
-    # model.add(Flatten())
-    # # model.add(Dense(128, activation='relu', name='dense_1'))
-    # # model.add(Dropout(0.5))
-    # model.add(Dense(1, name='dense_1'))
-    # model.summary(print_fn=log)
 
     model.compile(loss=keras.losses.mean_squared_error,
                   optimizer=keras.optimizers.RMSprop(),
