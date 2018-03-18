@@ -63,6 +63,9 @@ if __name__ == '__main__':
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
+    parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
+    parser.add_argument('--model', '-m', default='3x3', type=str, help='Model structure (3x3|1x1)')
+    parser.add_argument('--optimizer', '-o', default='rmsprop', type=str, help='Optimizer (rmsprop|sgd|adam|adagrad)')
     args = parser.parse_args()
     # args.debug = True
 
@@ -93,16 +96,13 @@ if __name__ == '__main__':
     # simdata.dropna(how='any', inplace=True)   # drop nan records
 
     #extract dataset
-    # x_types = ['DL', 'TAV', 'RAD']
-    # x_types = ['DL', 'TAV', 'TMX', 'RAD']
-    x_types = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
-    log('x_types:', x_types)
+    log('inputs:', args.input)
     xs, ys = [], []
     for meshcode in simdata['meshcode'].unique():
         for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
             # log(year, meshcode)
             a_simdata = simdata.loc[(simdata['meshcode'] == meshcode) & (simdata['year'] == year), :]
-            x = a_simdata[x_types]
+            x = a_simdata[args.input]
             x = fill_na_rows(x, target_nrows=longest)
             y = a_simdata.GY.iloc[-1]
             xs.append(np.array(x))
@@ -157,37 +157,50 @@ if __name__ == '__main__':
     log(x_train.shape[0], 'train samples')
     log(x_valid.shape[0], 'valid samples')
 
-    #model - use 3x3 conv2d
-    model = Sequential()
-    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
-                     input_shape=x_train.shape[1:], name='conv2d_1'))
-    model.add(Conv2D(64, (3, 3), activation='relu', name='conv2d_2'))
-    # model.add(MaxPooling2D(pool_size=(2, 2)))
-    # model.add(Dropout(0.25))
-    model.add(Flatten())
-    model.add(Dense(128, activation='relu', name='dense_1'))
-    # model.add(Dropout(0.5))
-    model.add(Dense(1, name='dense_2'))
-    model.summary(print_fn=log)
+    #model
+    if args.model == '3x3':
+        #3x3 conv2d
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
+                         input_shape=x_train.shape[1:], name='conv2d_1'))
+        model.add(Conv2D(64, (3, 3), activation='relu', name='conv2d_2'))
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # model.add(Dropout(0.25))
+        model.add(Flatten())
+        model.add(Dense(128, activation='relu', name='dense_1'))
+        # model.add(Dropout(0.5))
+        model.add(Dense(1, name='dense_2'))
+        model.summary(print_fn=log)
+    elif args.model == '1x1':
+        #1x1 conv2d
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(1, 1), activation='relu',
+                         input_shape=x_train.shape[1:], name='conv2d_1'))
+        model.add(Conv2D(32, (1, 4), activation='relu', name='conv2d_2'))
+        # model.add(MaxPooling2D(pool_size=(2, 2)))
+        # model.add(Dropout(0.25))
+        model.add(Flatten())
+        # model.add(Dense(128, activation='relu', name='dense_1'))
+        # model.add(Dropout(0.5))
+        model.add(Dense(1, name='dense_1'))
+        model.summary(print_fn=log)
+    else:
+        raise Exception(f'Unknown model type: {args.model}')
 
-    #model - use 1x1 conv2d
-    # model = Sequential()
-    # model.add(Conv2D(32, kernel_size=(1, 1), activation='relu',
-    #                  input_shape=x_train.shape[1:], name='conv2d_1'))
-    # model.add(Conv2D(32, (1, 4), activation='relu', name='conv2d_2'))
-    # # model.add(MaxPooling2D(pool_size=(2, 2)))
-    # # model.add(Dropout(0.25))
-    # model.add(Flatten())
-    # # model.add(Dense(128, activation='relu', name='dense_1'))
-    # # model.add(Dropout(0.5))
-    # model.add(Dense(1, name='dense_1'))
-    # model.summary(print_fn=log)
+    #optimizer
+    if args.optimizer == 'rmsprop':
+        optimizer = keras.optimizers.RMSprop()
+    elif args.optimizer == 'sgd':
+        optimizer = keras.optimizers.SGD()
+    elif args.optimizer == 'adam':
+        optimizer = keras.optimizers.Adam()
+    elif args.optimizer == 'adagrad':
+        optimizer = keras.optimizers.Adagrad()
+    else:
+        raise Exception(f'Unknown optimizer: {args.optimizer}')
 
     model.compile(loss=keras.losses.mean_squared_error,
-                  optimizer=keras.optimizers.RMSprop(),
-                  # optimizer=keras.optimizers.SGD(),
-                  # optimizer=keras.optimizers.Adam(),
-                  # optimizer=keras.optimizers.Adagrad(),
+                  optimizer=optimizer,
                   metrics=[keras.metrics.mae])
 
     #learn
