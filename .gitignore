@@ -2,6 +2,7 @@
 /meshdata/*
 /simdata/*
 !.gitkeep
+!/output/clean.py
 
 /.ipynb_checkpoints
 
