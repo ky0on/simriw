@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
     #extract dataset
     log('inputs:', args.input)
-    xs, ys = [], []
+    xs, ys, rs = [], [], []  # r: references (DVI, LAT etc.)
     for meshcode in simdata['meshcode'].unique():
         for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
             # log(year, meshcode)
@@ -105,12 +105,17 @@ if __name__ == '__main__':
             x = a_simdata[args.input]
             x = fill_na_rows(x, target_nrows=longest)
             y = a_simdata.GY.iloc[-1]
+            r = a_simdata[['DVI', 'LAI']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
+            r = fill_na_rows(r, target_nrows=longest)
             xs.append(np.array(x))
             ys.append(y)
+            rs.append(np.array(r))
     xs = np.array(xs).astype(np.float32)
     ys = np.array(ys).astype(np.float32)
+    rs = np.array(rs).astype(np.float32)
     log('xs.shape:', xs.shape)
     log('ys.shape:', ys.shape)
+    log('rs.shape:', rs.shape)
 
     #histogram of x and y
     ax = axes[0, 0]
@@ -131,6 +136,7 @@ if __name__ == '__main__':
 
     #remove smaller GY
     xs = xs[ys > args.threshold]
+    rs = rs[ys > args.threshold]
     ys = ys[ys > args.threshold]
     ax = axes[0, 1]
     ax.hist(ys)
@@ -150,8 +156,10 @@ if __name__ == '__main__':
     # y_train = ys.reshape(ys.shape[0], 1)
     x_train = xs_scaled.reshape(xs_scaled.shape[0], xs_scaled.shape[1], xs_scaled.shape[2], 1)
     y_train = ys_scaled.reshape(ys.shape[0], 1)
+    r_train = rs.reshape(rs.shape[0], rs.shape[1], rs.shape[2], 1)
     x_train, x_valid = train_test_split(x_train, test_size=.25, random_state=0)
     y_train, y_valid = train_test_split(y_train, test_size=.25, random_state=0)
+    r_train, r_valid = train_test_split(r_train, test_size=.25, random_state=0)
     log('x_train shape:', x_train.shape)
     log('y_train shape:', y_train.shape)
     log(x_train.shape[0], 'train samples')
@@ -244,4 +252,5 @@ if __name__ == '__main__':
     #save
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
+    np.save(f'{outdir}/r_train.npy', r_train)
     model.save(f'{outdir}/model.h5')
