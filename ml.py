@@ -87,7 +87,7 @@ if __name__ == '__main__':
     csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
     csvpaths.sort()
     if args.debug:
-        csvpaths = csvpaths[:20]
+        csvpaths = csvpaths[:10]
     simdata_all = joblib.Parallel(n_jobs=-1, verbose=1)(
         joblib.delayed(load_dataset)(csvpath) for csvpath in csvpaths)
     simdata = pd.concat(simdata_all)
@@ -220,8 +220,8 @@ if __name__ == '__main__':
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
-    log('Test loss:', score[0])
-    log('Test accuracy:', score[1])
+    log('Test loss (mse):', score[0])
+    log('Test acc  (mae):', score[1])
 
     #plot prediction
     for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
@@ -237,8 +237,9 @@ if __name__ == '__main__':
 
     #slack
     fig.tight_layout()
-    save_and_slack_file(fig, f'{outdir}/ml.png', post=args.noslack)
-    slack_file(logpath, post=args.noslack)
+    save_and_slack_file(fig, f'{outdir}/ml.png',
+                        msg=f'{str(args)}\nTest mse={round(score[0], 3)}\nTest mae={round(score[1], 3)}', post=args.noslack)
+    # slack_file(logpath, post=args.noslack)
 
     #save
     np.save(f'{outdir}/x_train.npy', x_train)
