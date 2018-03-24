@@ -59,7 +59,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
-    parser.add_argument('--epochs', '-e', type=int, default=10, help='the number of epochs')
+    parser.add_argument('--epochs', '-e', type=int, default=500, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
@@ -71,11 +71,10 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    outdir = os.path.join(
-        'output',
-        pd.Timestamp.now().strftime('%m-%d-%H-%M-%S'))
+    outdir = os.path.join('output', pd.Timestamp.now().strftime('%m-%d-%H-%M-%S'))
     if args.debug:
-        outdir = os.path.join('/tmp', outdir)
+        outdir = os.path.join('/tmp', outdir)  # move to /tmp if debug
+        args.epochs = 5                        # set epochs=5 if debug
     os.mkdir(outdir)
     fig, axes = plt.subplots(3, 3, figsize=(10, 10))
 
@@ -88,10 +87,11 @@ if __name__ == '__main__':
     csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
     csvpaths.sort()
     if args.debug:
-        csvpaths = csvpaths[:2]
+        csvpaths = csvpaths[:20]
     simdata_all = joblib.Parallel(n_jobs=-1, verbose=1)(
         joblib.delayed(load_dataset)(csvpath) for csvpath in csvpaths)
     simdata = pd.concat(simdata_all)
+    simdata = simdata.sort_values(['year', 'meshcode'])  # sort to obtain stable result
     longest = simdata.groupby(['meshcode', 'year']).apply(len).max()
     # simdata.dropna(how='any', inplace=True)   # drop nan records
 
