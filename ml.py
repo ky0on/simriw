@@ -63,7 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
-    parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
+    parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD', 'PPM'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
     parser.add_argument('--model', '-m', default='3x3', type=str, help='Model structure (3x3|1x1)')
     parser.add_argument('--optimizer', '-o', default='rmsprop', type=str, help='Optimizer (rmsprop|sgd|adam|adagrad)')
     args = parser.parse_args()
