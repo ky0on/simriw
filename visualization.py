@@ -27,6 +27,7 @@ if __name__ == '__main__':
 
     #init
     outdir = args.path
+    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
 
     #load model
     model = load_model(os.path.join(args.path, 'model.h5'))
@@ -62,18 +63,22 @@ if __name__ == '__main__':
                 continue
 
             #save as dataframe
-            for col in range(x.shape[1]):
-                saliency.append(pd.DataFrame(
-                    {'col': col, 'image_num': i, 'dvi': dvi,
-                     'saliency': grads[:, col]}))
+            #TODO(kyon): plot _saliency with dvi
+            _saliency = pd.DataFrame(grads, columns=inputs)
+            _saliency['dvi'] = dvi
+            _saliency['image_num'] = i
+            # print(_saliency.head())
+            # print(_saliency.tail())
+            saliency.append(_saliency)
 
         #plot
+        #TODO(kyon): scatter -> heat map
         df = pd.concat(saliency)
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
-        for i, col in enumerate(df.col.unique()):
+        for i, col in enumerate(inputs):
             ax = axes.flatten()[i]
-            df[df.col == col].plot.scatter(x='dvi', y='saliency', ax=ax)
-            ax.set_title(f'col={col}')
+            df.plot.scatter(x='dvi', y=col, ax=ax)
+            ax.set_title(col)
 
         #save
         outpng = os.path.join(outdir, f'saliency_{modifier_title}.png')
