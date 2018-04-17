@@ -10,6 +10,7 @@ from tqdm import tqdm
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 from collections import defaultdict
+from utils import save_and_slack_file
 
 from keras import activations
 from keras.models import load_model
@@ -24,6 +25,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/03-24-21-21-23')
+    parser.add_argument('--sample', '-n', default=10, type=int, help='number of sampled images')
     args = parser.parse_args()
 
     #init
@@ -38,16 +40,15 @@ if __name__ == '__main__':
     y_train = np.load(os.path.join(args.path, 'y_train.npy'))
     r_train = np.load(os.path.join(args.path, 'r_train.npy'))
 
-    #
+    #init
     modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
-    saliencies = {}
 
-    #
-    for modifier_tile, modifier in modifiers.items():
+    #explore modifires
+    for modifier_title, modifier in modifiers.items():
         saliency = []
 
-        for cnt in tqdm(range(1000)):
+        for cnt in tqdm(range(args.sample)):
 
             #random sampling
             i = np.random.randint(0, len(x_train))
@@ -56,34 +57,29 @@ if __name__ == '__main__':
             y = y_train[i][0]
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
 
+            #calculate saliency
             try:
                 grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
             except:
                 print('failed in vis')
                 continue
 
+            #save as dataframe
             for col in range(x.shape[1]):
                 saliency.append(pd.DataFrame(
-                    {'column': col, 'image_num': i, 'dvi': dvi, 'saliency': grads[:, col]}))
+                    {'col': col, 'image_num': i, 'dvi': dvi,
+                     'saliency': grads[:, col]}))
 
-            #debug
-            # if i > 10:
-            #     break
+        #plot
+        df = pd.concat(saliency)
+        fig, axes = plt.subplots(1, 5, figsize=(15, 3))
+        for i, col in enumerate(df.col.unique()):
+            ax = axes.flatten()[i]
+            df[df.col == col].plot.scatter(x='dvi', y='saliency', ax=ax)
+            ax.set_title(f'col={col}')
 
-        #save as dict
-        saliencies[modifier_tile] = saliency
-
-    #plot
-    # for modifier_tile, saliency in saliencies.items():
-    #
-    #     print(modifier_tile)
-    #     df = pd.concat(saliency)
-    #     fig, axes = plt.subplots(2, 3)
-    #
-    #     for i, column in enumerate(df.column.unique()):
-    #         ax = axes.flatten()[i]
-    #         df[df.column == column].plot.scatter(x='dvi', y='saliency', ax=ax)
-    #         ax.set_title(f'column={column}')
-    #
-    #     # fig.subtitle(modifier_tile)
-    #     fig.tight_layout()
+        #save
+        outpng = os.path.join(outdir, f'saliency_{modifier_title}.png')
+        fig.suptitle(modifier_title)
+        fig.tight_layout()
+        save_and_slack_file(fig, outpng)
