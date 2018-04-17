@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     #init
     outdir = args.path
-    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']
+    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']   #TODO(kyon): load from log or something
 
     #load model
     model = load_model(os.path.join(args.path, 'model.h5'))
