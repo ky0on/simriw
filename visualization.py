@@ -9,15 +9,12 @@ import pandas as pd
 from tqdm import tqdm
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from collections import defaultdict
+
 from utils import save_and_slack_file
 
-from keras import activations
 from keras.models import load_model
-
 from vis.utils import utils
-from vis.visualization import visualize_activation, visualize_saliency
-# from vis.input_modifiers import Jitter
+from vis.visualization import visualize_saliency
 
 
 if __name__ == '__main__':
