@@ -58,6 +58,14 @@ if __name__ == '__main__':
             y = y_train[i][0]
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
 
+            #debug (plot inputs and dvi)
+            fig2, axes2 = plt.subplots(6, 1)
+            for c in range(x.shape[1]):
+                axes2[c].plot(x[:, c, 0])
+            axes2[5].plot(dvi)
+            fig2.tight_layout()
+            fig2.savefig(f'/tmp/{i:0>5}.png')
+
             #calculate saliency
             try:
                 grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
