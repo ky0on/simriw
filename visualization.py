@@ -6,9 +6,11 @@ import os
 import argparse
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from tqdm import tqdm
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+from collections import defaultdict
 
 from utils import save_and_slack_file
 
@@ -27,7 +29,7 @@ if __name__ == '__main__':
 
     #init
     outdir = args.path
-    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']   #TODO(kyon): load from log or something
+    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']   # TODO(kyon): load from log or something
 
     #load model
     model = load_model(os.path.join(args.path, 'model.h5'))
@@ -39,7 +41,8 @@ if __name__ == '__main__':
     r_train = np.load(os.path.join(args.path, 'r_train.npy'))
 
     #init
-    modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
+    # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
+    modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
 
     #explore modifires
@@ -67,18 +70,27 @@ if __name__ == '__main__':
             _saliency = pd.DataFrame(grads, columns=inputs)
             _saliency['dvi'] = dvi
             _saliency['image_num'] = i
+            _saliency['count'] = 1
             # print(_saliency.head())
             # print(_saliency.tail())
             saliency.append(_saliency)
 
-        #plot
-        #TODO(kyon): scatter -> heat map
-        df = pd.concat(saliency)
+        #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
+        df = pd.concat(saliency).round(1)
         for i, col in enumerate(inputs):
             ax = axes.flatten()[i]
-            df.plot.scatter(x='dvi', y=col, ax=ax)
+            counts = df.groupby(['dvi', col]).count()['count']
+            counts = counts.unstack().T
+            counts.index = np.round(counts.index, 1)
+            counts.columns = np.round(counts.columns, 1)
+            counts = counts.fillna(0)
+            # counts = counts.astype(int)
+            counts_normalized = (counts-counts.min())/(counts.max()-counts.min())
+            sns.heatmap(counts_normalized, ax=ax)
             ax.set_title(col)
+            # ax.set_xlim(0, 2.0)
+            # ax.set_ylim(0, 1.0)
 
         #save
         outpng = os.path.join(outdir, f'saliency_{modifier_title}.png')
