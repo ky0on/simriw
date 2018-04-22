@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from common import mkdir
 from pysimriw import simriw
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
@@ -51,6 +52,9 @@ def simulate(csvpath):
     simulated['d']['year'] = year
     simulated['d']['meshcode'] = meshcode
 
+    for col in ['DL', 'DVI', 'DVR', 'DW', 'GY', 'LAI', 'PPM', 'PY', 'RAD', 'TAV', 'TMX']:
+        simulated['d'][col] = pd.to_numeric(simulated['d'][col])
+
     return simulated['d']
 
 
@@ -59,6 +63,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--plotraw', action='store_true', help='Plot raw data')
+    parser.add_argument('--debug', action='store_true')
     args = parser.parse_args()
 
     #init
@@ -72,8 +77,16 @@ if __name__ == '__main__':
     #explore datasets
     for pref in dataset.keys():
 
+        #debug (pref limitation)
+        if args.debug and pref != 'akita':
+            continue
+
         #explore year (to reduce memory consumption)
         for year in range(1980, 2017):
+
+            #debug (year limitation)
+            if args.debug and year > 1981:
+                continue
 
             #init
             csvpaths = glob.glob(os.path.join('meshdata', pref, str(year), '*.csv'))
@@ -81,17 +94,22 @@ if __name__ == '__main__':
             if len(csvpaths) == 0:
                 continue
 
+            #run simulation
             print(f'{pref} ({year})')
             result = joblib.Parallel(n_jobs=-1, verbose=1)(
                 joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
 
             #convert result to dataframe
             result = pd.concat(result)
+            result = result.round(3)
 
             #save
-            outcsv = os.path.join(outdir, f'{pref}_{year}.csv')
-            result.to_csv(outcsv, index=False)
-            print(f'saved as {outcsv}')
+            outdir2 = os.path.join(outdir, pref, str(year))
+            mkdir(outdir2)
+            for meshcode in result.meshcode.unique():
+                outcsv = os.path.join(outdir2, f'{meshcode}.csv')
+                result[result.meshcode == meshcode].to_csv(outcsv, index=False)
+                print(f'saved as {outcsv}')
 
     #plot GY in subplots
     # for loc in simulated_all['loc'].unique():

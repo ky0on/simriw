@@ -84,7 +84,7 @@ if __name__ == '__main__':
     log(str(args))
 
     #load simdata
-    csvpaths = glob.glob(os.path.join('simdata', '*.csv'))
+    csvpaths = glob.glob(os.path.join('simdata', '*', '*', '*.csv'))
     csvpaths.sort()
     if args.debug:
         csvpaths = csvpaths[:10]
