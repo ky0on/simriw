@@ -41,8 +41,8 @@ if __name__ == '__main__':
     r_train = np.load(os.path.join(args.path, 'r_train.npy'))
 
     #init
-    # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
-    modifiers = {'positive': None}
+    modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
+    # modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
 
     #explore modifires
