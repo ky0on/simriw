@@ -14,3 +14,7 @@
 - `install.packages('dplyr')`
 - `install.packages('gridExtra')`
 - `devtools::install_github('topepo/caret/pkg/caret')`
+
+## Todo
+- Visualize density on map using `simdata/*`
+- How many datasets reach DVI=2 in `simdata`?
