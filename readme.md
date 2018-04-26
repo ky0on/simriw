@@ -16,5 +16,6 @@
 - `devtools::install_github('topepo/caret/pkg/caret')`
 
 ## Todo
-- Visualize density on map using `simdata/*`
+- Visualize density on map using `simdata/*` (`plot.ipynb`?)
 - How many datasets reach DVI=2 in `simdata`?
+    - Ignore data of lower DVI in `ml.py`?
