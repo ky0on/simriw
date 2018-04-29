@@ -1,35 +1,14 @@
 {
-  tohoku1:
+  hokkaido:
   {
     planting: 05-01
     harvesting: 10-05
     lat0: 39.34
     lon0: 139
-    lat1: 42.33
-    lon1: 145
-  }
-  hokkaido:
-  {
-    planting: 05-01
-    harvesting: 10-05
-    lat0: 42.34
-    lon0: 139
     lat1: 45.33
     lon1: 145
   }
 }
-
-# {
-#   hokkaido:
-#   {
-#     planting: 05-01
-#     harvesting: 10-05
-#     lat0: 39.34
-#     lon0: 139
-#     lat1: 45.33
-#     lon1: 145
-#   }
-# }
 
 # AREAS = {
 #     "北海道" : Area("北海道",1, 59, 68, 39, 45),
