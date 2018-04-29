@@ -340,7 +340,7 @@ def GetMetData(element, timedomain, lalodomain, area=None,
             else:
                 tim = np.concatenate((tim,ti))
                 Met = np.concatenate((Met,nm))
-    print("Data shape:", Met.shape)
+    # print("Data shape:", Met.shape)
     
     if namuni:
         return Met, tim, lat, lon, name, unit
