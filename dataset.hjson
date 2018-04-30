@@ -1,12 +1,43 @@
 {
-  hokkaido:
-  {
+  hokkaido: {
     planting: 05-01
     harvesting: 10-05
     lat0: 39.34
-    lon0: 139
     lat1: 45.33
+    lon0: 139
     lon1: 145
+  },
+  tohoku: {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 34.7
+    lat1: 41.3
+    lon0: 137
+    lon1: 142
+  },
+  kanto-hokuriku: {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.0
+    lat1: 38.0
+    lon0: 135
+    lon1: 141
+  },
+  nishi-nihon: {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 32.67
+    lat1: 36.0
+    lon0: 130
+    lon1: 137
+  },
+  kyushu: {
+    planting: 05-01
+    harvesting: 10-05
+    lat0: 28.7
+    lat1: 34.7
+    lon0: 128
+    lon1: 132
   }
 }
 
