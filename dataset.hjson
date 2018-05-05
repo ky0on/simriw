@@ -1,8 +1,48 @@
 {
+  # hokkaido: {
+  #   planting: 05-01
+  #   harvesting: 10-05
+  #   lat0: 39.34
+  #   lat1: 45.33
+  #   lon0: 139
+  #   lon1: 145
+  # },
+  # tohoku: {
+  #   planting: 05-01
+  #   harvesting: 10-05
+  #   lat0: 34.7
+  #   lat1: 41.3
+  #   lon0: 137
+  #   lon1: 142
+  # },
+  # kanto-hokuriku: {
+  #   planting: 05-01
+  #   harvesting: 10-05
+  #   lat0: 32.0
+  #   lat1: 38.0
+  #   lon0: 135
+  #   lon1: 141
+  # },
+  # nishi-nihon: {
+  #   planting: 05-01
+  #   harvesting: 10-05
+  #   lat0: 32.67
+  #   lat1: 36.0
+  #   lon0: 130
+  #   lon1: 137
+  # },
+  # kyushu: {
+  #   planting: 05-01
+  #   harvesting: 10-05
+  #   lat0: 28.7
+  #   lat1: 34.7
+  #   lon0: 128
+  #   lon1: 132
+  # },
   hokkaido: {
     planting: 05-01
     harvesting: 10-05
-    lat0: 39.34
+    lat0: 41.4
     lat1: 45.33
     lon0: 139
     lon1: 145
@@ -10,15 +50,15 @@
   tohoku: {
     planting: 05-01
     harvesting: 10-05
-    lat0: 34.7
+    lat0: 38.1
     lat1: 41.3
-    lon0: 137
+    lon0: 139
     lon1: 142
   },
   kanto-hokuriku: {
     planting: 05-01
     harvesting: 10-05
-    lat0: 32.0
+    lat0: 34.0
     lat1: 38.0
     lon0: 135
     lon1: 141
@@ -29,13 +69,13 @@
     lat0: 32.67
     lat1: 36.0
     lon0: 130
-    lon1: 137
+    lon1: 135
   },
   kyushu: {
     planting: 05-01
     harvesting: 10-05
-    lat0: 28.7
-    lat1: 34.7
+    lat0: 30.9
+    lat1: 32.7
     lon0: 128
     lon1: 132
   }
