@@ -122,6 +122,10 @@ if __name__ == '__main__':
                     # print(f'({lat},{lon}) is on the sea, meshdata has not been saved.')
                     continue
 
+                #add RH2M if not exists
+                if 'RH2M' not in record.columns:
+                    record['RH2M'] = None
+
                 meshcode = AMD.lalo2mesh(lat, lon)
                 record['meshcode'] = meshcode
                 outdir = os.path.join('meshdata', pref, str(year))
