@@ -29,6 +29,7 @@ def fetch(element, timedomain, lalodomain, interval):
         lon = lon[::interval]
         Msh = Msh[:, ::interval, ::interval]
         print(f'Msh.shape (sliced, {element}): {Msh.shape}')
+        print(f'null ratio ({element}):', pd.isnull(Msh).mean())
     except OSError:
         print(f'Warning: {element} in {year} is not available. Returned None.')
         return None
@@ -64,6 +65,10 @@ if __name__ == '__main__':
     #explore locations
     for pref in dataset.keys():
 
+        #debug
+        # if pref != 'akita':
+        #     continue
+
         #skip if data exists
         # if os.path.exists(os.path.join('meshdata', pref)):
         #     print('skipped', pref)
@@ -90,9 +95,8 @@ if __name__ == '__main__':
             #         assert(np.all(dfs[0][col] == dfs[i][col]))
 
             #concat
-            #TODO(kyon): concat by index is slow?
             print('concat...')
-            df = pd.concat(dfs)
+            df = pd.concat(dfs, axis=1)
             df.reset_index(inplace=True)
             df['YEAR'] = df.date.dt.year
             df['DOY'] = df.date.dt.dayofyear
@@ -112,6 +116,12 @@ if __name__ == '__main__':
             df_grouped = df.groupby(['lat', 'lon'])
             for (lat, lon), row_idx in df_grouped.groups.items():
                 record = df.iloc[row_idx].copy()
+
+                #skip if on the sea (temperature will be null)
+                if np.all(pd.isnull(record.T2M)):
+                    # print(f'({lat},{lon}) is on the sea, meshdata has not been saved.')
+                    continue
+
                 meshcode = AMD.lalo2mesh(lat, lon)
                 record['meshcode'] = meshcode
                 outdir = os.path.join('meshdata', pref, str(year))
@@ -120,5 +130,5 @@ if __name__ == '__main__':
                 with open(outcsv, 'w') as f:
                     f.write('#config - lat:{}\n'.format(lat))
                     f.write('#config - lon:{}\n'.format(lon))
-                    record.to_csv(f, float_format='%.3f')
+                    record.to_csv(f, float_format='%.3f', index=False)
                     #TODO(kyon): tqdm
