@@ -121,3 +121,4 @@ if __name__ == '__main__':
                     f.write('#config - lat:{}\n'.format(lat))
                     f.write('#config - lon:{}\n'.format(lon))
                     record.to_csv(f, float_format='%.3f')
+                    #TODO(kyon): tqdm
