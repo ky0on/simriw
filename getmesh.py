@@ -11,6 +11,7 @@ import argparse
 import numpy as np
 import pandas as pd
 from collections import defaultdict
+from tqdm import tqdm, trange
 
 from common import mkdir
 
@@ -23,13 +24,12 @@ __date__ = '08 Oct 2017'
 def fetch(element, timedomain, lalodomain, interval):
     ''' Download 1km-mesh data from NARO '''
     try:
-        Msh, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
-        print(f'Msh.shape (original, {element}): {Msh.shape}')
+        Msh_org, tim, lat, lon = AMD.GetMetData(element, timedomain, lalodomain)
         lat = lat[::interval]
         lon = lon[::interval]
-        Msh = Msh[:, ::interval, ::interval]
-        print(f'Msh.shape (sliced, {element}): {Msh.shape}')
-        print(f'null ratio ({element}):', pd.isnull(Msh).mean())
+        Msh = Msh_org[:, ::interval, ::interval]
+        print(f'Msh.shape ({element}): {Msh_org.shape} -> {Msh.shape}')
+        print(f'null ratio ({element}):', round(pd.isnull(Msh).mean(), 2))
     except OSError:
         print(f'Warning: {element} in {year} is not available. Returned None.')
         return None
@@ -40,11 +40,11 @@ def fetch(element, timedomain, lalodomain, interval):
         'lon': list(lon) * len(lat) * len(tim),
         'date': np.repeat(tim, len(lat) * len(lon)),
     })
-    print(f'{element} datafram done')
+    # print(f'{element} dataframe done')
 
     #set index
     df.set_index(['date', 'lat', 'lon'], inplace=True)
-    print(f'{element} set_index done')
+    # print(f'{element} set_index done')
 
     # df[(df.A>0) & (df.B>0)]
     return df
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         dataset = hjson.load(f)
 
     #explore locations
-    for pref in dataset.keys():
+    for pref in tqdm(dataset.keys(), desc='Area'):
 
         #debug
         # if pref != 'akita':
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         elements = ('TMP_mea', 'TMP_max', 'TMP_min', 'RH', 'GSR', 'APCP')
 
         #explore year
-        for year in range(1980, 2017):
+        for year in trange(1980, 2017, desc='Year'):
 
             #access to server
             timedomain = [f'{year}-05-01', f'{year}-10-31']
@@ -95,12 +95,10 @@ if __name__ == '__main__':
             #         assert(np.all(dfs[0][col] == dfs[i][col]))
 
             #concat
-            print('concat...')
             df = pd.concat(dfs, axis=1)
             df.reset_index(inplace=True)
             df['YEAR'] = df.date.dt.year
             df['DOY'] = df.date.dt.dayofyear
-            print('done')
 
             #rename columns
             df.rename(
@@ -114,7 +112,7 @@ if __name__ == '__main__':
 
             #split by meshcode and save as csv
             df_grouped = df.groupby(['lat', 'lon'])
-            for (lat, lon), row_idx in df_grouped.groups.items():
+            for (lat, lon), row_idx in tqdm(df_grouped.groups.items(), desc='meshcode'):
                 record = df.iloc[row_idx].copy()
 
                 #skip if on the sea (temperature will be null)
@@ -135,4 +133,3 @@ if __name__ == '__main__':
                     f.write('#config - lat:{}\n'.format(lat))
                     f.write('#config - lon:{}\n'.format(lon))
                     record.to_csv(f, float_format='%.3f', index=False)
-                    #TODO(kyon): tqdm
