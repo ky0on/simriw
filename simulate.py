@@ -25,7 +25,7 @@ def simulate(csvpath):
 
     #check weather data
     # print(f'Loading {csvpath}')
-    csv = pd.read_csv(csvpath, comment='#', index_col='DATE', parse_dates=['DATE'])
+    csv = pd.read_csv(csvpath, comment='#', index_col='date', parse_dates=['date'])
     meshcode = os.path.splitext(os.path.basename(csvpath))[0]
     if np.any(pd.isnull(csv.T2M)):
         print(f'np.nan in T2M. Skipped {csvpath}.')
@@ -96,8 +96,9 @@ if __name__ == '__main__':
 
             #run simulation
             print(f'{pref} ({year})')
-            result = joblib.Parallel(n_jobs=-1, verbose=1)(
+            result = joblib.Parallel(n_jobs=6, verbose=1)(
                 joblib.delayed(simulate)(csvpath) for csvpath in csvpaths)
+            print('Loaded meshdata')
 
             #convert result to dataframe
             result = pd.concat(result)
