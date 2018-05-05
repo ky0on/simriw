@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""   """
+""" Run SIMRIW simulation  """
 
 from __future__ import print_function
 import argparse
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     for pref in dataset.keys():
 
         #debug (pref limitation)
-        if args.debug and pref != 'akita':
+        if args.debug and pref != 'kyushu':
             continue
 
         #explore year (to reduce memory consumption)
