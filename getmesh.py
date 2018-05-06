@@ -13,7 +13,7 @@ import pandas as pd
 from collections import defaultdict
 from tqdm import tqdm, trange
 
-from common import mkdir
+from utils import mkdir
 
 import AMD_Tools3 as AMD
 

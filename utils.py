@@ -12,6 +12,11 @@ __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '26 Dec 2017'
 
 
+def mkdir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+
 def save_and_slack_file(fig, filepath, msg='', dpi=100, post=True):
     fig.savefig(filepath, dpi=dpi)
     slack_file(filepath, msg=msg, post=post)

@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from common import mkdir
+from utils import mkdir
 from pysimriw import simriw
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
