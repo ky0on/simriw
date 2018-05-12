@@ -11,6 +11,7 @@ import numpy as np
 import tensorflow as tf
 import random as rn
 import pandas as pd
+from tqdm import tqdm
 from slacker import Slacker
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -36,20 +37,21 @@ __date__ = '15 Oct 2017'
 def load_dataset(csvpath):
     log('Loading', csvpath)
     df = pd.read_csv(csvpath)
-    return df
+    x = df[args.input]
+    y = df.GY.iloc[-1]
+    r = df[['DVI', 'LAI']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
+    return {'x': x, 'y': y, 'r': r}
 
 
 def fill_na_rows(df, target_nrows):
     """ Add nan rows to dataframe """
 
-    nrows = target_nrows - df.shape[0]
-    assert nrows >= 0, 'Maybe something wrong in longest calculation...'
-    assert len(df.shape) == 2, 'Supports 2d dataframe only'
+    if df.shape[0] == target_nrows:
+        return df
 
-    ar = np.zeros((nrows, df.shape[1]))
-    ar[:, :] = np.nan
-    ar = pd.DataFrame(ar, columns=df.columns)
-    df = df.append(ar, ignore_index=True)
+    zeros = [[0] * df.shape[1]] * (target_nrows - df.shape[0])
+    zeros_df = pd.DataFrame(zeros, columns=df.columns)
+    df = df.append(zeros_df)
 
     return df
 
@@ -84,32 +86,21 @@ if __name__ == '__main__':
     log(str(args))
 
     #load simdata
+    log('inputs:', args.input)
     csvpaths = glob.glob(os.path.join('simdata', '*', '*', '*.csv'))
     csvpaths.sort()
     if args.debug:
-        csvpaths = csvpaths[:10]
-    simdata_all = joblib.Parallel(n_jobs=-1, verbose=1)(
+        csvpaths = rn.sample(csvpaths, 50)
+    simdata = joblib.Parallel(n_jobs=-1, verbose=1)(
         joblib.delayed(load_dataset)(csvpath) for csvpath in csvpaths)
-    simdata = pd.concat(simdata_all)
-    simdata = simdata.sort_values(['year', 'meshcode'])  # sort to obtain stable result
-    longest = simdata.groupby(['meshcode', 'year']).apply(len).max()
-    # simdata.dropna(how='any', inplace=True)   # drop nan records
 
     #extract dataset
-    log('inputs:', args.input)
+    longest = np.max([d['x'].shape[0] for d in simdata])
     xs, ys, rs = [], [], []  # r: references (DVI, LAT etc.)
-    for meshcode in simdata['meshcode'].unique():
-        for year in simdata.loc[simdata['meshcode'] == meshcode, :].year.unique():
-            # log(year, meshcode)
-            a_simdata = simdata.loc[(simdata['meshcode'] == meshcode) & (simdata['year'] == year), :]
-            x = a_simdata[args.input]
-            x = fill_na_rows(x, target_nrows=longest)
-            y = a_simdata.GY.iloc[-1]
-            r = a_simdata[['DVI', 'LAI']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
-            r = fill_na_rows(r, target_nrows=longest)
-            xs.append(np.array(x))
-            ys.append(y)
-            rs.append(np.array(r))
+    for d in tqdm(simdata):
+        xs.append(np.array(fill_na_rows(d['x'], longest)))
+        rs.append(np.array(fill_na_rows(d['r'], longest)))
+        ys.append(d['y'])
     xs = np.array(xs).astype(np.float32)
     ys = np.array(ys).astype(np.float32)
     rs = np.array(rs).astype(np.float32)
