@@ -23,8 +23,9 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', nargs='?', type=str, default='./output/03-24-21-21-23')
+    parser.add_argument('path', nargs='?', type=str, default='./output/05-07-00-08-30')
     parser.add_argument('--sample', '-n', default=10, type=int, help='number of sampled images')
+    parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
 
     #init
@@ -47,9 +48,9 @@ if __name__ == '__main__':
 
     #explore modifires
     for modifier_title, modifier in modifiers.items():
-        saliency = []
+        counts = {inp: np.zeros((11, 21), dtype=int) for inp in inputs}
 
-        for cnt in tqdm(range(args.sample)):
+        for cnt in tqdm(range(args.sample), desc=modifier_title):
 
             #random sampling
             i = np.random.randint(0, len(x_train))
@@ -59,12 +60,13 @@ if __name__ == '__main__':
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
 
             #debug (plot inputs and dvi)
-            fig2, axes2 = plt.subplots(6, 1)
-            for c in range(x.shape[1]):
-                axes2[c].plot(x[:, c, 0])
-            axes2[5].plot(dvi)
-            fig2.tight_layout()
-            fig2.savefig(f'/tmp/{i:0>5}.png')
+            if args.plot_input_dvi:
+                fig2, axes2 = plt.subplots(6, 1)
+                for c in range(x.shape[1]):
+                    axes2[c].plot(x[:, c, 0])
+                axes2[5].plot(dvi)
+                fig2.tight_layout()
+                fig2.savefig(f'/tmp/{i:0>5}.png')
 
             #calculate saliency
             try:
@@ -74,29 +76,28 @@ if __name__ == '__main__':
                 continue
 
             #save as dataframe
-            #TODO(kyon): plot _saliency with dvi
-            _saliency = pd.DataFrame(grads, columns=inputs)
-            _saliency['dvi'] = dvi
-            _saliency['image_num'] = i
-            _saliency['count'] = 1
-            # print(_saliency.head())
-            # print(_saliency.tail())
-            saliency.append(_saliency)
+            for col in range(grads.shape[1]):
+                inp = inputs[col]
+                for g, d in zip(grads[:, col], dvi):
+                    ig = int(g * 10)
+                    id = int(d * 10)
+                    counts[inp][ig, id] += 1
 
         #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
-        df = pd.concat(saliency).round(1)
-        for i, col in enumerate(inputs):
+        for i, inp in enumerate(inputs):
+
+            #normalize
+            count = pd.DataFrame(counts[inp])
+            count.index = count.index / 10
+            count.columns = count.columns / 10
+            #TODO: Use pandas method for normalization?
+            count_normalized = (count-count.min())/(count.max()-count.min())
+
+            #plot
             ax = axes.flatten()[i]
-            counts = df.groupby(['dvi', col]).count()['count']
-            counts = counts.unstack().T
-            counts.index = np.round(counts.index, 1)
-            counts.columns = np.round(counts.columns, 1)
-            counts = counts.fillna(0)
-            # counts = counts.astype(int)
-            counts_normalized = (counts-counts.min())/(counts.max()-counts.min())
-            sns.heatmap(counts_normalized, ax=ax)
-            ax.set_title(col)
+            sns.heatmap(count_normalized, ax=ax)
+            ax.set_title(inp)
             # ax.set_xlim(0, 2.0)
             # ax.set_ylim(0, 1.0)
 
