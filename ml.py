@@ -241,6 +241,7 @@ if __name__ == '__main__':
     # slack_file(logpath, post=args.noslack)
 
     #save
+    pd.DataFrame(history.history).to_csv(f'{outdir}/history.csv')
     np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
