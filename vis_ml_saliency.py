@@ -17,6 +17,7 @@ from utils import save_and_slack_file
 from keras.models import load_model
 from vis.utils import utils
 from vis.visualization import visualize_saliency
+from sklearn.preprocessing import MinMaxScaler   #, StandardScaler
 
 
 if __name__ == '__main__':
@@ -91,8 +92,8 @@ if __name__ == '__main__':
             count = pd.DataFrame(counts[inp])
             count.index = count.index / 10
             count.columns = count.columns / 10
-            #TODO: Use pandas method for normalization?
-            count_normalized = (count-count.min())/(count.max()-count.min())
+            scaler = MinMaxScaler()
+            count_normalized = scaler.fit_transform(count)
 
             #plot
             ax = axes.flatten()[i]
