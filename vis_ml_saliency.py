@@ -24,13 +24,13 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/05-07-00-08-30')
-    parser.add_argument('--sample', '-n', default=10, type=int, help='number of sampled images')
+    parser.add_argument('--sample', '-n', default=5, type=int, help='number of sampled images')
     parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
 
     #init
     outdir = args.path
-    inputs = ['DL', 'TAV', 'TMX', 'RAD', 'PPM']   # TODO(kyon): load from log or something
+    inputs = np.loadtxt(os.path.join(args.path, 'inputs.csv'), dtype=str)
 
     #load model
     model = load_model(os.path.join(args.path, 'model.h5'))
