@@ -137,7 +137,7 @@ if __name__ == '__main__':
     #normalization
     x_scaler = MinMaxScaler()
     y_scaler = MinMaxScaler()
-    xs_scaled = x_scaler.fit_transform(xs.reshape(-1, xs.shape[2]))
+    xs_scaled = x_scaler.fit_transform(xs.reshape(-1, xs.shape[2]))   # normalize each column
     ys_scaled = y_scaler.fit_transform(ys.reshape(-1, 1))
     xs_scaled = xs_scaled.reshape(xs.shape)
     ys_scaled = ys_scaled.reshape(ys.shape)
