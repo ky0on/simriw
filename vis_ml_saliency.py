@@ -17,7 +17,7 @@ from utils import save_and_slack_file
 from keras.models import load_model
 from vis.utils import utils
 from vis.visualization import visualize_saliency
-from sklearn.preprocessing import MinMaxScaler   #, StandardScaler
+from sklearn.preprocessing import MinMaxScaler   # , StandardScaler
 
 
 if __name__ == '__main__':
@@ -41,6 +41,7 @@ if __name__ == '__main__':
     x_train = np.load(os.path.join(args.path, 'x_train.npy'))
     y_train = np.load(os.path.join(args.path, 'y_train.npy'))
     r_train = np.load(os.path.join(args.path, 'r_train.npy'))
+    print('x_train.shape:', x_train.shape)
 
     #init
     modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
