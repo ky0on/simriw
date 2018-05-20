@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', nargs='?', type=str, default='./output/05-07-00-08-30')
+    parser.add_argument('path', nargs='?', type=str, default='./output/05-12-19-48-41')
     parser.add_argument('--sample', '-n', default=500, type=int, help='number of sampled images')
     parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
@@ -87,9 +87,10 @@ if __name__ == '__main__':
             for col in range(grads.shape[1]):
                 inp = inputs[col]
                 for g, d in zip(grads[:, col], dvi):
-                    ig = int(g * 10)
-                    id = int(d * 10)
-                    counts[inp][ig, id] += 1
+                    if d > 0.0:   # ignore filled rows by ml.py
+                        ig = int(g * 10)
+                        id = int(d * 10)
+                        counts[inp][ig, id] += 1
 
         #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
