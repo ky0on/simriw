@@ -78,7 +78,7 @@ if __name__ == '__main__':
         outdir = os.path.join('/tmp', outdir)  # move to /tmp if debug
         args.epochs = 5                        # set epochs=5 if debug
     os.mkdir(outdir)
-    fig, axes = plt.subplots(3, 3, figsize=(10, 10))
+    fig, axes = plt.subplots(4, 4, figsize=(10, 10))
 
     #logger
     logpath = os.path.join(outdir, 'log')
@@ -226,14 +226,15 @@ if __name__ == '__main__':
     #TODO(kyon): inverse-transform y
     for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
         pred = model.predict(x)
-        result = pd.DataFrame({
-            'actual': y.flatten(),
-            'predict': pred.flatten(),
-        })
-        ax = axes[2, 0+i]
-        result.plot.scatter(x='actual', y='predict', ax=ax)
-        ax.set_title(title)
-        xyline(ax)
+        for j, invert in enumerate((False, True)):
+            result = pd.DataFrame({
+                'actual': y_scaler.inverse_transform(y).flatten() if invert else y.flatten(),
+                'predict': y_scaler.inverse_transform(pred).flatten() if invert else pred.flatten(),
+            })
+            ax = axes[2, 0+i*2+j]
+            result.plot.scatter(x='actual', y='predict', ax=ax)
+            ax.set_title(title)
+            xyline(ax)
 
     #slack
     fig.tight_layout()
