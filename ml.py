@@ -6,7 +6,6 @@
 from __future__ import print_function
 import argparse
 import glob
-import joblib
 import numpy as np
 import tensorflow as tf
 import random as rn
@@ -14,6 +13,7 @@ import pandas as pd
 from tqdm import tqdm
 from slacker import Slacker
 import matplotlib.pyplot as plt
+from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
 
 #seed https://keras.io/getting-started/faq/
@@ -223,6 +223,7 @@ if __name__ == '__main__':
     log('Test acc  (mae):', score[1])
 
     #plot prediction
+    #TODO(kyon): inverse-transform y
     for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
         pred = model.predict(x)
         result = pd.DataFrame({
@@ -247,3 +248,5 @@ if __name__ == '__main__':
     np.save(f'{outdir}/y_train.npy', y_train)
     np.save(f'{outdir}/r_train.npy', r_train)
     model.save(f'{outdir}/model.h5')
+    joblib.dump(x_scaler, f'{outdir}/x_scaler.dump')
+    joblib.dump(y_scaler, f'{outdir}/y_scaler.dump')
