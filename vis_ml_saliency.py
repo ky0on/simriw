@@ -63,7 +63,7 @@ if __name__ == '__main__':
             i = np.random.randint(0, len(x_train))
             x = x_train[i]
             r = r_train[i]
-            y = y_train[i][0]
+            # y = y_train[i][0]
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
 
             #debug (plot inputs and dvi)
@@ -77,6 +77,7 @@ if __name__ == '__main__':
 
             #calculate saliency
             try:
+                #TODO(kyon): why become slow after several iterations?
                 grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
             except:
                 print('failed in vis')
