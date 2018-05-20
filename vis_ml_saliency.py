@@ -26,7 +26,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/05-07-00-08-30')
-    parser.add_argument('--sample', '-n', default=5, type=int, help='number of sampled images')
+    parser.add_argument('--sample', '-n', default=500, type=int, help='number of sampled images')
     parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
 
@@ -49,8 +49,8 @@ if __name__ == '__main__':
     # y_scaler = joblib.load(os.path.join(args.path, 'y_scaler.dump'))
 
     #init
-    modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
-    # modifiers = {'positive': None}
+    # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
+    modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
 
     #explore modifires
