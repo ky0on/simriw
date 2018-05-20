@@ -10,6 +10,7 @@ import seaborn as sns
 from tqdm import tqdm
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+# from sklearn.externals import joblib
 from collections import defaultdict
 
 from utils import save_and_slack_file
@@ -42,6 +43,10 @@ if __name__ == '__main__':
     y_train = np.load(os.path.join(args.path, 'y_train.npy'))
     r_train = np.load(os.path.join(args.path, 'r_train.npy'))
     print('x_train.shape:', x_train.shape)
+
+    #load scaler
+    # x_scaler = joblib.load(os.path.join(args.path, 'x_scaler.dump'))
+    # y_scaler = joblib.load(os.path.join(args.path, 'y_scaler.dump'))
 
     #init
     modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
