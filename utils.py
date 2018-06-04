@@ -22,7 +22,7 @@ def save_and_slack_file(fig, filepath, msg='', dpi=100, post=True):
     slack_file(filepath, msg=msg, post=post)
 
 
-def slack_file(filepath, msg='', channel='#debug', post=True):
+def slack_file(filepath, msg='', channel='#xxx_simriw', post=True):
     ''' Post image to slack '''
 
     #not post
