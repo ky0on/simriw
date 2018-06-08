@@ -61,7 +61,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
-    parser.add_argument('--epochs', '-e', type=int, default=500, help='the number of epochs')
+    parser.add_argument('--epochs', '-e', type=int, default=20, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--threshold', '-t', default=100, type=int, help='Eliminate data where y is smaller than this')
