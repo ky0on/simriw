@@ -223,7 +223,6 @@ if __name__ == '__main__':
     log('Test acc  (mae):', score[1])
 
     #plot prediction
-    #TODO(kyon): inverse-transform y
     for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
         pred = model.predict(x)
         for j, invert in enumerate((False, True)):
@@ -232,7 +231,7 @@ if __name__ == '__main__':
                 'predict': y_scaler.inverse_transform(pred).flatten() if invert else pred.flatten(),
             })
             ax = axes[2, 0+i*2+j]
-            result.plot.scatter(x='actual', y='predict', ax=ax)
+            result.plot.scatter(x='actual', y='predict', ax=ax, alpha=.01, s=1)
             ax.set_title(title)
             xyline(ax)
 
@@ -244,6 +243,7 @@ if __name__ == '__main__':
 
     #save
     pd.DataFrame(history.history).to_csv(f'{outdir}/history.csv')
+    result.to_csv(f'{outdir}/result.csv')
     np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
