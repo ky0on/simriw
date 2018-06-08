@@ -219,8 +219,11 @@ if __name__ == '__main__':
 
     #score
     score = model.evaluate(x_train, y_train, verbose=0)
-    log('Test loss (mse):', score[0])
-    log('Test acc  (mae):', score[1])
+    log('Train loss (mse):', score[0])
+    log('Train acc  (mae):', score[1])
+    score = model.evaluate(x_valid, y_valid, verbose=0)
+    log('Valid loss (mse):', score[0])
+    log('Valid acc  (mae):', score[1])
 
     #plot prediction
     for i, (x, y, title) in enumerate(((x_train, y_train, 'train'), (x_valid, y_valid, 'valid'))):
