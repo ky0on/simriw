@@ -64,7 +64,8 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', '-e', type=int, default=20, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
-    parser.add_argument('--threshold', '-t', default=0, type=int, help='Eliminate data where y is smaller than this')
+    parser.add_argument('--GYth', default=0, type=int, help='Eliminate data where y is smaller than')
+    parser.add_argument('--DVIth', default=2.0, type=float, help='Eliminate data where final DVI is smaller than')
     parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD', 'PPM'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
     parser.add_argument('--model', '-m', default='3x3', type=str, help='Model structure (3x3|1x1)')
     parser.add_argument('--optimizer', '-o', default='rmsprop', type=str, help='Optimizer (rmsprop|sgd|adam|adagrad)')
@@ -126,18 +127,18 @@ if __name__ == '__main__':
     xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
 
     #remove smaller GY
-    xs = xs[ys >= args.threshold]
-    rs = rs[ys >= args.threshold]
-    ys = ys[ys >= args.threshold]
+    xs = xs[ys >= args.GYth]
+    rs = rs[ys >= args.GYth]
+    ys = ys[ys >= args.GYth]
     ax = axes[0, 1]
     ax.hist(ys)
     ax.set_xlabel('GY')
     ax.set_title('After GY thresholding')
 
     #remove smaller DVI
-    xs = xs[rs[:, :, 0].max(axis=1) >= 2.0]
-    ys = ys[rs[:, :, 0].max(axis=1) >= 2.0]
-    rs = rs[rs[:, :, 0].max(axis=1) >= 2.0]
+    xs = xs[rs[:, :, 0].max(axis=1) >= args.DVIth]
+    ys = ys[rs[:, :, 0].max(axis=1) >= args.DVIth]
+    rs = rs[rs[:, :, 0].max(axis=1) >= args.DVIth]
     ax = axes[0, 2]
     ax.hist(ys)
     ax.set_xlabel('GY')
