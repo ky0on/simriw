@@ -17,9 +17,9 @@ def mkdir(directory):
         os.makedirs(directory)
 
 
-def save_and_slack_file(fig, filepath, msg='', dpi=100, post=True):
+def save_and_slack_file(fig, filepath, msg='', dpi=100, post=True, channel='#xxx_simriw'):
     fig.savefig(filepath, dpi=dpi)
-    slack_file(filepath, msg=msg, post=post)
+    slack_file(filepath, msg=msg, post=post, channel=channel)
 
 
 def slack_file(filepath, msg='', channel='#xxx_simriw', post=True):

@@ -78,6 +78,7 @@ if __name__ == '__main__':
     if args.debug:
         outdir = os.path.join('/tmp', outdir)  # move to /tmp if debug
         args.epochs = 5                        # set epochs=5 if debug
+    channel = '#xxx_simriw' if not args.debug else '#xxx_debug'
     os.mkdir(outdir)
     fig, axes = plt.subplots(4, 4, figsize=(10, 10))
 
@@ -251,7 +252,8 @@ if __name__ == '__main__':
     #slack
     fig.tight_layout()
     save_and_slack_file(fig, f'{outdir}/ml.png',
-                        msg=f'{str(args)}\nTest mse={round(score[0], 3)}\nTest mae={round(score[1], 3)}', post=args.noslack)
+                        msg=f'{str(args)}\nTest mse={round(score[0], 3)}\nTest mae={round(score[1], 3)}',
+                        post=args.noslack, channel=channel)
     # slack_file(logpath, post=args.noslack)
 
     #save
