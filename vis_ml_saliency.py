@@ -135,4 +135,4 @@ if __name__ == '__main__':
         outpng = os.path.join(outdir, f'saliency_{modifier_title}.png')
         fig.suptitle(modifier_title)
         fig.tight_layout()
-        save_and_slack_file(fig, outpng)
+        save_and_slack_file(fig, outpng, msg=str(args))
