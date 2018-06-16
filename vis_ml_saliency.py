@@ -57,7 +57,8 @@ if __name__ == '__main__':
     for modifier_title, modifier in modifiers.items():
         counts = {inp: np.zeros((11, 21), dtype=int) for inp in inputs}
 
-        for cnt in tqdm(range(args.sample), desc=modifier_title):
+        pbar = tqdm(total=args.sample, desc=modifier_title)
+        while True:
 
             #random sampling
             i = np.random.randint(0, len(x_train))

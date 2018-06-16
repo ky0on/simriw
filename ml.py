@@ -39,7 +39,7 @@ def load_dataset(csvpath):
     df = pd.read_csv(csvpath)
     x = df[args.input]
     y = df.GY.iloc[-1]
-    r = df[['DVI', 'LAI']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
+    r = df[['DVI', 'LAI', 'ATHHT', 'ATHLT']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
     return {'x': x, 'y': y, 'r': r}
 
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     #init
     plt.style.use('ggplot')
-    outdir = os.path.join('output', pd.Timestamp.now().strftime('%m-%d-%H-%M-%S'))
+    outdir = os.path.join('output', pd.Timestamp.now().strftime('%m%d-%H%M%S'))
     if args.debug:
         outdir = os.path.join('/tmp', outdir)  # move to /tmp if debug
         args.epochs = 5                        # set epochs=5 if debug
@@ -135,6 +135,7 @@ if __name__ == '__main__':
     ax.hist(ys)
     ax.set_xlabel('GY')
     ax.set_title('After GY thresholding')
+    log('xs.shape (After GYth):', xs.shape)
 
     #remove smaller DVI
     xs = xs[rs[:, :, 0].max(axis=1) >= args.DVIth]
@@ -144,6 +145,7 @@ if __name__ == '__main__':
     ax.hist(ys)
     ax.set_xlabel('GY')
     ax.set_title('After DVI thresholding')
+    log('xs.shape (After DVIth):', xs.shape)
 
     #normalization
     x_scaler = MinMaxScaler()
