@@ -27,6 +27,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/05-12-19-48-41')
     parser.add_argument('--sample', '-n', default=500, type=int, help='number of sampled images')
+    parser.add_argument('--ATHHT', default=None, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
+    parser.add_argument('--ATHLT', default=None, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
     parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
 
@@ -66,6 +68,19 @@ if __name__ == '__main__':
             r = r_train[i]
             # y = y_train[i][0]
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
+            LAI = r[:, 1, 0]    # fixed!
+            ATHHT = r[:, 2, 0]  # fixed!
+            ATHLT = r[:, 3, 0]  # fixed!
+
+            #data filtering (DVI)
+            if dvi.max() < 2.0:
+                continue
+
+            #data filtering (hot/cool temperature stress)
+            if args.ATHHT and ATHHT[ATHHT > 0].min() > args.ATHHT:
+                continue
+            if args.ATHLT and ATHLT[ATHLT > 0].min() > args.ATHLT:
+                continue
 
             #debug (plot inputs and dvi)
             if args.plot_input_dvi:
@@ -92,6 +107,11 @@ if __name__ == '__main__':
                         ig = int(g * 10)
                         id = int(d * 10)
                         counts[inp][ig, id] += 1
+
+            #finalize
+            pbar.update(1)
+            if pbar.n >= args.sample:
+                break
 
         #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
