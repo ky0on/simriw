@@ -92,12 +92,8 @@ if __name__ == '__main__':
                 fig2.savefig(f'/tmp/{i:0>5}.png')
 
             #calculate saliency
-            try:
-                #TODO(kyon): why become slow after several iterations?
-                grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
-            except:
-                print('failed in vis')
-                continue
+            #TODO(kyon): why become slow after several iterations?
+            grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
 
             #save as dataframe
             for col in range(grads.shape[1]):
