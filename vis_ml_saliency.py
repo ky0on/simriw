@@ -52,7 +52,8 @@ if __name__ == '__main__':
 
     #init
     # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
-    modifiers = {'positive': None}
+    modifiers = {'positive': None, 'negate': 'negate'}
+    # modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
 
     #explore modifires
@@ -128,7 +129,7 @@ if __name__ == '__main__':
             # ax.set_ylim(0, 1.0)
 
         #save
-        outpng = os.path.join(outdir, f'saliency_{modifier_title}.png')
+        outpng = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.png')
         fig.suptitle(modifier_title)
         fig.tight_layout()
         save_and_slack_file(fig, outpng, msg=str(args))
