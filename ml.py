@@ -27,11 +27,44 @@ tf.set_random_seed(1234)
 sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
 K.set_session(sess)
 
+#cnn
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D
+# from keras.layers import Conv2D, MaxPooling2D
+from sklearn.preprocessing import MinMaxScaler
+
 from utils import save_and_slack_file, slack_file, xyline
 from utils import Logger
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
+
+
+class LossHistory(keras.callbacks.Callback):
+
+    def on_train_begin(self, logs={}):
+        from collections import defaultdict
+        self.metrics = defaultdict(lambda: [])
+
+    def on_epoch_end(self, epoch, logs={}):
+        for metric in ('loss', 'mean_absolute_error'):
+            self.metrics[metric].append(logs.get(metric))
+            self.metrics['val_' + metric].append(logs.get('val_' + metric))
+
+        if epoch > 0 and epoch % 2 == 0:
+            #to dataframe
+            m = pd.DataFrame(self.metrics)
+            m.index.name = 'epoch'
+
+            #plot
+            fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+            m[['loss', 'val_loss']].plot(ax=axes[0])
+            m[['mean_absolute_error', 'val_mean_absolute_error']].plot(ax=axes[1])
+            fig.tight_layout()
+            fig.savefig('/tmp/callback.png')
+            save_and_slack_file(fig, '/tmp/callback.png', channel='#xxx_debug')
 
 
 def load_dataset(csvpath):
@@ -115,14 +148,6 @@ if __name__ == '__main__':
     ax.hist(ys)
     ax.set_xlabel('GY')
     ax.set_title('Before thresholding')
-
-    #cnn
-    import keras
-    from keras.models import Sequential
-    from keras.layers import Dense, Dropout, Flatten
-    from keras.layers import Conv2D
-    # from keras.layers import Conv2D, MaxPooling2D
-    from sklearn.preprocessing import MinMaxScaler
 
     #NaN -> 0
     xs = np.nan_to_num(xs)   # TODO: NaN -> 0. OK?
@@ -215,12 +240,16 @@ if __name__ == '__main__':
                   optimizer=optimizer,
                   metrics=[keras.metrics.mae])
 
+    #callback
+    losshistory = LossHistory()
+
     #learn
     history = model.fit(x_train, y_train,
                         batch_size=args.batchsize,
                         epochs=args.epochs,
                         verbose=1,
                         validation_data=(x_valid, y_valid),
+                        callbacks=[losshistory],
                         )
 
     #history
