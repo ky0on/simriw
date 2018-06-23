@@ -279,6 +279,7 @@ if __name__ == '__main__':
             result.plot.scatter(x='actual', y='predict', ax=ax, alpha=.01, s=1)
             ax.set_title(title)
             xyline(ax)
+            result.to_csv(f'{outdir}/result_{title}.csv')
 
     #slack
     fig.tight_layout()
@@ -289,7 +290,6 @@ if __name__ == '__main__':
 
     #save
     pd.DataFrame(history.history).to_csv(f'{outdir}/history.csv')
-    result.to_csv(f'{outdir}/result.csv')
     np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
