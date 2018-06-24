@@ -34,6 +34,7 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D
 # from keras.layers import Conv2D, MaxPooling2D
 from sklearn.preprocessing import MinMaxScaler
+from keras.callbacks import EarlyStopping
 
 from utils import save_and_slack_file, slack_file, xyline
 from utils import Logger
@@ -241,7 +242,8 @@ if __name__ == '__main__':
                   metrics=[keras.metrics.mae])
 
     #callback
-    losshistory = LossHistory()
+    loss_history = LossHistory()
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0)
 
     #learn
     history = model.fit(x_train, y_train,
@@ -249,7 +251,7 @@ if __name__ == '__main__':
                         epochs=args.epochs,
                         verbose=1,
                         validation_data=(x_valid, y_valid),
-                        callbacks=[losshistory],
+                        callbacks=[loss_history, early_stopping],
                         )
 
     #history
