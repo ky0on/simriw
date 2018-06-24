@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     #argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', nargs='?', type=str, default='./output/05-12-19-48-41')
+    parser.add_argument('path', nargs='?', type=str, default='./output/0624-144155/21.h5')
     parser.add_argument('--sample', '-n', default=500, type=int, help='number of sampled images')
     parser.add_argument('--ATHHT', default=None, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
     parser.add_argument('--ATHLT', default=None, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
@@ -33,22 +33,23 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #init
-    outdir = args.path
-    inputs = np.loadtxt(os.path.join(args.path, 'inputs.csv'), dtype=str)
+    srcdir = os.path.dirname(args.path)
+    outdir = os.path.dirname(args.path)
+    inputs = np.loadtxt(os.path.join(srcdir, 'inputs.csv'), dtype=str)
 
     #load model
-    model = load_model(os.path.join(args.path, 'model.h5'))
+    model = load_model(args.path)
     model.summary()
 
     #load data
-    x_train = np.load(os.path.join(args.path, 'x_train.npy'))
-    y_train = np.load(os.path.join(args.path, 'y_train.npy'))
-    r_train = np.load(os.path.join(args.path, 'r_train.npy'))
+    x_train = np.load(os.path.join(srcdir, 'x_train.npy'))
+    y_train = np.load(os.path.join(srcdir, 'y_train.npy'))
+    r_train = np.load(os.path.join(srcdir, 'r_train.npy'))
     print('x_train.shape:', x_train.shape)
 
     #load scaler
-    # x_scaler = joblib.load(os.path.join(args.path, 'x_scaler.dump'))
-    # y_scaler = joblib.load(os.path.join(args.path, 'y_scaler.dump'))
+    # x_scaler = joblib.load(os.path.join(srcdir, 'x_scaler.dump'))
+    # y_scaler = joblib.load(os.path.join(srcdir, 'y_scaler.dump'))
 
     #init
     # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
