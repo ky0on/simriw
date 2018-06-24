@@ -35,6 +35,7 @@ from keras.layers import Conv2D
 # from keras.layers import Conv2D, MaxPooling2D
 from sklearn.preprocessing import MinMaxScaler
 from keras.callbacks import EarlyStopping
+from keras.callbacks import ModelCheckpoint
 
 from utils import save_and_slack_file, slack_file, xyline
 from utils import Logger
@@ -54,7 +55,7 @@ class LossHistory(keras.callbacks.Callback):
             self.metrics[metric].append(logs.get(metric))
             self.metrics['val_' + metric].append(logs.get('val_' + metric))
 
-        if epoch > 0 and epoch % 2 == 0:
+        if epoch > 0 and epoch % 5 == 0:
             #to dataframe
             m = pd.DataFrame(self.metrics)
             m.index.name = 'epoch'
@@ -243,7 +244,8 @@ if __name__ == '__main__':
 
     #callback
     loss_history = LossHistory()
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0)
+    check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, '{epoch:02d}.h5'))
+    early_stopping = EarlyStopping(monitor='val_mean_absolute_error', patience=10, verbose=0)
 
     #learn
     history = model.fit(x_train, y_train,
@@ -251,7 +253,7 @@ if __name__ == '__main__':
                         epochs=args.epochs,
                         verbose=1,
                         validation_data=(x_valid, y_valid),
-                        callbacks=[loss_history, early_stopping],
+                        callbacks=[loss_history, early_stopping, check_pointer],
                         )
 
     #history
