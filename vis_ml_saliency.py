@@ -52,8 +52,8 @@ if __name__ == '__main__':
 
     #init
     # modifiers = {'positive': None, 'negate': 'negate', 'small_values': 'small_values'}
-    modifiers = {'positive': None, 'negate': 'negate'}
-    # modifiers = {'positive': None}
+    # modifiers = {'positive': None, 'negate': 'negate'}
+    modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
 
     #explore modifires
