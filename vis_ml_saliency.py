@@ -120,7 +120,11 @@ if __name__ == '__main__':
             count.index = count.index / 10
             count.columns = count.columns / 10
             scaler = MinMaxScaler()
-            count_normalized = scaler.fit_transform(count)
+            count_normalized = pd.DataFrame(scaler.fit_transform(count))
+            count_normalized.index /= 10
+            count_normalized.columns /= 10
+            count_normalized.index.name = 'Saliency'
+            count_normalized.columns.name = 'DVI'
 
             #plot
             ax = axes.flatten()[i]
@@ -128,9 +132,12 @@ if __name__ == '__main__':
             ax.set_title(inp)
             # ax.set_xlim(0, 2.0)
             # ax.set_ylim(0, 1.0)
+            ax.set_xlabel('DVI')
+            ax.set_ylabel('Saliency')
 
         #save
         outpng = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.png')
-        fig.suptitle(modifier_title)
+        # fig.suptitle(modifier_title)
+        fig.suptitle('')
         fig.tight_layout()
         save_and_slack_file(fig, outpng, msg=str(args))
