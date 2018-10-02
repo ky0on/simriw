@@ -130,14 +130,12 @@ if __name__ == '__main__':
             ax = axes.flatten()[i]
             sns.heatmap(count_normalized, ax=ax)
             ax.set_title(inp)
-            # ax.set_xlim(0, 2.0)
-            # ax.set_ylim(0, 1.0)
             ax.set_xlabel('DVI')
             ax.set_ylabel('Saliency')
 
         #save
-        outpng = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.png')
+        out = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.pdf')
         # fig.suptitle(modifier_title)
         fig.suptitle('')
         fig.tight_layout()
-        save_and_slack_file(fig, outpng, msg=str(args))
+        save_and_slack_file(fig, out, msg=str(args))
