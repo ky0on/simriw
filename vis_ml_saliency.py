@@ -126,12 +126,27 @@ if __name__ == '__main__':
             count_normalized.index.name = 'Saliency'
             count_normalized.columns.name = 'DVI'
 
+            #title
+            if inp == 'TAV':
+                title = '$T_{mean}$'
+            elif inp == 'TMX':
+                title = '$T_{max}$'
+            elif inp == 'RAD':
+                title = '$S_s$'
+            elif inp == 'PPM':
+                title = '$P$'
+            elif inp == 'DL':
+                title = '$L$'
+            else:
+                title = inp
+
             #plot
             ax = axes.flatten()[i]
             sns.heatmap(count_normalized, ax=ax)
-            ax.set_title(inp)
-            ax.set_xlabel('DVI')
+            ax.set_title(title)
+            ax.set_xlabel('$DVI$')
             ax.set_ylabel('Saliency')
+            ax.invert_yaxis()
 
         #save
         out = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.pdf')
