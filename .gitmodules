@@ -1,0 +1,3 @@
+[submodule "convnet-drawer"]
+	path = convnet-drawer
+	url = git@github.com:ky0on/convnet-drawer.git
