@@ -8,10 +8,10 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
-import matplotlib.cm as cm
+# import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 # from sklearn.externals import joblib
-from collections import defaultdict
+# from collections import defaultdict
 
 from utils import save_and_slack_file
 
@@ -149,8 +149,10 @@ if __name__ == '__main__':
             ax.invert_yaxis()
 
         #save
-        out = os.path.join(outdir, f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.pdf')
+        out = os.path.join(
+            outdir,
+            f'saliency_{modifier_title}_ATHHT={args.ATHHT}_ATHLT={args.ATHLT}.tiff')
         # fig.suptitle(modifier_title)
         fig.suptitle('')
         fig.tight_layout()
-        save_and_slack_file(fig, out, msg=str(args))
+        save_and_slack_file(fig, out, dpi=300, msg=str(args))
