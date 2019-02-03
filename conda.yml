@@ -142,6 +142,7 @@ dependencies:
     - networkx==2.2
     - pillow==5.4.1
     - pynvim==0.3.2
+    - pysimriw==1.2
     - pywavelets==1.0.1
     - requests==2.21.0
     - scikit-image==0.14.2

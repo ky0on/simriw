@@ -2,7 +2,7 @@
 
 ## Requirements
 ### Python
-- `pip install -U git+https://ky0on@bitbucket.org/ky0on/pysimriw.git`
+- `pip install -U git+https://github.com/ky0on/pysimriw`
 - `pip install -U git+https://github.com/raghakot/keras-vis.git@40b27dfa3ecb84cdde5ec6b44251923c3266cc40`   # returns 1D grads in visualize_saliency()
 
 ### R
