@@ -96,15 +96,16 @@ if __name__ == '__main__':
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
             grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
+            print('grads.shape:', grads.shape)
 
             #save as dataframe
             for col in range(grads.shape[1]):
-                inp = inputs[col]
+                inp = inputs[col]     # DL, TMX etc.
                 for g, d in zip(grads[:, col], dvi):
                     if d > 0.0:   # ignore filled rows by ml.py
-                        ig = int(g * 10)
-                        id = int(d * 10)
-                        counts[inp][ig, id] += 1
+                        ig = int(g * 10)   # ig: [0, 1] (saliency -> row index)
+                        id = int(d * 10)   # id: [0, 2] (dvi -> column index)
+                        counts[inp][ig, id] += 1     # count up cell with specific saliency (row) and DVI (column)
 
             #finalize
             pbar.update(1)
