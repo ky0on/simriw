@@ -69,10 +69,10 @@ class LossHistory(keras.callbacks.Callback):
             save_and_slack_file(fig, '/tmp/callback.png', channel='#xxx_debug')
 
 
-def load_dataset(csvpath):
+def load_dataset(csvpath, input):
     log('Loading', csvpath)
     df = pd.read_csv(csvpath)
-    x = df[args.input]
+    x = df[input]
     y = df.GY.iloc[-1]
     r = df[['DVI', 'LAI', 'ATHHT', 'ATHLT']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
     return {'x': x, 'y': y, 'r': r}
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     if args.debug:
         csvpaths = rn.sample(csvpaths, 50)
     simdata = joblib.Parallel(n_jobs=-1, verbose=1)(
-        joblib.delayed(load_dataset)(csvpath) for csvpath in csvpaths)
+        joblib.delayed(load_dataset)(csvpath, args.input) for csvpath in csvpaths)
 
     #extract dataset
     longest = np.max([d['x'].shape[0] for d in simdata])
