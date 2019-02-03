@@ -96,7 +96,7 @@ if __name__ == '__main__':
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
             grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
-            print('grads.shape:', grads.shape)
+            # print('grads.shape:', grads.shape)
 
             #save as dataframe
             for col in range(grads.shape[1]):
