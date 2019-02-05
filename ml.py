@@ -11,7 +11,7 @@ import tensorflow as tf
 import random as rn
 import pandas as pd
 from tqdm import tqdm
-from slacker import Slacker
+# from slacker import Slacker
 import matplotlib.pyplot as plt
 from sklearn.externals import joblib
 from sklearn.model_selection import train_test_split
@@ -30,14 +30,14 @@ K.set_session(sess)
 #cnn
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Flatten
 from keras.layers import Conv2D
 # from keras.layers import Conv2D, MaxPooling2D
 from sklearn.preprocessing import MinMaxScaler
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ModelCheckpoint
 
-from utils import save_and_slack_file, slack_file, xyline
+from utils import save_and_slack_file, xyline
 from utils import Logger
 
 __autor__ = 'Kyosuke Yamamoto (kyon)'
@@ -55,18 +55,18 @@ class LossHistory(keras.callbacks.Callback):
             self.metrics[metric].append(logs.get(metric))
             self.metrics['val_' + metric].append(logs.get('val_' + metric))
 
-        if epoch > 0 and epoch % 5 == 0:
-            #to dataframe
-            m = pd.DataFrame(self.metrics)
-            m.index.name = 'epoch'
-
-            #plot
-            fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-            m[['loss', 'val_loss']].plot(ax=axes[0])
-            m[['mean_absolute_error', 'val_mean_absolute_error']].plot(ax=axes[1])
-            fig.tight_layout()
-            fig.savefig('/tmp/callback.png')
-            save_and_slack_file(fig, '/tmp/callback.png', channel='#xxx_debug')
+        # if epoch > 0 and epoch % 5 == 0:
+        #     #to dataframe
+        #     m = pd.DataFrame(self.metrics)
+        #     m.index.name = 'epoch'
+        #
+        #     #plot
+        #     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+        #     m[['loss', 'val_loss']].plot(ax=axes[0])
+        #     m[['mean_absolute_error', 'val_mean_absolute_error']].plot(ax=axes[1])
+        #     fig.tight_layout()
+        #     fig.savefig('/tmp/callback.png')
+        #     save_and_slack_file(fig, '/tmp/callback.png', channel='#xxx_debug')
 
 
 def load_dataset(csvpath, input):
