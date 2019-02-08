@@ -277,7 +277,6 @@ if __name__ == '__main__':
                         channel=channel)
 
     #save
-    np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
     np.save(f'{outdir}/r_train.npy', r_train)

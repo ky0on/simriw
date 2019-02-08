@@ -3,6 +3,7 @@
 
 from __future__ import print_function
 import os
+import json
 import argparse
 import numpy as np
 import pandas as pd
@@ -35,7 +36,9 @@ if __name__ == '__main__':
     #init
     srcdir = os.path.dirname(args.path)
     outdir = os.path.dirname(args.path)
-    inputs = np.loadtxt(os.path.join(srcdir, 'inputs.csv'), dtype=str)
+    with open(os.path.join(srcdir, 'args.json'), 'r') as fp:
+        ml_args = json.load(fp)
+    inputs = ml_args['input']
 
     #load model
     model = load_model(args.path)
