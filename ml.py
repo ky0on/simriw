@@ -5,6 +5,7 @@
 
 from __future__ import print_function
 import argparse
+import json
 import glob
 import numpy as np
 import tensorflow as tf
@@ -117,6 +118,10 @@ if __name__ == '__main__':
     channel = '#xxx_simriw' if not args.debug else '#xxx_debug'
     os.mkdir(outdir)
     fig, axes = plt.subplots(4, 4, figsize=(10, 10))
+
+    #save args
+    with open(os.path.join(outdir, 'args.json'), 'w') as fp:
+        json.dump(vars(args), fp, indent=2)
 
     #logger
     logpath = os.path.join(outdir, 'log')
