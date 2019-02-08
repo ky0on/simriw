@@ -96,7 +96,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', action='store_true')
-    parser.add_argument('--epochs', '-e', type=int, default=20, help='the number of epochs')
+    parser.add_argument('--epochs', '-e', type=int, default=50, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
     parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--GYth', default=0, type=int, help='Eliminate data where y is smaller than')
@@ -104,6 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD', 'PPM'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
     parser.add_argument('--model', '-m', default='3x3', type=str, help='Model structure (3x3|1x1)')
     parser.add_argument('--optimizer', '-o', default='rmsprop', type=str, help='Optimizer (rmsprop|sgd|adam|adagrad)')
+    parser.add_argument('--noise', '-n', default=0, type=float, help='noise level')
     args = parser.parse_args()
     # args.debug = True
 
@@ -195,6 +196,14 @@ if __name__ == '__main__':
     log('y_train shape:', y_train.shape)
     log(x_train.shape[0], 'train samples')
     log(x_valid.shape[0], 'valid samples')
+
+    #add noise
+    # for c in range(xs.shape[2]):
+    #     max_value = xs[:, :, c].max()
+    #     noise_value = max_value * args.noise
+    #     log(args.input[c], 'max_value:', max_value, 'noise_value:', noise_value)
+    #     xs[:, :, c] += np.random.uniform(low=-noise_value, high=noise_value, size=xs.shape[:2])
+    x_train += np.random.uniform(low=-args.noise, high=args.noise, size=x_train.shape)
 
     #model
     if args.model == '3x3':
