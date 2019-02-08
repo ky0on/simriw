@@ -229,7 +229,7 @@ if __name__ == '__main__':
 
     #callback
     csv_logger = CSVLogger(os.path.join(outdir, 'history.csv'))
-    check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, '{epoch:02d}.h5'))
+    check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, 'best.h5'), save_best_only=False)
     early_stopping = EarlyStopping(monitor='val_mean_absolute_error', patience=10, verbose=0)
 
     #learn
@@ -282,6 +282,5 @@ if __name__ == '__main__':
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
     np.save(f'{outdir}/r_train.npy', r_train)
-    model.save(f'{outdir}/model.h5')
     joblib.dump(x_scaler, f'{outdir}/x_scaler.dump')
     joblib.dump(y_scaler, f'{outdir}/y_scaler.dump')
