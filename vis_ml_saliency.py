@@ -120,7 +120,7 @@ if __name__ == '__main__':
         for i, inp in enumerate(inputs):
 
             #normalize
-            count = pd.DataFrame(counts[inp])
+            count = pd.DataFrame(counts[inp]).astype(float)
             count.index = count.index / 10
             count.columns = count.columns / 10
             scaler = MinMaxScaler()
