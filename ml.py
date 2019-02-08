@@ -37,6 +37,7 @@ from keras.layers import Conv2D
 from sklearn.preprocessing import MinMaxScaler
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ModelCheckpoint
+from keras.callbacks import CSVLogger
 
 from utils import save_and_slack_file, xyline
 from utils import Logger
@@ -253,6 +254,7 @@ if __name__ == '__main__':
 
     #callback
     loss_history = LossHistory()
+    csv_logger = CSVLogger(os.path.join(outdir, 'history.csv'))
     check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, '{epoch:02d}.h5'))
     early_stopping = EarlyStopping(monitor='val_mean_absolute_error', patience=10, verbose=0)
 
@@ -262,7 +264,7 @@ if __name__ == '__main__':
                         epochs=args.epochs,
                         verbose=1,
                         validation_data=(x_valid, y_valid),
-                        callbacks=[loss_history, early_stopping, check_pointer],
+                        callbacks=[loss_history, early_stopping, check_pointer, csv_logger],
                         )
 
     #history
@@ -302,7 +304,6 @@ if __name__ == '__main__':
     # slack_file(logpath, post=args.noslack)
 
     #save
-    pd.DataFrame(history.history).to_csv(f'{outdir}/history.csv')
     np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
