@@ -46,31 +46,6 @@ __autor__ = 'Kyosuke Yamamoto (kyon)'
 __date__ = '15 Oct 2017'
 
 
-class LossHistory(keras.callbacks.Callback):
-
-    def on_train_begin(self, logs={}):
-        from collections import defaultdict
-        self.metrics = defaultdict(lambda: [])
-
-    def on_epoch_end(self, epoch, logs={}):
-        for metric in ('loss', 'mean_absolute_error'):
-            self.metrics[metric].append(logs.get(metric))
-            self.metrics['val_' + metric].append(logs.get('val_' + metric))
-
-        # if epoch > 0 and epoch % 5 == 0:
-        #     #to dataframe
-        #     m = pd.DataFrame(self.metrics)
-        #     m.index.name = 'epoch'
-        #
-        #     #plot
-        #     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-        #     m[['loss', 'val_loss']].plot(ax=axes[0])
-        #     m[['mean_absolute_error', 'val_mean_absolute_error']].plot(ax=axes[1])
-        #     fig.tight_layout()
-        #     fig.savefig('/tmp/callback.png')
-        #     save_and_slack_file(fig, '/tmp/callback.png', channel='#xxx_debug')
-
-
 def load_dataset(csvpath, input):
     log('Loading', csvpath)
     df = pd.read_csv(csvpath)
@@ -253,7 +228,6 @@ if __name__ == '__main__':
                   metrics=[keras.metrics.mae])
 
     #callback
-    loss_history = LossHistory()
     csv_logger = CSVLogger(os.path.join(outdir, 'history.csv'))
     check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, '{epoch:02d}.h5'))
     early_stopping = EarlyStopping(monitor='val_mean_absolute_error', patience=10, verbose=0)
@@ -264,7 +238,7 @@ if __name__ == '__main__':
                         epochs=args.epochs,
                         verbose=1,
                         validation_data=(x_valid, y_valid),
-                        callbacks=[loss_history, early_stopping, check_pointer, csv_logger],
+                        callbacks=[early_stopping, check_pointer, csv_logger],
                         )
 
     #history
