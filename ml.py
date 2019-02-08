@@ -75,7 +75,6 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('--epochs', '-e', type=int, default=50, help='the number of epochs')
     parser.add_argument('--batchsize', '-b', type=int, default=32, help='mini-batch size')
-    parser.add_argument('--noslack', action='store_false')
     parser.add_argument('--GYth', default=0, type=int, help='Eliminate data where y is smaller than')
     parser.add_argument('--DVIth', default=2.0, type=float, help='Eliminate data where final DVI is smaller than')
     parser.add_argument('--input', '-i', nargs='*', default=['DL', 'TAV', 'TMX', 'RAD', 'PPM'], type=str, help='Input variables (DL|TAV|TMX|RAD|PPM)')
@@ -272,10 +271,10 @@ if __name__ == '__main__':
 
     #slack
     fig.tight_layout()
-    save_and_slack_file(fig, f'{outdir}/ml.png',
+    save_and_slack_file(fig,
+                        f'{outdir}/ml.png',
                         msg=f'{str(args)}\nTest mse={round(score[0], 3)}\nTest mae={round(score[1], 3)}',
-                        post=args.noslack, channel=channel)
-    # slack_file(logpath, post=args.noslack)
+                        channel=channel)
 
     #save
     np.savetxt(f'{outdir}/inputs.csv', args.input, delimiter=',', fmt='%s')
