@@ -228,8 +228,8 @@ if __name__ == '__main__':
 
     #callback
     csv_logger = CSVLogger(os.path.join(outdir, 'history.csv'))
-    check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, 'best.h5'), save_best_only=True, monitor='val_mean_absolute_error')
-    early_stopping = EarlyStopping(monitor='val_mean_absolute_error', patience=10, verbose=0)
+    check_pointer = ModelCheckpoint(filepath=os.path.join(outdir, 'best.h5'), save_best_only=True, monitor='val_loss')
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0)
 
     #learn
     history = model.fit(x_train, y_train,
