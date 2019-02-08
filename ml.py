@@ -198,11 +198,6 @@ if __name__ == '__main__':
     log(x_valid.shape[0], 'valid samples')
 
     #add noise
-    # for c in range(xs.shape[2]):
-    #     max_value = xs[:, :, c].max()
-    #     noise_value = max_value * args.noise
-    #     log(args.input[c], 'max_value:', max_value, 'noise_value:', noise_value)
-    #     xs[:, :, c] += np.random.uniform(low=-noise_value, high=noise_value, size=xs.shape[:2])
     x_train += np.random.uniform(low=-args.noise, high=args.noise, size=x_train.shape)
 
     #model
