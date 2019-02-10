@@ -27,7 +27,7 @@ if __name__ == '__main__':
     #argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/0624-144155/21.h5')
-    parser.add_argument('--sample', '-n', default=500, type=int, help='number of sampled images')
+    parser.add_argument('--sample', '-n', default=100, type=int, help='number of sampled images')
     parser.add_argument('--ATHHT', default=None, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
     parser.add_argument('--ATHLT', default=None, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
     parser.add_argument('--plot_input_dvi', action='store_true')
