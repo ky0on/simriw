@@ -34,6 +34,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     #init
+    np.random.seed(308)
     srcdir = os.path.dirname(args.path)
     outdir = os.path.dirname(args.path)
     with open(os.path.join(srcdir, 'args.json'), 'r') as fp:
@@ -59,19 +60,19 @@ if __name__ == '__main__':
     # modifiers = {'positive': None, 'negate': 'negate'}
     modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
+    idxs = np.random.permutation(x_train.shape[0])
 
     #explore modifires
     for modifier_title, modifier in modifiers.items():
         counts = {inp: np.zeros((11, 21), dtype=int) for inp in inputs}
 
         pbar = tqdm(total=args.sample, desc=modifier_title)
-        while True:
+        for idx in idxs:
 
             #random sampling
-            i = np.random.randint(0, len(x_train))
-            x = x_train[i]
-            r = r_train[i]
-            # y = y_train[i][0]
+            x = x_train[idx]
+            r = r_train[idx]
+            # y = y_train[idx][0]
             dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
             LAI = r[:, 1, 0]    # fixed!
             ATHHT = r[:, 2, 0]  # fixed!
@@ -94,7 +95,7 @@ if __name__ == '__main__':
                     axes2[c].plot(x[:, c, 0])
                 axes2[5].plot(dvi)
                 fig2.tight_layout()
-                fig2.savefig(f'/tmp/{i:0>5}.png')
+                fig2.savefig(f'/tmp/{idx:0>5}.png')
 
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
