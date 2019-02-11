@@ -8,7 +8,6 @@ import argparse
 import json
 import glob
 import numpy as np
-import tensorflow as tf
 import random as rn
 import pandas as pd
 from tqdm import tqdm
@@ -19,10 +18,14 @@ from sklearn.model_selection import train_test_split
 
 #seed https://keras.io/getting-started/faq/
 import os
+import tensorflow as tf
 os.environ['PYTHONHASHSEED'] = '0'
 np.random.seed(42)
 rn.seed(12345)
-session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+session_conf = tf.ConfigProto(
+    gpu_options=tf.GPUOptions(allow_growth=True),
+    intra_op_parallelism_threads=1,
+    inter_op_parallelism_threads=1,)
 from keras import backend as K
 tf.set_random_seed(1234)
 sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
