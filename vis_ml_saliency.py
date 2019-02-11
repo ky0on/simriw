@@ -4,6 +4,8 @@
 from __future__ import print_function
 import os
 import json
+import sys
+sys.path.append('keras-vis')
 import argparse
 import numpy as np
 import pandas as pd

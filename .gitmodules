@@ -1,3 +1,6 @@
 [submodule "convnet-drawer"]
 	path = convnet-drawer
 	url = git@github.com:ky0on/convnet-drawer.git
+[submodule "keras-vis"]
+	path = keras-vis
+	url = https://github.com/ky0on/keras-vis.git
