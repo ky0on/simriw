@@ -106,6 +106,9 @@ if __name__ == '__main__':
             if pbar.n >= args.sample:
                 break
 
+        else:
+            raise Exception('No enough data.')
+
         #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
         for i, inp in enumerate(inputs):
