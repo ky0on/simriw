@@ -30,7 +30,6 @@ if __name__ == '__main__':
     parser.add_argument('--sample', '-n', default=100, type=int, help='number of sampled images')
     parser.add_argument('--ATHHT', default=None, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
     parser.add_argument('--ATHLT', default=None, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
-    parser.add_argument('--plot_input_dvi', action='store_true')
     args = parser.parse_args()
 
     #init
@@ -87,15 +86,6 @@ if __name__ == '__main__':
                 continue
             if args.ATHLT and ATHLT[ATHLT > 0].min() > args.ATHLT:
                 continue
-
-            #debug (plot inputs and dvi)
-            if args.plot_input_dvi:
-                fig2, axes2 = plt.subplots(6, 1)
-                for c in range(x.shape[1]):
-                    axes2[c].plot(x[:, c, 0])
-                axes2[5].plot(dvi)
-                fig2.tight_layout()
-                fig2.savefig(f'/tmp/{idx:0>5}.png')
 
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
