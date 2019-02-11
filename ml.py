@@ -165,6 +165,8 @@ if __name__ == '__main__':
     ys_scaled = y_scaler.fit_transform(ys.reshape(-1, 1))
     xs_scaled = xs_scaled.reshape(xs.shape)
     ys_scaled = ys_scaled.reshape(ys.shape)
+    joblib.dump(x_scaler, f'{outdir}/x_scaler.dump')
+    joblib.dump(y_scaler, f'{outdir}/y_scaler.dump')
 
     #split train/valid
     # x_train = xs.reshape(xs.shape[0], xs.shape[1], xs.shape[2], 1)
@@ -179,6 +181,11 @@ if __name__ == '__main__':
     log('y_train shape:', y_train.shape)
     log(x_train.shape[0], 'train samples')
     log(x_valid.shape[0], 'valid samples')
+
+    #save (before adding noise)
+    np.save(f'{outdir}/x_train.npy', x_train)
+    np.save(f'{outdir}/y_train.npy', y_train)
+    np.save(f'{outdir}/r_train.npy', r_train)
 
     #add noise
     x_train += np.random.uniform(low=-args.noise, high=args.noise, size=x_train.shape)
@@ -278,10 +285,3 @@ if __name__ == '__main__':
                         f'{outdir}/ml.png',
                         msg=f'{str(args)}\nTest mse={round(score[0], 3)}\nTest mae={round(score[1], 3)}',
                         channel=channel)
-
-    #save
-    np.save(f'{outdir}/x_train.npy', x_train)
-    np.save(f'{outdir}/y_train.npy', y_train)
-    np.save(f'{outdir}/r_train.npy', r_train)
-    joblib.dump(x_scaler, f'{outdir}/x_scaler.dump')
-    joblib.dump(y_scaler, f'{outdir}/y_scaler.dump')
