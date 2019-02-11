@@ -9,17 +9,15 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from tqdm import tqdm
-# import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 # from sklearn.externals import joblib
-# from collections import defaultdict
 
 from utils import save_and_slack_file
 
 from keras.models import load_model
 from vis.utils import utils
 from vis.visualization import visualize_saliency
-from sklearn.preprocessing import MinMaxScaler   # , StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 
 if __name__ == '__main__':
@@ -28,8 +26,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', type=str, default='./output/0624-144155/21.h5')
     parser.add_argument('--sample', '-n', default=100, type=int, help='number of sampled images')
-    parser.add_argument('--ATHHT', default=None, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
-    parser.add_argument('--ATHLT', default=None, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
+    parser.add_argument('--ATHHT', default=1.0, type=float, help='Eliminate data where the smallest ATHHT is smaller than')
+    parser.add_argument('--ATHLT', default=1.0, type=float, help='Eliminate data where the smallest ATHLT is smaller than')
     args = parser.parse_args()
 
     #init
@@ -42,13 +40,28 @@ if __name__ == '__main__':
 
     #load model
     model = load_model(args.path)
-    model.summary()
+    # model.summary()
 
     #load data
     x_train = np.load(os.path.join(srcdir, 'x_train.npy'))
     y_train = np.load(os.path.join(srcdir, 'y_train.npy'))
     r_train = np.load(os.path.join(srcdir, 'r_train.npy'))
     print('x_train.shape:', x_train.shape)
+
+    #filter
+    DVI = r_train[:, :, 0, 0]     # fixed column
+    # LAI = r[:, 1, 0]            # fixed column
+    ATHHT = r_train[:, :, 2, 0]   # fixed column
+    ATHLT = r_train[:, :, 3, 0]   # fixed column
+    ATHHT[ATHHT == 0.0] = np.nan
+    ATHLT[ATHLT == 0.0] = np.nan
+    idxs = np.where((DVI.max(axis=1) >= 2.0) & (np.nanmin(ATHHT, axis=1) <= args.ATHHT) & (np.nanmin(ATHLT, axis=1) <= args.ATHLT))[0]
+    print(f'{len(idxs)} of {DVI.shape[0]} were extracted.')
+    if len(idxs) < args.sample:
+        raise Exception('No enough data.')
+
+    #shuffle
+    idxs = np.random.permutation(idxs)[:args.sample]
 
     #load scaler
     # x_scaler = joblib.load(os.path.join(srcdir, 'x_scaler.dump'))
@@ -59,33 +72,18 @@ if __name__ == '__main__':
     # modifiers = {'positive': None, 'negate': 'negate'}
     modifiers = {'positive': None}
     layer_idx = utils.find_layer_idx(model, 'dense_2')
-    idxs = np.random.permutation(x_train.shape[0])
 
     #explore modifires
     for modifier_title, modifier in modifiers.items():
         counts = {inp: np.zeros((11, 21), dtype=int) for inp in inputs}
 
-        pbar = tqdm(total=args.sample, desc=modifier_title)
-        for idx in idxs:
+        for idx in tqdm(idxs, desc=modifier_title):
 
             #random sampling
             x = x_train[idx]
             r = r_train[idx]
             # y = y_train[idx][0]
-            dvi = r[:, 0, 0]    # fixed! (DVI is in 0th column)
-            LAI = r[:, 1, 0]    # fixed!
-            ATHHT = r[:, 2, 0]  # fixed!
-            ATHLT = r[:, 3, 0]  # fixed!
-
-            #data filtering (DVI)
-            if dvi.max() < 2.0:
-                continue
-
-            #data filtering (hot/cool temperature stress)
-            if args.ATHHT and ATHHT[ATHHT > 0].min() > args.ATHHT:
-                continue
-            if args.ATHLT and ATHLT[ATHLT > 0].min() > args.ATHLT:
-                continue
+            dvi = r[:, 0, 0]
 
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
@@ -100,14 +98,6 @@ if __name__ == '__main__':
                         ig = int(g * 10)   # ig: [0, 1] (saliency -> row index)
                         id = int(d * 10)   # id: [0, 2] (dvi -> column index)
                         counts[inp][ig, id] += 1     # count up cell with specific saliency (row) and DVI (column)
-
-            #finalize
-            pbar.update(1)
-            if pbar.n >= args.sample:
-                break
-
-        else:
-            raise Exception('No enough data.')
 
         #heatmap
         fig, axes = plt.subplots(1, 5, figsize=(15, 3))
