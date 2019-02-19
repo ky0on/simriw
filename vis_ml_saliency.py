@@ -89,6 +89,7 @@ if __name__ == '__main__':
 
             #calculate saliency
             #TODO(kyon): why become slow after several iterations?
+            #https://github.com/raghakot/keras-vis/issues/71
             grads = visualize_saliency(model, layer_idx, filter_indices=0, seed_input=x, grad_modifier=modifier)
             # print('grads.shape:', grads.shape)
 
