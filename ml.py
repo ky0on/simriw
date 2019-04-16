@@ -189,6 +189,7 @@ if __name__ == '__main__':
 
     #add noise
     x_train += np.random.uniform(low=-args.noise, high=args.noise, size=x_train.shape)
+    x_valid += np.random.uniform(low=-args.noise, high=args.noise, size=x_valid.shape)
 
     #model
     if args.model == '3x3':
