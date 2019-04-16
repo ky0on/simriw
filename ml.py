@@ -55,6 +55,8 @@ def load_dataset(csvpath, input):
     x = df[input]
     y = df.GY.iloc[-1]
     r = df[['DVI', 'LAI', 'ATHHT', 'ATHLT']]    # add to last if any other index is required (order is fixed in visualization.ipynb)
+    r['year'] = csvpath.split('/')[2]
+    r['meshcode'] = os.path.splitext(csvpath.split('/')[3])[0]
     return {'x': x, 'y': y, 'r': r}
 
 
@@ -186,6 +188,7 @@ if __name__ == '__main__':
     np.save(f'{outdir}/x_train.npy', x_train)
     np.save(f'{outdir}/y_train.npy', y_train)
     np.save(f'{outdir}/r_train.npy', r_train)
+    np.save(f'{outdir}/r_valid.npy', r_valid)
 
     #add noise
     x_train += np.random.uniform(low=-args.noise, high=args.noise, size=x_train.shape)
