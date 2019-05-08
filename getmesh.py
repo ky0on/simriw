@@ -10,7 +10,6 @@ import joblib
 import argparse
 import numpy as np
 import pandas as pd
-from collections import defaultdict
 from tqdm import tqdm, trange
 
 from utils import mkdir
@@ -31,6 +30,9 @@ def fetch(element, timedomain, lalodomain, interval):
         print(f'Msh.shape ({element}): {Msh_org.shape} -> {Msh.shape}')
         print(f'null ratio ({element}):', round(pd.isnull(Msh).mean(), 2))
     except OSError:
+        print(f'Warning: {element} in {year} is not available. Returned None.')
+        return None
+    except TypeError:
         print(f'Warning: {element} in {year} is not available. Returned None.')
         return None
 
@@ -84,7 +86,7 @@ if __name__ == '__main__':
 
             #access to server
             timedomain = [f'{year}-05-01', f'{year}-10-31']
-            dfs = joblib.Parallel(n_jobs=6, verbose=1)(
+            dfs = joblib.Parallel(n_jobs=2, verbose=1)(
                 joblib.delayed(fetch)(element, timedomain, lalodomain, args.interval) for element in elements)
 
             #assert
